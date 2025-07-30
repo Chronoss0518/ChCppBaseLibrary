@@ -1124,11 +1124,11 @@ namespace ChMath
 	struct Vector2Base
 	{
 		union {
+			VectorBase<T, 2> val = VectorBase<T, 2>();
 			struct { T x, y; };
 			struct { T w, h; };
 			struct { T start, end; };
 			struct { T high, low; };
-			VectorBase<T, 2> val = VectorBase<T, 2>();
 		};
 
 	public://Constructor Destructor//
@@ -1154,9 +1154,9 @@ namespace ChMath
 	struct Vector3Base
 	{
 		union {
+			VectorBase<T, 3> val = VectorBase<T, 3>();
 			struct { T x, y, z; };
 			struct { T r, g, b; };
-			VectorBase<T, 3> val = VectorBase<T, 3>();
 		};
 
 	public://Constructor Destructor//
@@ -1182,10 +1182,10 @@ namespace ChMath
 	struct Vector4Base
 	{
 		union {
+			VectorBase<T, 4> val = VectorBase<T, 4>();
 			struct { T x, y, z, w; };
 			struct { T r, g, b, a; };
 			struct { T left, top, right, bottom; };
-			VectorBase<T, 4> val = VectorBase<T, 4>();
 		};
 
 	public://Constructor Destructor//
@@ -1526,6 +1526,7 @@ namespace ChMath
 	{
 		union
 		{
+			SquareMatrixBase<T, 1> m = SquareMatrixBase<T, 1>();
 			struct
 			{
 				T l_11;
@@ -1534,7 +1535,6 @@ namespace ChMath
 			{
 				T r_11;
 			};
-			SquareMatrixBase<T, 1> m = SquareMatrixBase<T, 1>();
 		};
 
 	public://Constructor Destructor//
@@ -1562,6 +1562,7 @@ namespace ChMath
 	{
 		union
 		{
+			SquareMatrixBase<T, 2> m = SquareMatrixBase<T, 2>();
 			struct
 			{
 				T l_11, l_12;
@@ -1572,7 +1573,6 @@ namespace ChMath
 				T r_11, r_21;
 				T r_12, r_22;
 			};
-			SquareMatrixBase<T, 2> m = SquareMatrixBase<T, 2>();
 		};
 
 	public://Constructor Destructor//
@@ -1600,6 +1600,7 @@ namespace ChMath
 	{
 		union
 		{
+			SquareMatrixBase<T, 3> m = SquareMatrixBase<T, 3>();
 			struct
 			{
 				T l_11, l_12, l_13;
@@ -1612,7 +1613,6 @@ namespace ChMath
 				T r_12, r_22, r_32;
 				T r_13, r_23, r_33;
 			};
-			SquareMatrixBase<T, 3> m = SquareMatrixBase<T, 3>();
 		};
 
 	public://Constructor Destructor//
@@ -1641,6 +1641,7 @@ namespace ChMath
 	{
 		union
 		{
+			SquareMatrixBase<T, 4> m = SquareMatrixBase<T, 4>();
 			struct
 			{
 				T l_11, l_12, l_13, l_14;
@@ -1655,7 +1656,6 @@ namespace ChMath
 				T r_13, r_23, r_33, r_43;
 				T r_14, r_24, r_34, r_44;
 			};
-			SquareMatrixBase<T, 4> m = SquareMatrixBase<T, 4>();
 		};
 
 	public://Constructor Destructor//
