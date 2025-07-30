@@ -8,6 +8,12 @@
 #include"../../CPP/ChBitBool/ChBitBool.h"
 #include"../../ClassParts/ChCPInitializer.h"
 
+namespace ChCpp
+{
+	class KeyInputBase;
+	class FPSController;
+}
+
 namespace ChSystem
 {
 	class SystemManager;
@@ -36,13 +42,7 @@ namespace ChSystem
 		inline void SetUseSystemButtons(const bool _button) { useSystemButtonFlg = _button; }
 
 		//全体で利用するFPSを管理//
-		inline void SetFPS(const unsigned long _FPS) { FPS = _FPS; }
-
-		inline void SetNowTime(const unsigned long _time) { lastFPSPoint = _time; }
-	
-	protected://Set Functions//
-
-		virtual void SetKeyCode() = 0;
+		void SetFPS(const unsigned long _FPS);
 
 	public://Get Functions//
 
@@ -53,9 +53,9 @@ namespace ChSystem
 		const inline unsigned int GetWindHeight()const { return windSize.h; }
 
 		//FPSカウントの取得//
-		const inline unsigned long GetFPS() const { return FPS; }
+		const unsigned long GetFPS() const;
 
-		const inline long double GetNowFPSPoint()const { return lastFPSPoint; }
+		const long double GetNowFPSPoint()const;
 
 	public://Is Functions//
 
@@ -84,20 +84,7 @@ namespace ChSystem
 	public://Other Functions//
 
 		//FPS処理
-		inline bool FPSProcess()
-		{
-			if (!*this)return false;
-
-			unsigned long nowTime = GetNowTime();
-			unsigned long tmp = nowTime - lastFPSTime;
-
-			if (tmp < 1000 / FPS)return false;
-
-			lastFPSPoint = 1000 / tmp;
-			lastFPSTime = nowTime;
-
-			return true;
-		}
+		bool FPSProcess();
 
 	protected:
 
@@ -109,12 +96,8 @@ namespace ChSystem
 		bool nowKey = false;
 		bool pauseFlg = false;
 
-		unsigned long FPS = 60;
-		long double lastFPSPoint = 0;
-		unsigned long lastFPSTime = 0;
-
-		ChCpp::BitBool buttonList;
-		ChCpp::BitBool isNowPush;
+		ChCpp::KeyInputBase* keyInput = nullptr;
+		ChCpp::FPSController* fpsController = nullptr;
 
 	};
 
@@ -148,8 +131,6 @@ namespace ChSystem
 
 		//全体で利用するFPSを管理//
 		inline void SetFPS(const unsigned long _FPS) { if (baseSystems != nullptr)baseSystems->SetFPS(_FPS); }
-
-		inline void SetNowTime(const unsigned long _time) { if (baseSystems != nullptr)baseSystems->SetNowTime(_time); }
 
 		inline void SetUseSystemButtons(const bool _button) { if(baseSystems != nullptr) baseSystems->SetUseSystemButtons(_button); }
 
@@ -199,6 +180,7 @@ namespace ChSystem
 		inline bool IsUpdate()
 		{
 			if (baseSystems == nullptr)return false;
+
 			return baseSystems->IsUpdate();
 		}
 
