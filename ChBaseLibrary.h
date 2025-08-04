@@ -19,6 +19,12 @@
 
 #include"BaseIncluder/ChBase.h"
 
+#include"CPP/ChFPSController/ChFPSController.h"
+#include"CPP/ChKeyInputBase/ChKeyInputBase.h"
+
+#include"CPP/ChFile/ChFile.h"
+#include"CPP/ChFile/ChBinaryFile.h"
+
 #include"CPP/ChBaseObject/ChBaseComponent.h"
 #include"CPP/ChBaseObject/ChBaseObject.h"
 #include"CPP/ChBaseObject/ChObjectList.h"
@@ -40,9 +46,6 @@
 #include"CPP/ChJsonObject/ChJsonNumber.h"
 #include"CPP/ChJsonObject/ChJsonString.h"
 #include"CPP/ChJsonObject/ChJsonBoolean.h"
-
-#include"CPP/ChFile/ChFile.h"
-#include"CPP/ChFile/ChBinaryFile.h"
 
 #include"CPP/ChModel/ChModel.h"
 #include"CPP/ChModel/ChModelObject.h"
