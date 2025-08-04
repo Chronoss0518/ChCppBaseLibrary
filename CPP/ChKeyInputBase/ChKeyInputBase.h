@@ -15,11 +15,13 @@ namespace ChCpp
 			nowInputBitbool.SetSize(BITBOOL_ARRAY_SIZE);
 		}
 
+	public:
+
+		void SetAllFlgDown();
+
 	protected:
 
 		void SetKeyFlg(const unsigned char _key, bool _flg);
-
-		void SetAllFlgDown();
 
 	public:
 
