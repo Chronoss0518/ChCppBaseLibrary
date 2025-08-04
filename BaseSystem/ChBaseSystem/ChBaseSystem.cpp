@@ -13,6 +13,11 @@ using namespace ChSystem;
 //ChBaseSystem メソッド
 ///////////////////////////////////////////////////////////////////////////////////////
 
+ChSystem::BaseSystem::BaseSystem()
+{
+	fpsController = new ChCpp::FPSController();
+}
+
 //全体で利用するFPSを管理//
 void ChSystem::BaseSystem::SetFPS(const unsigned long _FPS) {
 	if (ChPtr::NotNullCheck(fpsController))fpsController

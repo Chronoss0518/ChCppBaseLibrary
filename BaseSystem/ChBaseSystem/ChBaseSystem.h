@@ -26,7 +26,7 @@ namespace ChSystem
 
 	protected:
 
-		BaseSystem() {}
+		BaseSystem();
 
 		virtual ~BaseSystem()
 		{
@@ -35,7 +35,11 @@ namespace ChSystem
 
 	public:
 
-		virtual void Release() {};
+		virtual void Release()
+		{
+			if (ChPtr::NotNullCheck(keyInput)) { delete keyInput; keyInput = nullptr; }
+			if (ChPtr::NotNullCheck(fpsController)) { delete fpsController; fpsController = nullptr; }
+		};
 
 	public://Set Functions//
 
