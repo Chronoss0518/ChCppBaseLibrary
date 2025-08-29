@@ -800,7 +800,7 @@ void ChCpp::ModelController::XFile<CharaType>::XFrameToChFrame(
 
 	_chFrame->SetFrameTransform(_xFrame->frameMatrix);
 
-	_chFrame->GetDrawLHandMatrix();
+	ChCpp::ModelControllerBase<CharaType>::SetOffsetMatrix(*_chFrame, _chFrame->GetDrawLHandMatrix());
 
 	for (auto&& frame : _xFrame->next)
 	{
@@ -862,13 +862,13 @@ void ChCpp::ModelController::XFile<CharaType>::XFrameToChFrame(
 			chVertex->normal.Normalize();
 		}
 
-		for (unsigned long i = 0; i < _xFrame->skinWeightDatas.size() && i < maxBoneNum; i++)
+		for (size_t i = 0; i < _xFrame->skinWeightDatas.size() && i < maxBoneNum; i++)
 		{
 			auto&& skinWeight = _xFrame->skinWeightDatas[i];
-			for (unsigned long j = 0; j < chVertexList.size(); j++)
+			for (size_t j = 0; j < chVertexList.size(); j++)
 			{
 				auto&& chVertex = *chVertexList[j];
-				auto weitPow = skinWeight->weitPow.find(j);
+				auto&& weitPow = skinWeight->weitPow.find(j);
 
 				chVertex.blendPow.push_back(weitPow == skinWeight->weitPow.end() ? 0.0f : (*weitPow).second);
 			}
