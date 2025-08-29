@@ -34,7 +34,8 @@ void _methodName(const ChRMat& _mat) { _matrixType = _mat.GetConvertAxis(); }
 #define CH_FRAME_GET_MATRIX_FUNCTION(_RLType,_returnMethod) \
 Ch##_RLType##Mat GetOutSizdTransform##_RLType##Mat() { return outSideMat _returnMethod ; }\
 Ch##_RLType##Mat GetFrameTransform##_RLType##Mat() { return frameMat _returnMethod ; }\
-Ch##_RLType##Mat GetDraw##_RLType##HandMatrix() { UpdateDrawTransform(); return drawMat _returnMethod ; }
+Ch##_RLType##Mat GetDraw##_RLType##HandMatrix() { UpdateDrawTransform(); return drawMat _returnMethod ; }\
+Ch##_RLType##Mat GetOffset##_RLType##Matrix() { return offsetMat _returnMethod ; }
 #endif
 
 namespace ChCpp
@@ -89,6 +90,9 @@ namespace ChCpp
 	template<typename CharaType>
 	class FrameObject : public ChCpp::BaseObject<CharaType>
 	{
+
+		template<typename CharaType>
+		friend class ModelControllerBase;
 
 	public://Set Functions//
 
@@ -276,6 +280,7 @@ namespace ChCpp
 
 		ChLMat frameMat;
 		ChLMat outSideMat;
+		ChLMat offsetMat;
 
 	private:
 

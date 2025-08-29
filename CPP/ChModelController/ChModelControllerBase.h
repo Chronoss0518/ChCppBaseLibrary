@@ -61,6 +61,8 @@ namespace ChCpp
 
 		inline void SetBoxSize(ModelObject<CharaType>& _model, const ChVec3& _size) { _model.SetBoxSize(_size); }
 
+		inline void SetOffsetMatrix(FrameObject<CharaType>& _model, const ChLMat& _mat) { _model.offsetMat = _mat; }
+
 	protected:
 
 		//カレントディレクトリからのルートパス取得//
