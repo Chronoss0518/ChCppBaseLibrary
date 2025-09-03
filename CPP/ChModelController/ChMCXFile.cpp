@@ -821,6 +821,14 @@ void ChCpp::ModelController::XFile<CharaType>::XFrameToChFrame(
 	{
 		auto& xVertexList = _xFrame->mesh->vertexList;
 
+		for (size_t i = 0; i < _xFrame->skinWeightDatas.size() && i < maxBoneNum; i++)
+		{
+			auto&& skinWeight = _xFrame->skinWeightDatas[i];
+			auto boneData = ChPtr::Make_S<ChCpp::TargetBoneData<CharaType>>();
+			boneData->boneObjectName = skinWeight->targetFrameName;
+			boneData->boneOffset = skinWeight->boneOffset;
+			mesh->boneDatas.push_back(boneData);
+		};
 
 		for (size_t i = 0; i < xVertexList.size(); i++)
 		{
@@ -850,6 +858,14 @@ void ChCpp::ModelController::XFile<CharaType>::XFrameToChFrame(
 			chVertex->pos = xVertexList[i]->pos;
 			chVertex->normal = xVertexList[i]->normal;
 
+			for (size_t j = 0; j < _xFrame->skinWeightDatas.size() && j < maxBoneNum; j++)
+			{
+				auto&& skinWeight = _xFrame->skinWeightDatas[j];
+				auto&& weitPow = skinWeight->weitPow.find(i);
+
+				chVertex->blendPow.push_back(weitPow == skinWeight->weitPow.end() ? 0.0f : (*weitPow).second);
+			};
+
 			chVertexList.push_back(chVertex);
 
 			mesh->maxPos = ChCpp::ModelControllerBase<CharaType>::TestMaxPos(mesh->maxPos, chVertex->pos);
@@ -862,21 +878,6 @@ void ChCpp::ModelController::XFile<CharaType>::XFrameToChFrame(
 			chVertex->normal.Normalize();
 		}
 
-		for (size_t i = 0; i < _xFrame->skinWeightDatas.size() && i < maxBoneNum; i++)
-		{
-			auto&& skinWeight = _xFrame->skinWeightDatas[i];
-			for (size_t j = 0; j < chVertexList.size(); j++)
-			{
-				auto&& chVertex = *chVertexList[j];
-				auto&& weitPow = skinWeight->weitPow.find(j);
-
-				chVertex.blendPow.push_back(weitPow == skinWeight->weitPow.end() ? 0.0f : (*weitPow).second);
-			}
-			auto boneData = ChPtr::Make_S<ChCpp::TargetBoneData<CharaType>>();
-			boneData->boneObjectName = skinWeight->targetFrameName;
-			boneData->boneOffset = skinWeight->boneOffset;
-			mesh->boneDatas.push_back(boneData);
-		};
 
 		mesh->centerPos = ChCpp::ModelControllerBase<CharaType>::CreateCenterPos(mesh->minPos, mesh->maxPos);
 		mesh->boxSize = ChCpp::ModelControllerBase<CharaType>::CreateBoxSize(mesh->minPos, mesh->maxPos);
