@@ -6,7 +6,7 @@
 #include<vector>
 #include<string>
 
-#include"../../BasePack/ChPtr.h"
+#include"../../BaseIncluder/ChBase.h"
 
 #include"ChBaseComponent.h"
 
@@ -331,6 +331,15 @@ namespace ChCpp
 		{
 			std::vector<ChPtr::Weak<T>>res;
 			GetAllChildlenConstainsName(res, _name);
+			return res;
+		}
+
+		std::basic_string<CharaType> GetNamePath(const std::basic_string<CharaType>&_cutChar = ChStd::GetSlashChara<CharaType>())
+		{
+			std::basic_string<CharaType> res = myName;
+			auto&& parent = ChPtr::SharedSafeCast<BaseObject<CharaType>>(GetParent());
+			if (parent == nullptr)return res;
+			res = parent->GetNamePath(_cutChar) + _cutChar + res;
 			return res;
 		}
 
