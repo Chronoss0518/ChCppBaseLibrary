@@ -14,29 +14,6 @@
 
 namespace ChCpp
 {
-	class ModelAnimator :public BaseComponent
-	{
-		float Speed = 0.1f;
-
-		unsigned long AllAnimationCount = 0;
-
-		struct AniDatas
-		{
-			ChVec3 Pos;
-			ChQua Rot;
-			ChVec3 Scal;
-		};
-
-		struct AnimationData
-		{
-			AniDatas Start;
-			AniDatas End;
-			unsigned long AnimationFrameCount = 0;
-		};
-
-		std::vector<ChPtr::Shared<AnimationData>>animation;
-	};
-
 	template<typename CharaType>
 	struct ModelFrame
 	{
