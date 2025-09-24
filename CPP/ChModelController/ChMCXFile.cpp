@@ -153,6 +153,12 @@ void ChCpp::ModelController::XFile<CharaType>::LoadModel(const std::basic_string
 template<typename CharaType>
 void ChCpp::ModelController::XFile<CharaType>::OutModel(const std::basic_string<CharaType>& _filePath)
 {
+	if (_filePath.size() <= 0)return;
+	if (xModel == nullptr)return;
+
+	std::basic_string<CharaType> text = XFileTag::GetXFilePrefixTag<CharaType>();
+	text += ChStd::GetLFChara<CharaType>();
+	text += ChStd::GetLFChara<CharaType>();
 
 }
 
