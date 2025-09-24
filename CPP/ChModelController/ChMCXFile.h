@@ -53,7 +53,7 @@ namespace ChCpp
 	{
 		namespace XFileTag
 		{
-			//"xof"//
+			//"xof 0303txt 0032"//
 			CH_NUMBER_FUNCTION_BASE(GetXFilePrefixTag);
 
 			//"template"//
