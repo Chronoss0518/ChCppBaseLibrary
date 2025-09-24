@@ -12,14 +12,15 @@ template<typename CharaType>
 void AnimationObject<CharaType>::AddModel(const ChPtr::Shared<FrameObject<CharaType>>& _frameObject)
 {
 	if (_frameObject == nullptr)return;
-	auto&& animationPalam = animations.find(_frameObject->GetMyNamePath());
+	auto&& animationPalam = animations.find(_frameObject->GetNamePath());
 	if (animationPalam == animations.end())return;
-	animationPalam.second->targetObject = _frameObject;
+	animationPalam->second->targetObject = _frameObject;
 	auto&& childlen = _frameObject->GetChildlen<FrameObject<CharaType>>();
 
 	for (auto&& child : childlen)
 	{
-		AddModel(child);
+		AddModel(child.lock());
 	}
 }
 
+CH_STRING_TYPE_EXPLICIT_DECLARATION(ChCpp::AnimationObject);

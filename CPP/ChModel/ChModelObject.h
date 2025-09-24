@@ -224,6 +224,15 @@ namespace ChCpp
 			return res;
 		}
 
+		std::basic_string<CharaType> GetNamePath(const std::basic_string<CharaType>& _cutChar = ChStd::GetSlashChara<CharaType>())
+		{
+			std::basic_string<CharaType> res = BaseObject<CharaType>::GetMyName();
+			auto&& parent = ChPtr::SharedSafeCast<FrameObject<CharaType>>(BasicObject::GetParent());
+			if (parent == nullptr)return res;
+			res = parent->GetNamePath(_cutChar) + _cutChar + res;
+			return res;
+		}
+
 	private:
 
 		void GetLenToPointAllChildTest(std::vector<ChPtr::Shared<NearPointData<CharaType>>>& _outData, const ChVec3& _point, const float _maxLen = FLT_MAX, const ChLMat& _mat = ChLMat())
@@ -271,8 +280,6 @@ namespace ChCpp
 			}
 			drawMat = outSideMat * frameMat * parentDrawMat;
 		}
-
-		void SetAnimationName(const std::basic_string<CharaType>& _name);
 
 	public://Is Function//
 

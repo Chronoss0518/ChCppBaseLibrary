@@ -41,7 +41,7 @@ namespace ChCpp
 		typedef std::basic_string<CharaType> FrameNamePath;
 
 
-		std::map<FrameNamePath, AnimationFrameObject>animations;
+		std::map<FrameNamePath, ChPtr::Shared<AnimationFrameObject>>animations;
 
 		float animationMoveParFrame = 0.1f;
 	};
