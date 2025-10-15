@@ -160,6 +160,24 @@ void ChCpp::ModelController::XFile<CharaType>::OutModel(const std::basic_string<
 	text += ChStd::GetLFChara<CharaType>();
 	text += ChStd::GetLFChara<CharaType>();
 
+
+
+
+
+
+
+
+
+
+	loadFileName = _filePath;
+
+	ChCpp::CharFile files;
+
+	files.FileOpen(_filePath, false);
+
+	files.FileWrite(text);
+
+	files.FileClose();
 }
 
 template<typename CharaType>
@@ -191,7 +209,7 @@ void ChCpp::ModelController::XFile<CharaType>::SetModel(const ChPtr::Shared<Mode
 }
 
 template<typename CharaType>
-bool ChCpp::ModelController::XFile<CharaType>::SetFrame(
+bool ChCpp::ModelController::XFile<CharaType>::DesFrame(
 	ChPtr::Shared<XFrame>& _frames,
 	const ChPtr::Shared<TemplateRange>& _targetTemplate,
 	const std::basic_string<CharaType>& _text)
@@ -237,7 +255,7 @@ bool ChCpp::ModelController::XFile<CharaType>::SetFrame(
 }
 
 template<typename CharaType>
-bool ChCpp::ModelController::XFile<CharaType>::SetFremeTransformMatrix(
+bool ChCpp::ModelController::XFile<CharaType>::DesFremeTransformMatrix(
 	ChPtr::Shared<XFrame>& _frames,
 	const ChPtr::Shared<TemplateRange>& _targetTemplate,
 	const std::basic_string<CharaType>& _text)
@@ -262,7 +280,7 @@ bool ChCpp::ModelController::XFile<CharaType>::SetFremeTransformMatrix(
 }
 
 template<typename CharaType>
-bool ChCpp::ModelController::XFile<CharaType>::SetMesh(
+bool ChCpp::ModelController::XFile<CharaType>::DesMesh(
 	ChPtr::Shared<XFrame>& _frames,
 	const ChPtr::Shared<TemplateRange>& _targetTemplate,
 	const std::basic_string<CharaType>& _text)
@@ -339,7 +357,7 @@ bool ChCpp::ModelController::XFile<CharaType>::SetMesh(
 }
 
 template<typename CharaType>
-bool ChCpp::ModelController::XFile<CharaType>::SetMeshNormal(
+bool ChCpp::ModelController::XFile<CharaType>::DesMeshNormal(
 	ChPtr::Shared<XFrame>& _frames,
 	const ChPtr::Shared<TemplateRange>& _targetTemplate,
 	const std::basic_string<CharaType>& _text)
@@ -388,7 +406,7 @@ bool ChCpp::ModelController::XFile<CharaType>::SetMeshNormal(
 }
 
 template<typename CharaType>
-bool ChCpp::ModelController::XFile<CharaType>::SetMeshTextureCoords(
+bool ChCpp::ModelController::XFile<CharaType>::DesMeshTextureCoords(
 	ChPtr::Shared<XFrame>& _frames,
 	const ChPtr::Shared<TemplateRange>& _targetTemplate,
 	const std::basic_string<CharaType>& _text)
@@ -422,7 +440,7 @@ bool ChCpp::ModelController::XFile<CharaType>::SetMeshTextureCoords(
 }
 
 template<typename CharaType>
-bool ChCpp::ModelController::XFile<CharaType>::SetMeshMaterialList(
+bool ChCpp::ModelController::XFile<CharaType>::DesMeshMaterialList(
 	ChPtr::Shared<XFrame>& _frames,
 	const ChPtr::Shared<TemplateRange>& _targetTemplate,
 	const std::basic_string<CharaType>& _text)
@@ -457,7 +475,7 @@ bool ChCpp::ModelController::XFile<CharaType>::SetMeshMaterialList(
 }
 
 template<typename CharaType>
-bool ChCpp::ModelController::XFile<CharaType>::SetMaterial(
+bool ChCpp::ModelController::XFile<CharaType>::DesMaterial(
 	ChPtr::Shared<XFrame>& _frames,
 	const ChPtr::Shared<TemplateRange>& _targetTemplate,
 	const std::basic_string<CharaType>& _text)
@@ -577,7 +595,7 @@ bool ChCpp::ModelController::XFile<CharaType>::SetMaterial(
 }
 
 template<typename CharaType>
-bool ChCpp::ModelController::XFile<CharaType>::SetSkinWeights(
+bool ChCpp::ModelController::XFile<CharaType>::DesSkinWeights(
 	ChPtr::Shared<XFrame>& _frames,
 	const ChPtr::Shared<TemplateRange>& _targetTemplate,
 	const std::basic_string<CharaType>& _text)
@@ -978,6 +996,68 @@ void ChCpp::ModelController::XFile<CharaType>::XFrameToChFrame(
 
 	ChCpp::ModelControllerBase<CharaType>::maxPos = ChCpp::ModelControllerBase<CharaType>::TestMaxPos(tmpMinPos, ChCpp::ModelControllerBase<CharaType>::maxPos);
 	ChCpp::ModelControllerBase<CharaType>::minPos = ChCpp::ModelControllerBase<CharaType>::TestMinPos(tmpMinPos, ChCpp::ModelControllerBase<CharaType>::minPos);
+}
+
+template<typename CharaType>
+std::basic_string<CharaType> ChCpp::ModelController::XFile<CharaType>::SerFrame(ChPtr::Shared<XFrame>& _frames)
+{
+	std::basic_string<CharaType> result;
+
+	return result;
+}
+
+template<typename CharaType>
+std::basic_string<CharaType> ChCpp::ModelController::XFile<CharaType>::SerFremeTransformMatrix(ChPtr::Shared<XFrame>& _frames)
+{
+	std::basic_string<CharaType> result;
+
+	return result;
+}
+
+template<typename CharaType>
+std::basic_string<CharaType> ChCpp::ModelController::XFile<CharaType>::SerMesh(ChPtr::Shared<XFrame>& _frames)
+{
+	std::basic_string<CharaType> result;
+
+	return result;
+}
+
+template<typename CharaType>
+std::basic_string<CharaType> ChCpp::ModelController::XFile<CharaType>::SerMeshNormal(ChPtr::Shared<XFrame>& _frames)
+{
+	std::basic_string<CharaType> result;
+
+	return result;
+}
+
+template<typename CharaType>
+std::basic_string<CharaType> ChCpp::ModelController::XFile<CharaType>::SerMeshTextureCoords(ChPtr::Shared<XFrame>& _frames)
+{
+	std::basic_string<CharaType> result;
+
+	return result;
+}
+
+template<typename CharaType>
+std::basic_string<CharaType> ChCpp::ModelController::XFile<CharaType>::SerMeshMaterialList(ChPtr::Shared<XFrame>& _frames)
+{
+	std::basic_string<CharaType> result;
+
+	return result;
+}
+
+template<typename CharaType>
+std::basic_string<CharaType> ChCpp::ModelController::XFile<CharaType>::SerMaterial(ChPtr::Shared<XFrame>& _frames)
+{
+	std::basic_string<CharaType> result;
+
+	return result;
+}
+
+template<typename CharaType>
+std::basic_string<CharaType> ChCpp::ModelController::XFile<CharaType>::SerSkinWeights(ChPtr::Shared<XFrame>& _frames)
+{
+
 }
 
 CH_STRING_TYPE_USE_FILE_EXPLICIT_DECLARATION(ChCpp::ModelController::XFile);

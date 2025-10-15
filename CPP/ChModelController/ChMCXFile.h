@@ -187,47 +187,70 @@ namespace ChCpp
 				ChPtr::Shared<FrameObject<CharaType>> _chFrame,
 				const ChPtr::Shared<XFrame>& _xFrame);
 
-		protected://SetFunction//
+			void ChFrameToXFrame(
+				ChPtr::Shared<XFrame>& _xFrame,
+				const ChPtr::Shared<FrameObject<CharaType>> _chFrame);
 
-			bool SetFrame(
+		protected://Deserialize Function//
+
+			bool DesFrame(
 				ChPtr::Shared<XFrame>& _frames,
 				const ChPtr::Shared<TemplateRange>& _targetTemplate,
 				const std::basic_string<CharaType>& _text);
 
-			bool SetFremeTransformMatrix(
+			bool DesFremeTransformMatrix(
 				ChPtr::Shared<XFrame>& _frames,
 				const ChPtr::Shared<TemplateRange>& _targetTemplate,
 				const std::basic_string<CharaType>& _text);
 
-			bool SetMesh(
+			bool DesMesh(
 				ChPtr::Shared<XFrame>& _frames,
 				const ChPtr::Shared<TemplateRange>& _targetTemplate,
 				const std::basic_string<CharaType>& _text);
 
-			bool SetMeshNormal(
+			bool DesMeshNormal(
 				ChPtr::Shared<XFrame>& _frames,
 				const ChPtr::Shared<TemplateRange>& _targetTemplate,
 				const std::basic_string<CharaType>& _text);
 
-			bool SetMeshTextureCoords(
+			bool DesMeshTextureCoords(
 				ChPtr::Shared<XFrame>& _frames,
 				const ChPtr::Shared<TemplateRange>& _targetTemplate,
 				const std::basic_string<CharaType>& _text);
 
-			bool SetMeshMaterialList(
+			bool DesMeshMaterialList(
 				ChPtr::Shared<XFrame>& _frames,
 				const ChPtr::Shared<TemplateRange>& _targetTemplate,
 				const std::basic_string<CharaType>& _text);
 
-			bool SetMaterial(
+			bool DesMaterial(
 				ChPtr::Shared<XFrame>& _frames,
 				const ChPtr::Shared<TemplateRange>& _targetTemplate,
 				const std::basic_string<CharaType>& _text);
 
-			bool SetSkinWeights(
+			bool DesSkinWeights(
 				ChPtr::Shared<XFrame>& _frames,
 				const ChPtr::Shared<TemplateRange>& _targetTemplate,
 				const std::basic_string<CharaType>& _text);
+
+		private://Serialize Functions//
+
+			std::basic_string<CharaType> SerFrame(ChPtr::Shared<XFrame>& _frames);
+
+			std::basic_string<CharaType> SerFremeTransformMatrix(ChPtr::Shared<XFrame>& _frames);
+
+			std::basic_string<CharaType> SerMesh(ChPtr::Shared<XFrame>& _frames);
+
+			std::basic_string<CharaType> SerMeshNormal(ChPtr::Shared<XFrame>& _frames);
+
+			std::basic_string<CharaType> SerMeshTextureCoords(ChPtr::Shared<XFrame>& _frames);
+
+			std::basic_string<CharaType> SerMeshMaterialList(ChPtr::Shared<XFrame>& _frames);
+
+			std::basic_string<CharaType> SerMaterial(ChPtr::Shared<XFrame>& _frames);
+
+			std::basic_string<CharaType> SerSkinWeights(ChPtr::Shared<XFrame>& _frames);
+
 		public:
 
 			inline const unsigned long GetMaxBoneNum() const { return maxBoneNum; }
