@@ -16,6 +16,7 @@ namespace ChCpp
 		
 		struct InsertTextData
 		{
+			bool intoBeforeFlg = false;
 			bool useIndentCount = false;
 			std::basic_string<CharaType>insertText;
 		};
@@ -37,7 +38,8 @@ namespace ChCpp
 		void SetInsertText(
 			const std::basic_string<CharaType>& _indentText,
 			const std::basic_string<CharaType>& _insertText,
-			bool _useIndentCount = true);
+			bool _useIndentCount = true,
+			bool _intoBeforeFlg = false);
 
 		void SetIndent(
 			const std::basic_string<CharaType>& _indentUpDownText,

@@ -36,17 +36,23 @@ template<typename CharaType>
 void DocumentFormatter<CharaType>::SetInsertText(
 	const std::basic_string<CharaType>& _indentText,
 	const std::basic_string<CharaType>& _insertText,
-	bool _useIndentCount)
+	bool _useIndentCount,
+	bool _intoBeforeFlg)
 {
 	if (_indentText == ChStd::GetZeroChara<CharaType>())return;
 	if (_insertText == ChStd::GetZeroChara<CharaType>())return;
 	if (insertTextMap.find(_indentText) != insertTextMap.end())return;
 
+	auto&& test = insertTextMap.find(_indentText);
+	InsertTextData* data = test == insertTextMap.end() ?
+		new InsertTextData() :
+		test->second;
+
 	checker->SetCheckText(_indentText);
-	InsertTextData* insertTextData = new InsertTextData();
-	insertTextData->useIndentCount = _useIndentCount;
-	insertTextData->insertText = _insertText;
-	insertTextMap[_indentText] = insertTextData;
+	data->useIndentCount = _useIndentCount;
+	data->insertText = _insertText;
+	data->intoBeforeFlg = _intoBeforeFlg;
+	insertTextMap[_indentText] = data;
 }
 
 template<typename CharaType>
@@ -57,9 +63,11 @@ void DocumentFormatter<CharaType>::SetIndent(
 {
 	if (_indentUpDownText == ChStd::GetZeroChara<CharaType>())return;
 	if (_indentCount == 0)return;
-
+	auto&& test = indentCountMap.find(_indentUpDownText);
+	IndentTextData* data = test == indentCountMap.end() ?
+		new IndentTextData() :
+		test->second;
 	checker->SetCheckText(_indentUpDownText);
-	IndentTextData* data = new IndentTextData();
 	data->count = _indentCount;
 	data->removeFlg = _removeFlg;
 	indentCountMap[_indentUpDownText] = data;
@@ -75,6 +83,7 @@ std::basic_string<CharaType> DocumentFormatter<CharaType>::Format(const std::bas
 
 	std::basic_string<CharaType>insertTextData = ChStd::GetZeroChara<CharaType>();
 	int nowIndent = 0;
+	
 	std::basic_string<CharaType> checkText = ChStd::GetZeroChara<CharaType>();
 	std::basic_string<CharaType> baseText = _base;
 
@@ -93,7 +102,7 @@ std::basic_string<CharaType> DocumentFormatter<CharaType>::Format(const std::bas
 		{
 			nowIndent += indentCount->second->count;
 			if (indentCount->second->removeFlg)
-				i++;
+				result.erase(result.begin() + (result.length()));
 		}
 
 		result += checkText;
@@ -104,15 +113,18 @@ std::basic_string<CharaType> DocumentFormatter<CharaType>::Format(const std::bas
 		{
 			std::basic_string<CharaType> tmp = insertData->second->insertText;
 
-			for (size_t j = 0; j < nowIndent - 1 && insertData->second->useIndentCount; j++)
+			if (insertData->second->useIndentCount)
 			{
-				tmp += insertData->second->insertText;
+				for (int j = 0; j < nowIndent - 1; j++)
+				{
+					tmp += insertData->second->insertText;
+				}
 			}
 
 			if(i + checkText.length() >= baseText.length())
 				baseText = baseText + tmp;
 			else
-				baseText.insert(i + checkText.length(), tmp);
+				baseText.insert(i + 1, tmp);
 		}
 	}
 
