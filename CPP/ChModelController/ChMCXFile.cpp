@@ -140,9 +140,9 @@ void ChCpp::ModelController::XFile<CharaType>::LoadModel(const std::basic_string
 
 	for (auto&& tmp : templates->nest)
 	{
-		SetFrame(tmpXModel->modelData, tmp, text);
+		DesFrame(tmpXModel->modelData, tmp, text);
 
-		SetMesh(tmpXModel->modelData, tmp, text);
+		DesMesh(tmpXModel->modelData, tmp, text);
 	}
 
 	if (exceptionFlg)return;
@@ -173,7 +173,7 @@ void ChCpp::ModelController::XFile<CharaType>::OutModel(const std::basic_string<
 
 	ChCpp::CharFile files;
 
-	files.FileOpen(_filePath, false);
+	files.FileOpen(_filePath, true);
 
 	files.FileWrite(text);
 
@@ -232,12 +232,12 @@ bool ChCpp::ModelController::XFile<CharaType>::DesFrame(
 
 	for (auto&& tmp : _targetTemplate->nest)
 	{
-		if (SetFremeTransformMatrix(tmpFrame, tmp, _text)) continue;
+		if (DesFremeTransformMatrix(tmpFrame, tmp, _text)) continue;
 
 		{
 			ChPtr::Shared<XFrame> obj = nullptr;
 
-			if (SetFrame(obj, tmp, _text))
+			if (DesFrame(obj, tmp, _text))
 			{
 
 				tmpFrame->next.push_back(obj);
@@ -246,7 +246,7 @@ bool ChCpp::ModelController::XFile<CharaType>::DesFrame(
 			}
 		}
 
-		if (SetMesh(tmpFrame, tmp, _text)) continue;
+		if (DesMesh(tmpFrame, tmp, _text)) continue;
 	}
 
 	_frames = tmpFrame;
@@ -344,13 +344,13 @@ bool ChCpp::ModelController::XFile<CharaType>::DesMesh(
 	for (auto&& tmp : _targetTemplate->nest)
 	{
 
-		if (SetMeshNormal(_frames, tmp, _text)) continue;
+		if (DesMeshNormal(_frames, tmp, _text)) continue;
 
-		if (SetMeshTextureCoords(_frames, tmp, _text)) continue;
+		if (DesMeshTextureCoords(_frames, tmp, _text)) continue;
 
-		if (SetMeshMaterialList(_frames, tmp, _text)) continue;
+		if (DesMeshMaterialList(_frames, tmp, _text)) continue;
 
-		if (SetSkinWeights(_frames, tmp, _text)) continue;
+		if (DesSkinWeights(_frames, tmp, _text)) continue;
 
 	}
 	return true;
@@ -468,7 +468,7 @@ bool ChCpp::ModelController::XFile<CharaType>::DesMeshMaterialList(
 
 	for (auto&& tmp : _targetTemplate->nest)
 	{
-		SetMaterial(_frames, tmp, _text);
+		DesMaterial(_frames, tmp, _text);
 	}
 
 	return true;

@@ -216,11 +216,11 @@ void ChCpp::ModelController::ObjFile<CharaType>::LoadModel(const std::basic_stri
 		CreateMaterials(line);
 
 		CreateObject(line);
-		SetVertex(line);
-		SetUV(line);
-		SetNormal(line);
-		SetFace(line);
-		SetMateBlock(line);
+		DesVertex(line);
+		DesUV(line);
+		DesNormal(line);
+		DesFace(line);
+		DesMateBlock(line);
 	}
 
 	if (objects.size() <= 0)return;
@@ -345,19 +345,19 @@ void ChCpp::ModelController::ObjFile<CharaType>::CreateMaterials(const std::basi
 		if (line[0] == ObjTag::GetCommentTag<CharaType>()[0])continue;
 
 		CreateMaterial(line);
-		SetMatAmbient(line);
-		SetMatDiffuse(line);
-		SetMatSpecular(line);
-		SetMatSpecularHighLight(line);
-		SetMatDissolve(line);
-		SetMatODensity(line);
-		SetMatAmbientMap(line);
-		SetMatDiffuseMap(line);
-		SetMatSpecularMap(line);
-		SetMatSpecularHighLightMap(line);
-		SetMatBumpMap(line);
-		SetMatMetallicMap(line);
-		SetMatNormalMap(line);
+		DesMatAmbient(line);
+		DesMatDiffuse(line);
+		DesMatSpecular(line);
+		DesMatSpecularHighLight(line);
+		DesMatDissolve(line);
+		DesMatODensity(line);
+		DesMatAmbientMap(line);
+		DesMatDiffuseMap(line);
+		DesMatSpecularMap(line);
+		DesMatSpecularHighLightMap(line);
+		DesMatBumpMap(line);
+		DesMatMetallicMap(line);
+		DesMatNormalMap(line);
 	}
 
 }
