@@ -1057,7 +1057,9 @@ std::basic_string<CharaType> ChCpp::ModelController::XFile<CharaType>::SerMateri
 template<typename CharaType>
 std::basic_string<CharaType> ChCpp::ModelController::XFile<CharaType>::SerSkinWeights(ChPtr::Shared<XFrame>& _frames)
 {
+	std::basic_string<CharaType> result;
 
+	return result;
 }
 
 CH_STRING_TYPE_USE_FILE_EXPLICIT_DECLARATION(ChCpp::ModelController::XFile);
