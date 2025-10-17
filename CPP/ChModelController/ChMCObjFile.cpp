@@ -1,8 +1,8 @@
 #include"ChMCObjFile.h"
 
-#define SET_VECTOR_FUNCTION(_SetVecPascal, _SetVecCamel,_VectorStruct) \
+#define DES_VECTOR_FUNCTION(_SetVecPascal, _SetVecCamel,_VectorStruct) \
 template<typename CharaType>\
-inline void ChCpp::ModelController::ObjFile<CharaType>::Set##_SetVecPascal(const std::basic_string<CharaType>& _line){\
+inline void ChCpp::ModelController::ObjFile<CharaType>::Des##_SetVecPascal(const std::basic_string<CharaType>& _line){\
 	std::basic_string<CharaType>tag = ObjTag::Get##_SetVecPascal##Tag<CharaType>();\
 	if (!IsPrefix(_line, tag, tag.length()))return;\
 	NullModelTest();\
@@ -10,7 +10,7 @@ inline void ChCpp::ModelController::ObjFile<CharaType>::Set##_SetVecPascal(const
 	_SetVecCamel->template Deserialize<CharaType>(_line, tag.length() + 1, ChStd::GetSpaceChara<CharaType>());\
 	makeObject->vertex##_SetVecPascal##List.push_back(_SetVecCamel);}
 
-#define SET_METHOD(_FunctionName, _TagValue,_SetMethod) \
+#define DES_METHOD(_FunctionName, _TagValue,_SetMethod) \
 template<typename CharaType>\
 inline void ChCpp::ModelController::ObjFile<CharaType>::_FunctionName(const std::basic_string<CharaType>& _line){\
 	std::basic_string<CharaType>tag = _TagValue;\
@@ -511,14 +511,14 @@ void ChCpp::ModelController::ObjFile<CharaType>::CreateChFrame(ChPtr::Shared<ChC
 	}
 }
 
-SET_VECTOR_FUNCTION(Vertex, vertex, ChVec3);
+DES_VECTOR_FUNCTION(Vertex, vertex, ChVec3);
 
-SET_VECTOR_FUNCTION(UV, uv, ChVec2);
+DES_VECTOR_FUNCTION(UV, uv, ChVec2);
 
-SET_VECTOR_FUNCTION(Normal, normal, ChVec3);
+DES_VECTOR_FUNCTION(Normal, normal, ChVec3);
 
 template<typename CharaType>
-void ChCpp::ModelController::ObjFile<CharaType>::SetFace(const std::basic_string<CharaType>& _line)
+void ChCpp::ModelController::ObjFile<CharaType>::DesFace(const std::basic_string<CharaType>& _line)
 {
 	std::basic_string<CharaType>tag = ObjTag::GetMeshTag<CharaType>();
 	if (!IsPrefix(_line, tag, tag.length()))return;
@@ -592,37 +592,37 @@ void ChCpp::ModelController::ObjFile<CharaType>::SetFace(const std::basic_string
 	}
 }
 
-SET_METHOD(SetMateBlock, ObjTag::GetMaterialBlockTag<CharaType>(), (blockMaterial = &_line[tag.length() + 1]););
+DES_METHOD(DesMateBlock, ObjTag::GetMaterialBlockTag<CharaType>(), (blockMaterial = &_line[tag.length() + 1]););
 
-SET_METHOD(SetMatAmbient, ObjTag::GetMatAmbientTag<CharaType>(), (targetMaterial->ambient.template Deserialize<CharaType>(&_line[tag.length() + 1], 0, ChStd::GetSpaceChara<CharaType>())););
+DES_METHOD(DesMatAmbient, ObjTag::GetMatAmbientTag<CharaType>(), (targetMaterial->ambient.template Deserialize<CharaType>(&_line[tag.length() + 1], 0, ChStd::GetSpaceChara<CharaType>())););
 
-SET_METHOD(SetMatDiffuse, ObjTag::GetMatDiffuseTag<CharaType>(), (targetMaterial->diffuse.template Deserialize<CharaType>(&_line[tag.length() + 1], 0, ChStd::GetSpaceChara<CharaType>())););
+DES_METHOD(DesMatDiffuse, ObjTag::GetMatDiffuseTag<CharaType>(), (targetMaterial->diffuse.template Deserialize<CharaType>(&_line[tag.length() + 1], 0, ChStd::GetSpaceChara<CharaType>())););
 
-SET_METHOD(SetMatSpecular, ObjTag::GetMatSpecularTag<CharaType>(), (targetMaterial->specular.template Deserialize<CharaType>(&_line[tag.length() + 1], 0, ChStd::GetSpaceChara<CharaType>())););
+DES_METHOD(DesMatSpecular, ObjTag::GetMatSpecularTag<CharaType>(), (targetMaterial->specular.template Deserialize<CharaType>(&_line[tag.length() + 1], 0, ChStd::GetSpaceChara<CharaType>())););
 
-SET_METHOD(SetMatSpecularHighLight, ObjTag::GetMatSpecularHighLightTag<CharaType>(), (targetMaterial->spePow = ChStr::GetNumFromText<float>(&_line[tag.length() + 1], 0)););
+DES_METHOD(DesMatSpecularHighLight, ObjTag::GetMatSpecularHighLightTag<CharaType>(), (targetMaterial->spePow = ChStr::GetNumFromText<float>(&_line[tag.length() + 1], 0)););
 
-SET_METHOD(SetMatDissolve, ObjTag::GetMatDissolveTag<CharaType>(), (targetMaterial->alpha = ChStr::GetNumFromText<float>(&_line[tag.length() + 1], 0)););
+DES_METHOD(DesMatDissolve, ObjTag::GetMatDissolveTag<CharaType>(), (targetMaterial->alpha = ChStr::GetNumFromText<float>(&_line[tag.length() + 1], 0)););
 
-SET_METHOD(SetMatODensity, ObjTag::GetMatODensityTag<CharaType>(), (targetMaterial->ODensity = ChStr::GetNumFromText<float>(&_line[tag.length() + 1], 0)););
+DES_METHOD(DesMatODensity, ObjTag::GetMatODensityTag<CharaType>(), (targetMaterial->ODensity = ChStr::GetNumFromText<float>(&_line[tag.length() + 1], 0)););
 
-SET_METHOD(SetMatAmbientMap, ObjTag::GetMatAmbientMapTag<CharaType>(), (targetMaterial->ambientMap = LoadTextureName(&_line[tag.length() + 1])););
+DES_METHOD(DesMatAmbientMap, ObjTag::GetMatAmbientMapTag<CharaType>(), (targetMaterial->ambientMap = LoadTextureName(&_line[tag.length() + 1])););
 
-SET_METHOD(SetMatDiffuseMap, ObjTag::GetMatDiffuseMapTag<CharaType>(), (targetMaterial->diffuseMap = LoadTextureName(&_line[tag.length() + 1])););
+DES_METHOD(DesMatDiffuseMap, ObjTag::GetMatDiffuseMapTag<CharaType>(), (targetMaterial->diffuseMap = LoadTextureName(&_line[tag.length() + 1])););
 
-SET_METHOD(SetMatSpecularMap, ObjTag::GetMatSpecularMapTag<CharaType>(), (targetMaterial->specularMap = LoadTextureName(&_line[tag.length() + 1])););
+DES_METHOD(DesMatSpecularMap, ObjTag::GetMatSpecularMapTag<CharaType>(), (targetMaterial->specularMap = LoadTextureName(&_line[tag.length() + 1])););
 
-SET_METHOD(SetMatSpecularHighLightMap, ObjTag::GetMatSpecularHighLightMapTag<CharaType>(), (targetMaterial->specularHighLightMap = LoadTextureName(&_line[tag.length() + 1])););
+DES_METHOD(DesMatSpecularHighLightMap, ObjTag::GetMatSpecularHighLightMapTag<CharaType>(), (targetMaterial->specularHighLightMap = LoadTextureName(&_line[tag.length() + 1])););
 
-SET_METHOD(SetMatBumpMap, ObjTag::GetMatBumpMapTag<CharaType>(), (targetMaterial->bumpMap = LoadTextureName(&_line[tag.length() + 1])););
+DES_METHOD(DesMatBumpMap, ObjTag::GetMatBumpMapTag<CharaType>(), (targetMaterial->bumpMap = LoadTextureName(&_line[tag.length() + 1])););
 
-SET_METHOD(SetMatBumpMap2, ObjTag::GetMatBumpMapTag2<CharaType>(), (targetMaterial->bumpMap = LoadTextureName(&_line[tag.length() + 1])););
+DES_METHOD(DesMatBumpMap2, ObjTag::GetMatBumpMapTag2<CharaType>(), (targetMaterial->bumpMap = LoadTextureName(&_line[tag.length() + 1])););
 
-SET_METHOD(SetMatMetallicMap, ObjTag::GetMatMetallicMapTag<CharaType>(), (targetMaterial->metallicMap = LoadTextureName(&_line[tag.length() + 1])););
+DES_METHOD(DesMatMetallicMap, ObjTag::GetMatMetallicMapTag<CharaType>(), (targetMaterial->metallicMap = LoadTextureName(&_line[tag.length() + 1])););
 
-SET_METHOD(SetMatMetallicMap2, ObjTag::GetMatMetallicMapTag2<CharaType>(), (targetMaterial->metallicMap = LoadTextureName(&_line[tag.length() + 1])););
+DES_METHOD(DesMatMetallicMap2, ObjTag::GetMatMetallicMapTag2<CharaType>(), (targetMaterial->metallicMap = LoadTextureName(&_line[tag.length() + 1])););
 
-SET_METHOD(SetMatNormalMap, ObjTag::GetMatNormalMapTag<CharaType>(), (targetMaterial->normalMap = LoadTextureName(&_line[tag.length() + 1])););
+DES_METHOD(DesMatNormalMap, ObjTag::GetMatNormalMapTag<CharaType>(), (targetMaterial->normalMap = LoadTextureName(&_line[tag.length() + 1])););
 
 template<typename CharaType>
 bool ChCpp::ModelController::ObjFile<CharaType>::IsPrefix(const std::basic_string<CharaType>& _str, const std::basic_string<CharaType>& _prefix, const size_t _prefixSize)
