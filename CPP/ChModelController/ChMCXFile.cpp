@@ -160,22 +160,13 @@ void ChCpp::ModelController::XFile<CharaType>::OutModel(const std::basic_string<
 	text += ChStd::GetLFChara<CharaType>();
 	text += ChStd::GetLFChara<CharaType>();
 
-
-
-
-
-
-
-
-
-
 	loadFileName = _filePath;
 
 	ChCpp::CharFile files;
 
 	files.FileOpen(_filePath, true);
 
-	files.FileWrite(text);
+	files.FileWrite(ChCpp::GetConvertText<char>(text));
 
 	files.FileClose();
 }
