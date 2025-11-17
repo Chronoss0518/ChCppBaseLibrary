@@ -46,6 +46,8 @@ namespace ChCpp
 			int _indentCount,
 			bool removeFlg = false);
 
+		void SetIndentText(const std::basic_string<CharaType>& _indentText);
+
 	public:
 
 		std::basic_string<CharaType> Format(const std::basic_string<CharaType>& _base);
@@ -53,9 +55,9 @@ namespace ChCpp
 	private:
 
 		TextChecker<CharaType>* checker = nullptr;
-
 		std::map<std::basic_string<CharaType>, InsertTextData*>insertTextMap;
 
+		std::basic_string<CharaType>indentText;
 		std::map<std::basic_string<CharaType>, IndentTextData*>indentCountMap;
 
 	};

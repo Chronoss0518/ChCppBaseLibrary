@@ -10,6 +10,8 @@ template<typename CharaType>
 DocumentFormatter<CharaType>::DocumentFormatter()
 {
 	checker = new TextChecker<CharaType>();
+
+	indentText = ChStd::GetZeroChara<CharaType>();
 }
 
 template<typename CharaType>
