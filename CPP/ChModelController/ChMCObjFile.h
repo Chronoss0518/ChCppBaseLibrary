@@ -230,51 +230,51 @@ namespace ChCpp
 
 			void CreateChFrame(ChPtr::Shared<ChCpp::FrameObject<CharaType>> _frame);
 
-		protected://SetFunction//
+		protected://DesFunction//
 
 			// Load Model Methods //
 
-			void SetVertex(const std::basic_string<CharaType>& _line);
+			void DesVertex(const std::basic_string<CharaType>& _line);
 
-			void SetUV(const std::basic_string<CharaType>& _line);
+			void DesUV(const std::basic_string<CharaType>& _line);
 
-			void SetNormal(const std::basic_string<CharaType>& _line);
+			void DesNormal(const std::basic_string<CharaType>& _line);
 
-			void SetFace(const std::basic_string<CharaType>& _line);
+			void DesFace(const std::basic_string<CharaType>& _line);
 
-			void SetMateBlock(const std::basic_string<CharaType>& _line);
+			void DesMateBlock(const std::basic_string<CharaType>& _line);
 
-			void SetMatAmbient(const std::basic_string<CharaType>& _line);
+			void DesMatAmbient(const std::basic_string<CharaType>& _line);
 
-			void SetMatDiffuse(const std::basic_string<CharaType>& _line);
+			void DesMatDiffuse(const std::basic_string<CharaType>& _line);
 
-			void SetMatSpecular(const std::basic_string<CharaType>& _line);
+			void DesMatSpecular(const std::basic_string<CharaType>& _line);
 
-			void SetMatSpecularHighLight(const std::basic_string<CharaType>& _line);
+			void DesMatSpecularHighLight(const std::basic_string<CharaType>& _line);
 
 			//Alphaíl//
-			void SetMatDissolve(const std::basic_string<CharaType>& _line);
+			void DesMatDissolve(const std::basic_string<CharaType>& _line);
 
 			//ã¸ê‹ó¶//
-			void SetMatODensity(const std::basic_string<CharaType>& _line);
+			void DesMatODensity(const std::basic_string<CharaType>& _line);
 
-			void SetMatAmbientMap(const std::basic_string<CharaType>& _line);
+			void DesMatAmbientMap(const std::basic_string<CharaType>& _line);
 
-			void SetMatDiffuseMap(const std::basic_string<CharaType>& _line);
+			void DesMatDiffuseMap(const std::basic_string<CharaType>& _line);
 
-			void SetMatSpecularMap(const std::basic_string<CharaType>& _line);
+			void DesMatSpecularMap(const std::basic_string<CharaType>& _line);
 
-			void SetMatSpecularHighLightMap(const std::basic_string<CharaType>& _line);
+			void DesMatSpecularHighLightMap(const std::basic_string<CharaType>& _line);
 
-			void SetMatBumpMap(const std::basic_string<CharaType>& _line);
-			void SetMatBumpMap2(const std::basic_string<CharaType>& _line);
+			void DesMatBumpMap(const std::basic_string<CharaType>& _line);
+			void DesMatBumpMap2(const std::basic_string<CharaType>& _line);
 
-			void SetMatMetallicMap(const std::basic_string<CharaType>& _line);
-			void SetMatMetallicMap2(const std::basic_string<CharaType>& _line);
+			void DesMatMetallicMap(const std::basic_string<CharaType>& _line);
+			void DesMatMetallicMap2(const std::basic_string<CharaType>& _line);
 
-			void SetMatNormalMap(const std::basic_string<CharaType>& _line);
+			void DesMatNormalMap(const std::basic_string<CharaType>& _line);
 
-			// Set Model Methods //
+			// Des Model Methods //
 			
 
 

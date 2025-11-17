@@ -63,8 +63,12 @@
 #define CH_TO_CHAR32(Text) U##Text
 #endif
 
+#ifdef CPP20
+
 #ifndef CH_TO_CHAR8
 #define CH_TO_CHAR8(Text) u8##Text
+#endif
+
 #endif
 
 #ifndef CH_NUMBER_FUNCTION_BASE

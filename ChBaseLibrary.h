@@ -25,6 +25,9 @@
 #include"CPP/ChFile/ChFile.h"
 #include"CPP/ChFile/ChBinaryFile.h"
 
+#include"CPP/ChTextChecker/ChTextChecker.h"
+#include"CPP/ChDocumentFormatter/ChDocumentFormatter.h"
+
 #include"CPP/ChBaseObject/ChBaseComponent.h"
 #include"CPP/ChBaseObject/ChBaseObject.h"
 #include"CPP/ChBaseObject/ChObjectList.h"

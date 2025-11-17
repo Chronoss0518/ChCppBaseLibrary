@@ -17,17 +17,17 @@ namespace ChCpp
 
 		//第一引数はアドレス内の一番小さいビットから数えた数値を入力//
 		//例)アドレス位置が1000番,選択箇所1001番の場合は1を選択//
-		void SetBitFlg(const unsigned char _argsNum, const bool _flg);
+		void SetBitFlg(const unsigned long _argsNum, const bool _flg);
 
 		//引数で選択された位置のビットをtrueをセットする//
 		//第一引数はアドレス内の一番小さいビットから数えた数値を入力//
 		//例)アドレス位置が1000番,選択箇所1001番の場合は1を選択//
-		void SetBitTrue(const unsigned char _argsNum);
+		void SetBitTrue(const unsigned long _argsNum);
 
 		//引数で選択された位置のビットをfalseをセットする//
 		//第一引数はアドレス内の一番小さいビットから数えた数値を入力//
 		//例)アドレス位置が1000番,選択箇所1001番の場合は1を選択//
-		void SetBitFalse(const unsigned char _argsNum);
+		void SetBitFalse(const unsigned long _argsNum);
 
 		//引数で選択された位置のByteをセットする//
 		//第一引数はセットする値//
@@ -44,19 +44,19 @@ namespace ChCpp
 
 		//引数で選択された数値のビットの値によって//
 		//ChStd::TrueかChStd::Falseを返す//
-		bool GetBitFlg(const unsigned char _argsNum);
+		bool GetBitFlg(const unsigned long _argsNum)const;
 
 		//使用可能サイズ//
-		unsigned long  GetSize();
-
-		unsigned char GetValue(const unsigned char _byteCount = 0);
+		unsigned long  GetSize()const
+;
+		unsigned char GetValue(const unsigned char _byteCount = 0)const;
 
 		//フラグ数の指定でのTrueの個数取得//
-		inline unsigned long GetTrueCnt(const unsigned long& _cnt)
+		inline unsigned long GetTrueCnt(const unsigned long& _cnt)const
 		{
-			unsigned char cnt = 0;
+			unsigned long cnt = 0;
 
-			for (unsigned char i = 0; i < _cnt; i++)
+			for (unsigned long i = 0; i < _cnt; i++)
 			{
 				if (!GetBitFlg(i))continue;
 				cnt++;
@@ -65,16 +65,10 @@ namespace ChCpp
 			return cnt;
 		}
 
-		inline unsigned long GetTrueCnt()
+		inline unsigned long GetTrueCnt()const
 		{
 			return GetTrueCnt(GetSize());
 		}
-
-	protected://get Functions//
-
-		unsigned char GetMask(const unsigned char _argsNum);
-
-		unsigned char& GetFlgs(const unsigned char _argsNum);
 
 	private:
 
