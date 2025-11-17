@@ -98,8 +98,7 @@ namespace ChCpp
 		{
 		public:
 
-			struct XVertex :public Ch3D::PolyVertex
-			{};
+			struct XVertex :public Ch3D::PolyVertex {};
 
 			struct XMaterial :public Ch3D::Material
 			{
