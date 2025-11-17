@@ -8,35 +8,10 @@
 
 #include<float.h>
 
-#include"../../BasePack/ChStd.h"
-#include"../../BasePack/ChPtr.h"
-#include"../../BasePack/Ch3D.h"
-
 #include"../../ClassParts/ChCPInitializer.h"
-
-#include"../ChBaseObject/ChBaseObject.h"
+#include"../ChTransformObject/ChTransformObject.h"
 
 #include"ChModel.h"
-
-
-#ifndef CH_FRAME_SET_MATRIX_FUNCTION
-#define CH_FRAME_SET_MATRIX_FUNCTION(_methodName,_matrixType) \
-void _methodName(const Ch3D::Transform& _trans){\
-	_matrixType.SetPosition(_trans.pos);\
-	_matrixType.SetRotation(_trans.rot);\
-	_matrixType.SetScalling(_trans.scl);\
-}\
-void _methodName(const ChLMat& _mat) { _matrixType = _mat; }\
-void _methodName(const ChRMat& _mat) { _matrixType = _mat.GetConvertAxis(); }
-#endif
-
-#ifndef CH_FRAME_GET_MATRIX_FUNCTION
-#define CH_FRAME_GET_MATRIX_FUNCTION(_RLType,_returnMethod) \
-Ch##_RLType##Mat GetOutSizdTransform##_RLType##Mat() { return outSideMat _returnMethod ; }\
-Ch##_RLType##Mat GetFrameTransform##_RLType##Mat() { return frameMat _returnMethod ; }\
-Ch##_RLType##Mat GetDraw##_RLType##HandMatrix() { UpdateDrawTransform(); return drawMat _returnMethod ; }\
-Ch##_RLType##Mat GetOffset##_RLType##Matrix() { return offsetMat _returnMethod ; }
-#endif
 
 namespace ChCpp
 {
@@ -88,24 +63,11 @@ namespace ChCpp
 	};
 
 	template<typename CharaType>
-	class FrameObject : public ChCpp::BaseObject<CharaType>
+	class FrameObject : public ChCpp::TransformObject<CharaType>
 	{
 
 		template<typename CharaType>
 		friend class ModelControllerBase;
-
-	public://Set Functions//
-
-		CH_FRAME_SET_MATRIX_FUNCTION(SetOutSizdTransform, outSideMat);
-
-		CH_FRAME_SET_MATRIX_FUNCTION(SetFrameTransform, frameMat);
-
-	public://Get Functions//
-
-
-		CH_FRAME_GET_MATRIX_FUNCTION(L, );
-
-		CH_FRAME_GET_MATRIX_FUNCTION(R, .GetConvertAxis());
 
 	public:
 
@@ -240,51 +202,14 @@ namespace ChCpp
 
 	public://Update Functions//
 
-		void Update()override { UpdateDrawTransform(); }
-
-		void UpdateDrawTransform()
-		{
-			ChLMat parentDrawMat;
-
-			{
-				auto parent = ChPtr::SharedSafeCast<FrameObject>(ChCpp::BasicObject::GetParent());
-
-				if (parent != nullptr)
-				{
-					parentDrawMat = parent->drawMat;
-				}
-			}
-			drawMat = outSideMat * frameMat * parentDrawMat;
-		}
-
-		void UpdateAllDrawTransform()
-		{
-			ChLMat parentDrawMat;
-			{
-				auto&& parent = ChPtr::SharedSafeCast<FrameObject<CharaType>>(ChCpp::BasicObject::GetParent());
-
-				if (parent != nullptr)
-				{
-					parent->UpdateAllDrawTransform();
-					parentDrawMat = parent->drawMat;
-				}
-			}
-			drawMat = outSideMat * frameMat * parentDrawMat;
-		}
-
 		void SetAnimationName(const std::basic_string<CharaType>& _name);
-
-	public://Is Function//
 
 	protected:
 
-		ChLMat frameMat;
-		ChLMat outSideMat;
 		ChLMat offsetMat;
 
 	private:
 
-		ChLMat drawMat;
 		std::basic_string<CharaType> animationName = ChStd::GetZeroChara<CharaType>();
 	};
 
