@@ -11,19 +11,6 @@ namespace ChCpp
 	{
 	public:
 
-		enum class Type : unsigned char
-		{
-			Char,
-			WChar,
-			U16Char,
-			U32Char,
-#ifdef CPP20
-			U8Char,
-#endif
-		};
-
-	public:
-
 		virtual ~StringObjectBase(){}
 
 	public:
@@ -104,10 +91,6 @@ namespace ChCpp
 		static size_t Find(StringObjectBase* _base, StringObjectBase* _target);
 
 		virtual size_t Find(StringObjectBase* _obj) = 0;
-
-	protected:
-
-		Type type = Type::Char;
 
 	};
 
