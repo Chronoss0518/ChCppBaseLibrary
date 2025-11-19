@@ -53,32 +53,27 @@ using namespace ChCpp;
 
 void StringObjectBase::Set(StringObjectBase* _in, StringObjectBase* _out)
 {
-	if (_in->type != _out->type)return;
 	_in->Set(_out);
 }
 
 bool StringObjectBase::Is(StringObjectBase* _in, StringObjectBase* _out)
 {
-	if (_in->type != _out->type)return false;
 	return _in->Is(_out);
 }
 
 bool StringObjectBase::IsConstain(StringObjectBase* _in, StringObjectBase* _out)
 {
-	if (_in->type != _out->type)return false;
 	return _in->IsConstain(_out);
 }
 
 void StringObjectBase::Add(StringObjectBase* _base, StringObjectBase* _target)
 {
-	if (_base->type != _target->type)return;
 	_base->Add(_target);
 }
 
 size_t StringObjectBase::Find(StringObjectBase* _base, StringObjectBase* _target)
 {
-	if (_base->type != _target->type)return;
-	_base->Set(_target);
+	return _base->Find(_target);
 }
 
 BASE_METHOD_LIST(char, CharStringObject)
