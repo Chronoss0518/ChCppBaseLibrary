@@ -20,6 +20,14 @@ bool StringObjectBase::IsConstain(StringObjectBase* _obj, const std::basic_strin
 	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
 	if (ChPtr::NullCheck(cast))return false;\
 	return cast->str.find(_str, 0) != std::basic_string<_charaType>::npos;}\
+void StringObjectBase::AddBefore(StringObjectBase* _obj, const std::basic_string<_charaType>& _str){\
+	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
+	if (ChPtr::NullCheck(cast))return;\
+	cast->str = _str + cast->str;}\
+void StringObjectBase::AddAfter(StringObjectBase* _obj, const std::basic_string<_charaType>& _str){\
+	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
+	if (ChPtr::NullCheck(cast))return;\
+	cast->str = cast->str + _str;}\
 size_t StringObjectBase::Find(StringObjectBase* _obj, const std::basic_string<_charaType>& _str){\
 	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
 	if (ChPtr::NullCheck(cast))return std::basic_string<_charaType>::npos;\
@@ -38,7 +46,11 @@ bool _stringObjectType::IsConstain(StringObjectBase* _obj){\
 	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
 	if (ChPtr::NullCheck(cast))return false;\
 	return str.find(cast->str) >= 0;}\
-void _stringObjectType::Add(StringObjectBase* _obj){\
+void _stringObjectType::AddBefore(StringObjectBase* _obj){\
+	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
+	if (ChPtr::NullCheck(cast))return;\
+	str = cast->str + str;}\
+void _stringObjectType::AddAfter(StringObjectBase* _obj){\
 	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
 	if (ChPtr::NullCheck(cast))return;\
 	str = str + cast->str;}\
@@ -66,9 +78,9 @@ bool StringObjectBase::IsConstain(StringObjectBase* _in, StringObjectBase* _out)
 	return _in->IsConstain(_out);
 }
 
-void StringObjectBase::Add(StringObjectBase* _base, StringObjectBase* _target)
+void StringObjectBase::Add(StringObjectBase* _before, StringObjectBase* _after)
 {
-	_base->Add(_target);
+	_before->AddAfter(_after);
 }
 
 size_t StringObjectBase::Find(StringObjectBase* _base, StringObjectBase* _target)

@@ -64,18 +64,27 @@ namespace ChCpp
 
 	public:
 
-		static void Add(StringObjectBase* _obj, std::basic_string<char>& _str);
-		static void Add(StringObjectBase* _obj, std::basic_string<wchar_t>& _str);
-		static void Add(StringObjectBase* _obj, std::basic_string<char16_t>& _str);
-		static void Add(StringObjectBase* _obj, std::basic_string<char32_t>& _str);
+		static void AddBefore(StringObjectBase* _obj, const std::basic_string<char>& _str);
+		static void AddBefore(StringObjectBase* _obj, const std::basic_string<wchar_t>& _str);
+		static void AddBefore(StringObjectBase* _obj, const std::basic_string<char16_t>& _str);
+		static void AddBefore(StringObjectBase* _obj, const std::basic_string<char32_t>& _str);
 
 #ifdef CPP20
-		static void Add(StringObjectBase* _obj, std::basic_string<char8_t>& _str);
+		static void AddBefore(StringObjectBase* _obj, const std::basic_string<char8_t>& _str);
+#endif
+		static void AddAfter(StringObjectBase* _obj, const std::basic_string<char>& _str);
+		static void AddAfter(StringObjectBase* _obj, const std::basic_string<wchar_t>& _str);
+		static void AddAfter(StringObjectBase* _obj, const std::basic_string<char16_t>& _str);
+		static void AddAfter(StringObjectBase* _obj, const std::basic_string<char32_t>& _str);
+
+#ifdef CPP20
+		static void AddAfter(StringObjectBase* _obj, const std::basic_string<char8_t>& _str);
 #endif
 
 		static void Add(StringObjectBase* _base, StringObjectBase* _target);
 
-		virtual void Add(StringObjectBase* _obj) = 0;
+		virtual void AddBefore(StringObjectBase* _obj) = 0;
+		virtual void AddAfter(StringObjectBase* _obj) = 0;
 
 	public:
 
@@ -95,11 +104,7 @@ namespace ChCpp
 	};
 
 	class CharStringObject :public StringObjectBase
-	{
-	public:
-
-		CharStringObject() { type = Type::Char; }
-		
+	{	
 	public:
 
 		void Set(StringObjectBase* _obj)override;
@@ -108,7 +113,9 @@ namespace ChCpp
 
 		bool IsConstain(StringObjectBase* _obj)override;
 
-		void Add(StringObjectBase* _obj)override;
+		void AddBefore(StringObjectBase* _obj)override;
+
+		void AddAfter(StringObjectBase* _obj)override;
 
 		size_t Find(StringObjectBase* _obj)override;
 
@@ -121,17 +128,15 @@ namespace ChCpp
 	{
 	public:
 
-		WCharStringObject() { type = Type::WChar; }
-
-	public:
-
 		void Set(StringObjectBase* _obj)override;
 
 		bool Is(StringObjectBase* _obj)override;
 
 		bool IsConstain(StringObjectBase* _obj)override;
 
-		void Add(StringObjectBase* _obj)override;
+		void AddBefore(StringObjectBase* _obj)override;
+
+		void AddAfter(StringObjectBase* _obj)override;
 
 		size_t Find(StringObjectBase* _obj)override;
 
@@ -144,17 +149,15 @@ namespace ChCpp
 	{
 	public:
 
-		U16CharStringObject() { type = Type::U16Char; }
-
-	public:
-
 		void Set(StringObjectBase* _obj)override;
 
 		bool Is(StringObjectBase* _obj)override;
 
 		bool IsConstain(StringObjectBase* _obj)override;
 
-		void Add(StringObjectBase* _obj)override;
+		void AddBefore(StringObjectBase* _obj)override;
+
+		void AddAfter(StringObjectBase* _obj)override;
 
 		size_t Find(StringObjectBase* _obj)override;
 
@@ -167,17 +170,15 @@ namespace ChCpp
 	{
 	public:
 
-		U32CharStringObject() { type = Type::U32Char; }
-
-	public:
-
 		void Set(StringObjectBase* _obj)override;
 
 		bool Is(StringObjectBase* _obj)override;
 
 		bool IsConstain(StringObjectBase* _obj)override;
 
-		void Add(StringObjectBase* _obj)override;
+		void AddBefore(StringObjectBase* _obj)override;
+
+		void AddAfter(StringObjectBase* _obj)override;
 
 		size_t Find(StringObjectBase* _obj)override;
 
@@ -191,17 +192,15 @@ namespace ChCpp
 	{
 	public:
 
-		U8CharStringObject() { type = Type::U8Char; }
-
-	public:
-
 		void Set(StringObjectBase* _obj)override;
 
 		bool Is(StringObjectBase* _obj)override;
 
 		bool IsConstain(StringObjectBase* _obj)override;
 
-		void Add(StringObjectBase* _obj)override;
+		void AddBefore(StringObjectBase* _obj)override;
+
+		void AddAfter(StringObjectBase* _obj)override;
 
 		size_t Find(StringObjectBase* _obj)override;
 
