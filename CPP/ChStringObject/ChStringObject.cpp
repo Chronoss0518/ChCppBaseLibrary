@@ -12,6 +12,11 @@ template<> std::basic_string<_charaType> StringObjectBase::Get(StringObjectBase*
 	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
 	if (ChPtr::NullCheck(cast))return ChStd::GetZeroChara<_charaType>();\
 	return cast->str;}\
+template<> _charaType StringObjectBase::GetValue(StringObjectBase* _obj, size_t _position){\
+	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
+	if (ChPtr::NullCheck(cast))return 0;\
+	if (cast->str.length() <= _position)return 0;\
+	return cast->str[_position];}\
 bool StringObjectBase::Is(StringObjectBase* _obj, const std::basic_string<_charaType>& _str){\
 	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
 	if (ChPtr::NullCheck(cast))return false;\
@@ -38,6 +43,8 @@ void _stringObjectType::Set(StringObjectBase* _obj){\
 	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
 	if (ChPtr::NullCheck(cast))return;\
 	str = cast->str;}\
+size_t _stringObjectType::GetLen(){\
+	return str.length();}\
 bool _stringObjectType::Is(StringObjectBase* _obj){\
 	auto&& cast = dynamic_cast<_stringObjectType*>(_obj);\
 	if (ChPtr::NullCheck(cast))return false;\
@@ -65,26 +72,42 @@ using namespace ChCpp;
 
 void StringObjectBase::Set(StringObjectBase* _in, StringObjectBase* _out)
 {
+	if (ChPtr::NullCheck(_in))return;
+	if (ChPtr::NullCheck(_out))return;
 	_in->Set(_out);
+}
+
+size_t StringObjectBase::GetLen(StringObjectBase* _obj)
+{
+	if (ChPtr::NullCheck(_obj))return -1;
+	return _obj->GetLen();
 }
 
 bool StringObjectBase::Is(StringObjectBase* _in, StringObjectBase* _out)
 {
+	if (ChPtr::NullCheck(_in))return;
+	if (ChPtr::NullCheck(_out))return;
 	return _in->Is(_out);
 }
 
 bool StringObjectBase::IsConstain(StringObjectBase* _in, StringObjectBase* _out)
 {
+	if (ChPtr::NullCheck(_in))return;
+	if (ChPtr::NullCheck(_out))return;
 	return _in->IsConstain(_out);
 }
 
 void StringObjectBase::Add(StringObjectBase* _before, StringObjectBase* _after)
 {
+	if (ChPtr::NullCheck(_before))return;
+	if (ChPtr::NullCheck(_after))return;
 	_before->AddAfter(_after);
 }
 
 size_t StringObjectBase::Find(StringObjectBase* _base, StringObjectBase* _target)
 {
+	if (ChPtr::NullCheck(_base))return;
+	if (ChPtr::NullCheck(_target))return;
 	return _base->Find(_target);
 }
 
@@ -99,4 +122,3 @@ CHILD_METHOD_LIST(wchar_t, WCharStringObject)
 CHILD_METHOD_LIST(char16_t, U16CharStringObject)
 CHILD_METHOD_LIST(char32_t, U32CharStringObject)
 CHILD_METHOD_LIST(char8_t, U8CharStringObject)
-

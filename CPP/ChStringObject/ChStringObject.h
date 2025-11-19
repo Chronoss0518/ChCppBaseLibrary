@@ -33,6 +33,13 @@ namespace ChCpp
 		template<typename CharaType>
 		static std::basic_string<CharaType> Get(StringObjectBase* _obj);
 
+		template<typename CharaType>
+		static CharaType GetValue(StringObjectBase* _obj, size_t _position);
+
+		static size_t GetLen(StringObjectBase* _obj);
+
+		virtual size_t GetLen() = 0;
+
 	public:
 
 		static bool Is(StringObjectBase* _obj, const std::basic_string<char>& _str);
@@ -81,7 +88,7 @@ namespace ChCpp
 		static void AddAfter(StringObjectBase* _obj, const std::basic_string<char8_t>& _str);
 #endif
 
-		static void Add(StringObjectBase* _base, StringObjectBase* _target);
+		static void Add(StringObjectBase* _before, StringObjectBase* _after);
 
 		virtual void AddBefore(StringObjectBase* _obj) = 0;
 		virtual void AddAfter(StringObjectBase* _obj) = 0;
@@ -109,6 +116,8 @@ namespace ChCpp
 
 		void Set(StringObjectBase* _obj)override;
 
+		virtual size_t GetLen()override;
+
 		bool Is(StringObjectBase* _obj)override;
 
 		bool IsConstain(StringObjectBase* _obj)override;
@@ -129,6 +138,8 @@ namespace ChCpp
 	public:
 
 		void Set(StringObjectBase* _obj)override;
+
+		virtual size_t GetLen()override;
 
 		bool Is(StringObjectBase* _obj)override;
 
@@ -151,6 +162,8 @@ namespace ChCpp
 
 		void Set(StringObjectBase* _obj)override;
 
+		virtual size_t GetLen()override;
+
 		bool Is(StringObjectBase* _obj)override;
 
 		bool IsConstain(StringObjectBase* _obj)override;
@@ -171,6 +184,8 @@ namespace ChCpp
 	public:
 
 		void Set(StringObjectBase* _obj)override;
+
+		virtual size_t GetLen()override;
 
 		bool Is(StringObjectBase* _obj)override;
 
@@ -193,6 +208,8 @@ namespace ChCpp
 	public:
 
 		void Set(StringObjectBase* _obj)override;
+
+		virtual size_t GetLen()override;
 
 		bool Is(StringObjectBase* _obj)override;
 
