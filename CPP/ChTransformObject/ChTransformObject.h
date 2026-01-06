@@ -1,7 +1,6 @@
 #ifndef Ch_CPP_TransformObject_h
 #define Ch_CPP_TransformObject_h
 
-
 #include"../ChBaseObject/ChBaseObject.h"
 
 #include"../../BasePack/ChStd.h"
@@ -22,10 +21,9 @@ void _methodName(const ChRMat& _mat) { _matrixType = _mat.GetConvertAxis(); }
 
 #ifndef CH_FRAME_GET_MATRIX_FUNCTION
 #define CH_FRAME_GET_MATRIX_FUNCTION(_RLType,_returnMethod) \
-Ch##_RLType##Mat GetOutSizdTransform##_RLType##Mat() { return outSideMat _returnMethod ; }\
+Ch##_RLType##Mat GetOutSideTransform##_RLType##Mat() { return outSideMat _returnMethod ; }\
 Ch##_RLType##Mat GetFrameTransform##_RLType##Mat() { return frameMat _returnMethod ; }\
-Ch##_RLType##Mat GetDraw##_RLType##HandMatrix() { UpdateDrawTransform(); return drawMat _returnMethod ; }\
-Ch##_RLType##Mat GetOffset##_RLType##Matrix() { return offsetMat _returnMethod ; }
+Ch##_RLType##Mat GetDraw##_RLType##HandMatrix() { UpdateDrawTransform(); return drawMat _returnMethod ; }
 #endif
 
 namespace ChCpp
@@ -55,7 +53,7 @@ namespace ChCpp
 			ChLMat parentDrawMat;
 
 			{
-				auto parent = ChPtr::SharedSafeCast<FrameObject>(ChCpp::BasicObject::GetParent());
+				auto parent = ChPtr::SharedSafeCast<TransformObject<CharaType>>(ChCpp::BasicObject::GetParent());
 
 				if (parent != nullptr)
 				{
@@ -69,7 +67,7 @@ namespace ChCpp
 		{
 			ChLMat parentDrawMat;
 			{
-				auto&& parent = ChPtr::SharedSafeCast<FrameObject<CharaType>>(ChCpp::BasicObject::GetParent());
+				auto&& parent = ChPtr::SharedSafeCast<TransformObject<CharaType>>(ChCpp::BasicObject::GetParent());
 
 				if (parent != nullptr)
 				{

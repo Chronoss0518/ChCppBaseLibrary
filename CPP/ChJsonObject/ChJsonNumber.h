@@ -122,7 +122,7 @@ namespace ChCpp
 
 	private:
 
-		long double value;
+		long double value = 0.0;
 	};
 
 }

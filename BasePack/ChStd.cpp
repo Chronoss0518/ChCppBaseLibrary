@@ -5,7 +5,7 @@
 #endif
 
 #ifndef CH_HEXA_NUM_TEXT
-#define CH_HEXA_NUM_TEXT "01234456789ABCDE"
+#define CH_HEXA_NUM_TEXT "0123456789ABCDEF"
 #endif
 
 #ifndef CH_OCTAL_NUM_TEXT

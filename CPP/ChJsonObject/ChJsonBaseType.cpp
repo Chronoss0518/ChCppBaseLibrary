@@ -11,15 +11,6 @@ using namespace ChCpp;
 
 #define CH_JSON_NULL_TEXT_FUNCTION(type) CH_NUMBER_FUNCTION(ChCpp::Json::GetNullText,type)
 
-#define	CH_JSON_OBJECT_COUNT \
-ChCpp::Cumulative<CharaType> objectCount = ChCpp::Cumulative<CharaType>(\
-	ChStd::GetStartBraceChara<CharaType>()[0],\
-	ChStd::GetEndBraceChara<CharaType>()[0])
-
-#define	CH_JSON_ARRAY_COUNT \
-ChCpp::Cumulative<CharaType> arrayCount = ChCpp::Cumulative<CharaType>(\
-	ChStd::GetStartBracketChara<CharaType>()[0],\
-	ChStd::GetEndBracketChara<CharaType>()[0])
 
 namespace ChCpp
 {
@@ -75,9 +66,13 @@ std::basic_string<CharaType> ChCpp::JsonBaseType<CharaType>::FormatDocument(cons
 		ChStd::GetEndBraceChara<CharaType>()[0],
 		ChStd::GetEndBracketChara<CharaType>()[0] };
 
-	CH_JSON_OBJECT_COUNT;
+	ChCpp::Cumulative<CharaType> objectCount = ChCpp::Cumulative<CharaType>(
+		ChStd::GetStartBraceChara<CharaType>()[0],
+		ChStd::GetEndBraceChara<CharaType>()[0]);
 
-	CH_JSON_ARRAY_COUNT;
+	ChCpp::Cumulative<CharaType> arrayCount = ChCpp::Cumulative<CharaType>(
+		ChStd::GetStartBracketChara<CharaType>()[0],
+		ChStd::GetEndBracketChara<CharaType>()[0]);
 
 	bool beforeCrFlg = false;
 	bool afterCrFlg = false;
@@ -184,16 +179,20 @@ std::basic_string<CharaType> ChCpp::JsonBaseType<CharaType>::GetExtractString(co
 {
 	bool inString = false;
 
-	CH_JSON_OBJECT_COUNT;
+	ChCpp::Cumulative<CharaType> objectCount = ChCpp::Cumulative<CharaType>(
+		ChStd::GetStartBraceChara<CharaType>()[0],
+		ChStd::GetEndBraceChara<CharaType>()[0]);
 
-	CH_JSON_ARRAY_COUNT;
+	ChCpp::Cumulative<CharaType> arrayCount = ChCpp::Cumulative<CharaType>(
+		ChStd::GetStartBracketChara<CharaType>()[0],
+		ChStd::GetEndBracketChara<CharaType>()[0]);
 
 	std::basic_string<CharaType> res = ChStd::GetZeroChara<CharaType>();
 
-	const char whiteSpaceInterfaceChar = 32;
+	const char whiteSpaceInterfaceChar = 0x20;
 	const char delCharNum = 127;
-
 	bool isInObjectOrArray = false;
+
 
 	for (unsigned long i = 0; i < _value.length(); i++)
 	{
@@ -205,15 +204,16 @@ std::basic_string<CharaType> ChCpp::JsonBaseType<CharaType>::GetExtractString(co
 
 		res = res + _value[i];
 
-		objectCount.Update(_value[i]);
-		arrayCount.Update(_value[i]);
+		if (!inString)
+		{
+			objectCount.Update(_value[i]);
+			arrayCount.Update(_value[i]);
 
-		isInObjectOrArray = objectCount.GetCount() > 0 || arrayCount.GetCount() > 0;
+			isInObjectOrArray = objectCount.GetCount() > 0 || arrayCount.GetCount() > 0;
+		}
 
-		if (isInObjectOrArray)continue;
-		if (_value[i] != '\"')continue;
+		if (_value[i] == '\"')inString = !inString;
 
-		inString = !inString;
 	}
 	return res;
 }

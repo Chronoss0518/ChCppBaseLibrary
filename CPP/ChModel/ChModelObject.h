@@ -71,6 +71,12 @@ namespace ChCpp
 
 	public:
 
+		ChLMat GetOffsetLMatrix() { return offsetMat; }
+
+		ChRMat GetOffsetRMatrix() { return offsetMat.GetConvertAxis(); }
+
+	public:
+
 		static bool GetLenIsPointToPolyBoard(ChVec3& _outVector, const ChVec3& _point, Ch3D::Primitive& _prim, const std::vector<ChPtr::Shared<Ch3D::SavePolyVertex>>& _vertexList, const float _maxLen = FLT_MAX, const ChLMat& _mat = ChLMat())
 		{
 
@@ -145,7 +151,7 @@ namespace ChCpp
 			std::vector<ChPtr::Shared<Ch3D::SavePolyVertex>> vertexList;
 			{
 				ChLMat tmpMat = _mat;
-				tmpMat = GetDrawLHandMatrix() * tmpMat;
+				tmpMat = TransformObject<CharaType>::GetDrawLHandMatrix() * tmpMat;
 
 				for (auto&& vertex : com->vertexList)
 				{
