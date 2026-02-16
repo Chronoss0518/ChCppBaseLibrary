@@ -82,6 +82,9 @@ bool Collider::HitTestTri(
 	const ChVec3& _vec2,
 	const ChVec3& _vec3)
 {
+	//https://shikousakugo.wordpress.com/2012/06/27/ray-intersection-2/
+	//ƒNƒ‰ƒƒ‹‚ÌŒö®‚ğQÆ//
+
 	//eg1 = (v1 - v0), eg2 = (v2 - v0);
 	//hitPos = spos + (dir * len)
 	//hitPos = (eg1 * u) + (eg2 * v) + v0
