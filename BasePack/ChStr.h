@@ -76,13 +76,13 @@ namespace ChStr
 	}
 
 	//ƒNƒ‰ƒX–¼‚ğæ“¾‚·‚éŠÖ”//
-	template<typename CharaType, class T = int>
-	inline std::basic_string<CharaType> GetTypeName()
+	template<class T = int>
+	inline std::string GetTypeName()
 	{
-		std::basic_string<CharaType> tmpStr = typeid(T).name();
+		std::string tmpStr = typeid(T).name();
 
-		size_t tmp = tmpStr.GetFindPosition(static_cast<CharaType>(' '));
-		if (tmp == std::basic_string<CharaType>::NPos())tmp = 0;
+		size_t tmp = tmpStr.find(' ');
+		if (tmp == std::string::npos())tmp = 0;
 		else tmp += 1;
 
 		return &tmpStr[tmp];
