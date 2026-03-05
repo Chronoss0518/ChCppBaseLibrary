@@ -17,8 +17,6 @@
 #include <cassert>
 #endif
 
-#include <locale>
-
 #include"ChStd.h"
 #include"ChPtr.h"
 
@@ -424,7 +422,6 @@ namespace ChStr
 	//文字列からUTF8のワイド文字列へ変換する//
 	static inline std::wstring UTF8ToWString(const std::string& _str)
 	{
-
 		return GetU8Converter().from_bytes(_str.c_str());
 	}
 
@@ -437,7 +434,6 @@ namespace ChStr
 	//文字列からUTF16のワイド文字列へ変換する//
 	static inline std::wstring UTF16ToWString(const std::string& _str)
 	{
-
 		return GetU16Converter().from_bytes(_str.c_str());
 	}
 
@@ -454,6 +450,8 @@ namespace ChStr
 		const std::vector<CharaType>& _addCRLF,
 		const std::vector<CharaType>& _addTab,
 		const std::vector<CharaType>& _subTab);
+
+
 
 }
 
