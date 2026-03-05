@@ -7,25 +7,6 @@
 #include"../../BasePack/ChPtr.h"
 #include"../../BasePack/Ch3D.h"
 
-
-#ifndef CH_FRAME_SET_MATRIX_FUNCTION
-#define CH_FRAME_SET_MATRIX_FUNCTION(_methodName,_matrixType) \
-void _methodName(const Ch3D::Transform& _trans){\
-	_matrixType.SetPosition(_trans.pos);\
-	_matrixType.SetRotation(_trans.rot);\
-	_matrixType.SetScalling(_trans.scl);\
-}\
-void _methodName(const ChLMat& _mat) { _matrixType = _mat; }\
-void _methodName(const ChRMat& _mat) { _matrixType = _mat.GetConvertAxis(); }
-#endif
-
-#ifndef CH_FRAME_GET_MATRIX_FUNCTION
-#define CH_FRAME_GET_MATRIX_FUNCTION(_RLType,_returnMethod) \
-Ch##_RLType##Mat GetOutSideTransform##_RLType##Mat() { return outSideMat _returnMethod ; }\
-Ch##_RLType##Mat GetFrameTransform##_RLType##Mat() { return frameMat _returnMethod ; }\
-Ch##_RLType##Mat GetDraw##_RLType##HandMatrix() { UpdateDrawTransform(); return drawMat _returnMethod ; }
-#endif
-
 namespace ChCpp
 {
 	template<typename CharaType>
@@ -33,16 +14,41 @@ namespace ChCpp
 	{
 	public://Set Functions//
 
-		CH_FRAME_SET_MATRIX_FUNCTION(SetOutSideTransform, outSideMat);
+		inline void SetOutSideTransform(const Ch3D::Transform& _trans) {
+			outSideMat.SetPosition(_trans.pos);
+			outSideMat.SetRotation(_trans.rot);
+			outSideMat.SetScalling(_trans.scl);
+		}
+		
+		inline void SetOutSideTransform(const ChLMat& _mat) { outSideMat = _mat; }
 
-		CH_FRAME_SET_MATRIX_FUNCTION(SetFrameTransform, frameMat);
+		inline void SetOutSideTransform(const ChRMat& _mat) { outSideMat = _mat.GetConvertAxis(); }
+
+		inline void SetFrameTransform(const Ch3D::Transform& _trans) {
+			frameMat.SetPosition(_trans.pos);
+			frameMat.SetRotation(_trans.rot);
+			frameMat.SetScalling(_trans.scl);
+		}
+
+		inline void SetFrameTransform(const ChLMat& _mat) { frameMat = _mat; }
+
+		inline void SetFrameTransform(const ChRMat& _mat) { frameMat = _mat.GetConvertAxis(); }
+
 
 	public://Get Functions//
 
+		inline ChLMat GetOutSideTransformLMat() { return outSideMat; }
+		
+		inline ChLMat GetFrameTransformLMat() { return frameMat; }
+		
+		inline ChLMat GetDrawLHandMatrix() { UpdateDrawTransform(); return drawMat; }
 
-		CH_FRAME_GET_MATRIX_FUNCTION(L, );
 
-		CH_FRAME_GET_MATRIX_FUNCTION(R, .GetConvertAxis());
+		inline ChRMat GetOutSideTransformRMat() { return outSideMat.GetConvertAxis(); }
+
+		inline ChRMat GetFrameTransformRMat() { return frameMat.GetConvertAxis(); }
+
+		inline ChRMat GetDrawRHandMatrix() { UpdateDrawTransform(); return drawMat.GetConvertAxis(); }
 
 	public:
 
