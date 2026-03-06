@@ -169,13 +169,13 @@ std::basic_string<CharaType> ChCpp::JsonBaseType<CharaType>::GetTabText(unsigned
 	std::basic_string<CharaType> res = ChStd::GetZeroChara<CharaType>();
 
 	for (unsigned long i = 0; i < _count; i++)
-		res += ChStd::GetTabChara<CharaType>();
+		res += ChStd::GetHTabChara<CharaType>();
 
 	return res;
 }
 
 template<typename CharaType>
-std::basic_string<CharaType> ChCpp::JsonBaseType<CharaType>::GetExtractString(const std::basic_string<CharaType>& _value)
+std::vector<std::basic_string<CharaType>> ChCpp::JsonBaseType<CharaType>::GetCutTextLine(const std::basic_string<CharaType>& _val)
 {
 	bool inString = false;
 
@@ -187,86 +187,50 @@ std::basic_string<CharaType> ChCpp::JsonBaseType<CharaType>::GetExtractString(co
 		ChStd::GetStartBracketChara<CharaType>()[0],
 		ChStd::GetEndBracketChara<CharaType>()[0]);
 
-	std::basic_string<CharaType> res = ChStd::GetZeroChara<CharaType>();
-
 	const char whiteSpaceInterfaceChar = 0x20;
 	const char delCharNum = 127;
-	bool isInObjectOrArray = false;
 
+	std::vector<std::basic_string<CharaType>> res;
 
-	for (unsigned long i = 0; i < _value.length(); i++)
+	std::basic_string<CharaType>tmp = ChStd::GetZeroChara<CharaType>();
+
+	for (int i = 0; i < _val.length(); i++)
 	{
-		if (!inString && !isInObjectOrArray)
+		if (!inString && arrayCount.GetCount() <= 0 && objectCount.GetCount() <= 0)
 		{
-			if (_value[i] <= whiteSpaceInterfaceChar)continue;
-			if (_value[i] == delCharNum)continue;
+			if (_val[i] <= whiteSpaceInterfaceChar) continue;
+			if (_val[i] == delCharNum) continue;
 		}
 
-		res = res + _value[i];
+		if (_val[i] == ChStd::GetDBQuotation<CharaType>()[0])inString = !inString;
 
-		if (!inString)
+		arrayCount.Update(_val[i]);
+		objectCount.Update(_val[i]);
+
+
+		if (!inString && arrayCount.GetCount() <= 0 && objectCount.GetCount() <= 0)
 		{
-			objectCount.Update(_value[i]);
-			arrayCount.Update(_value[i]);
+			if (_val[i] == ChStd::GetCommaChara<CharaType>()[0])
+			{
+				res.push_back(tmp);
+				tmp = ChStd::GetZeroChara<CharaType>();
+				continue;
+			}
 
-			isInObjectOrArray = objectCount.GetCount() > 0 || arrayCount.GetCount() > 0;
 		}
 
-		if (_value[i] == '\"')inString = !inString;
-
+		tmp += _val[i];
 	}
+
+	if (tmp != ChStd::GetZeroChara<CharaType>())
+	{
+		res.push_back(tmp);
+	}
+
+
 	return res;
 }
 
-template<typename CharaType>
-std::basic_string<CharaType> ChCpp::JsonBaseType<CharaType>::GetRawText(unsigned long& _textPosition, const std::basic_string<CharaType>& _parameterObjectText, const ChCpp::TextObject<CharaType>& _parameterObject, bool _jsonObjectFlg)
-{
-	std::basic_string<CharaType> res = _parameterObjectText;
-
-	CharaType baseStartText = res[0];
-	if (baseStartText != ChStd::GetStartBracketChara<CharaType>()[0] &&
-		baseStartText != ChStd::GetStartBraceChara<CharaType>()[0])return res;
-
-	CharaType baseEndText = ChStd::GetEndBracketChara<CharaType>()[0];
-	if (baseStartText == ChStd::GetStartBraceChara<CharaType>()[0])
-		baseEndText = ChStd::GetEndBraceChara<CharaType>()[0];
-
-	if (_jsonObjectFlg)
-	{
-		auto nameAndValue = ChStr::Split<CharaType>(_parameterObject.GetTextLine(_textPosition), ChStd::GetDoubleColonChara<CharaType>());
-
-		for (unsigned long i = 2; i < nameAndValue.size(); i++)
-			res += ChStd::GetDoubleColonChara<CharaType>() + nameAndValue[i];
-	}
-	else
-	{
-		res += ChStd::GetCommaChara<CharaType>();
-	}
-
-
-	ChCpp::Cumulative<CharaType> testNum = ChCpp::Cumulative<CharaType>(baseStartText, baseEndText);
-
-	for (unsigned long i = 0; i < res.size(); i++)
-	{
-		testNum.Update(res[i]);
-	}
-
-	while (testNum.GetCount() > 0)
-	{
-		_textPosition++;
-		if (_parameterObject.LineCount() <= _textPosition)return ChStd::GetZeroChara<CharaType>();
-		std::basic_string<CharaType> testText = _parameterObject.GetTextLine(_textPosition);
-		res += ChStd::GetCommaChara<CharaType>() + testText;
-
-		for (unsigned long i = 0; i < testText.size(); i++)
-		{
-			testNum.Update(testText[i]);
-		}
-
-	}
-
-	return res;
-}
 
 CH_STRING_TYPE_EXPLICIT_DECLARATION(ChCpp::JsonBaseType);
 CH_STRING_TYPE_EXPLICIT_DECLARATION(ChCpp::JsonNull);

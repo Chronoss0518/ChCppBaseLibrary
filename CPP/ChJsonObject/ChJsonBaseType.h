@@ -88,9 +88,7 @@ namespace ChCpp
 
 	protected:
 
-		std::basic_string<CharaType> GetRawText(unsigned long& _textPosition, const std::basic_string<CharaType>& _parameterObjectText, const TextObject<CharaType>& _parameterObject, bool _jsonObjectFlg);
-
-		std::basic_string<CharaType> GetExtractString(const std::basic_string<CharaType>& _value);
+		std::vector<std::basic_string<CharaType>> GetCutTextLine(const std::basic_string<CharaType>& _val);
 	};
 
 	template<typename CharaType>

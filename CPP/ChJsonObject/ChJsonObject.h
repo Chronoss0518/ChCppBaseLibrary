@@ -13,6 +13,14 @@ namespace ChCpp
 	{
 	public:
 
+		struct KeyValue
+		{
+			std::basic_string<CharaType> key = ChStd::GetZeroChara<CharaType>();
+			std::basic_string<CharaType> value = ChStd::GetZeroChara<CharaType>();
+		};
+
+	public:
+
 		JsonObject(){}
 
 	public://Set Function//
@@ -69,10 +77,6 @@ namespace ChCpp
 		typename std::map<std::basic_string<CharaType>, ChPtr::Shared<JsonBaseType<CharaType>>>::iterator begin() { return values.begin(); }
 
 		typename std::map<std::basic_string<CharaType>, ChPtr::Shared<JsonBaseType<CharaType>>>::iterator end() { return values.end(); }
-
-	private:
-
-		bool IsCutCharInParameterName(const std::basic_string<CharaType>& _parameterName);
 
 	private:
 

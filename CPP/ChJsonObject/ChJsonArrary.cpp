@@ -41,18 +41,11 @@ bool ChCpp::JsonArray<CharaType>::SetRawData(const std::basic_string<CharaType>&
 
 	std::basic_string<CharaType> parameter = _jsonText.substr(1, _jsonText.length() - 2);
 
-	parameter = JsonBaseType<CharaType>::GetExtractString(parameter);
+	std::vector<std::basic_string<CharaType>> parameterObject = JsonBaseType<CharaType>::GetCutTextLine(parameter);
 
-	TextObject<CharaType> parameterObject;
-
-	parameterObject.SetCutChar(ChStd::GetCommaChara<CharaType>());
-
-	parameterObject.SetText(parameter.c_str());
-
-	for (unsigned long i = 0; i < parameterObject.LineCount(); i++)
+	for (unsigned long i = 0; i < parameterObject.size(); i++)
 	{
-		std::basic_string<CharaType> val = parameterObject.GetTextLine(i);
-		val = JsonBaseType<CharaType>::GetRawText(i, val, parameterObject, false);
+		std::basic_string<CharaType> val = parameterObject[i];
 		if (val.empty())continue;
 		auto&& obj = JsonBaseType<CharaType>::GetParameter(val);
 		if (obj == nullptr)continue;

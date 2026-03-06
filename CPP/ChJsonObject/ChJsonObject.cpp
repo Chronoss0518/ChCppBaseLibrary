@@ -31,32 +31,35 @@ bool ChCpp::JsonObject<CharaType>::SetRawData(const std::basic_string<CharaType>
 	if (_jsonText[0] != ChStd::GetStartBraceChara<CharaType>()[0] ||
 		_jsonText[_jsonText.size() - 1] != ChStd::GetEndBraceChara<CharaType>()[0])return false;
 
-	std::basic_string<CharaType> parameter = _jsonText.substr(1, _jsonText.length() - 2);
-	parameter = JsonBaseType<CharaType>::GetExtractString(parameter);
+	std::vector<std::basic_string<CharaType>> parameterObject = JsonBaseType<CharaType>::GetCutTextLine(_jsonText.substr(1, _jsonText.length() - 2));
 
-	TextObject<CharaType> parameterObject;
+	JsonString<CharaType> str;
 
-	parameterObject.SetCutChar(ChStd::GetCommaChara<CharaType>());
-
-	parameterObject.SetText(parameter.c_str());
-
-	for (unsigned long i = 0; i < parameterObject.LineCount(); i++)
+	for (unsigned long i = 0; i < parameterObject.size(); i++)
 	{
-		auto&& nameAndValue = ChStr::Split<CharaType>(parameterObject.GetTextLine(i), ChStd::GetDoubleColonChara<CharaType>());
-		if (nameAndValue.size() < 2)continue;
+		KeyValue keyValue;
 
-		if (nameAndValue[0][0] != ChStd::GetDBQuotation<CharaType>()[0] ||
-			nameAndValue[0][nameAndValue[0].size() - 1] != ChStd::GetDBQuotation<CharaType>()[0])return false;
+		bool isString = false;
+		for (size_t j = 0; j < parameterObject[i].length() - 1; j++)
+		{
+			if (!isString && parameterObject[i][j] == ChStd::GetDoubleColonChara<CharaType>()[0])
+			{
+				keyValue.value = &parameterObject[i][j + 1];
+				break;
+			}
 
-		nameAndValue[0] = nameAndValue[0].substr(1, nameAndValue[0].size() - 2);
+			if (parameterObject[i][j] == ChStd::GetDBQuotation<CharaType>()[0])isString = !isString;
+			keyValue.key += parameterObject[i][j];
+		}
 
-		if (IsCutCharInParameterName(nameAndValue[0]))return false;
+		if (keyValue.value.length() < 1)continue;
 
-		nameAndValue[1] = JsonBaseType<CharaType>::GetRawText(i, nameAndValue[1], parameterObject, true);
-		if (nameAndValue[1].empty())return false;
-		auto obj = JsonBaseType<CharaType>::GetParameter(nameAndValue[1]);
+		
+		if (!str.SetRawData(keyValue.key))return false;
+
+		auto obj = JsonBaseType<CharaType>::GetParameter(keyValue.value);
 		if (obj == nullptr)continue;
-		values[nameAndValue[0]] = obj;
+		values[str.GetString()] = obj;
 	}
 
 	return true;
@@ -67,7 +70,7 @@ bool ChCpp::JsonObject<CharaType>::SetRawData(const std::basic_string<CharaType>
 template<typename CharaType>
 void ChCpp::JsonObject<CharaType>::Set(const std::basic_string<CharaType>& _parameterName, const ChPtr::Shared<JsonBaseType<CharaType>> _value)
 {
-	if (IsCutCharInParameterName(_parameterName))return;
+	if (_parameterName.empty())return;
 
 	if (_value == nullptr)
 	{
@@ -86,10 +89,13 @@ std::basic_string<CharaType> ChCpp::JsonObject<CharaType>::GetRawData()const
 
 	bool initFlg = false;
 
+	JsonString<CharaType> str;
+
 	for (auto&& val : values)
 	{
+		str.SetString(val.first);
 		if (initFlg)res += ChStd::GetCommaChara<CharaType>();
-		res += ChStd::GetDBQuotation<CharaType>() + val.first + ChStd::GetDBQuotation<CharaType>() + ChStd::GetDoubleColonChara<CharaType>() + val.second->GetRawData();
+		res += ChStd::GetDBQuotation<CharaType>() + str.GetRawData() + ChStd::GetDBQuotation<CharaType>() + ChStd::GetDoubleColonChara<CharaType>() + val.second->GetRawData();
 		initFlg = true;
 	}
 
@@ -146,17 +152,6 @@ void ChCpp::JsonObject<CharaType>::Clear()
 {
 	if (values.empty())return;
 	values.clear();
-}
-
-template<typename CharaType>
-bool ChCpp::JsonObject<CharaType>::IsCutCharInParameterName(const std::basic_string<CharaType>& _parameterName)
-{
-	for (unsigned long i = 0; i < _parameterName.size(); i++)
-	{
-		if (_parameterName[i] == ChStd::GetDBQuotation<CharaType>()[0])return true;
-	}
-
-	return false;
 }
 
 template<typename CharaType>
