@@ -12,7 +12,110 @@
 
 #define LOCALE_TYPE_COUNT 6
 
+#ifndef CH_JSON_STRING_a_CHARA_FUNCTION
+#define CH_JSON_STRING_a_CHARA_FUNCTION(type) CH_NUMBER_FUNCTION(Get_a_Chara,type)
+#endif
+
+#ifndef CH_JSON_STRING_b_CHARA_FUNCTION
+#define CH_JSON_STRING_b_CHARA_FUNCTION(type) CH_NUMBER_FUNCTION(Get_b_Chara,type)
+#endif
+
+#ifndef CH_JSON_STRING_f_CHARA_FUNCTION
+#define CH_JSON_STRING_f_CHARA_FUNCTION(type) CH_NUMBER_FUNCTION(Get_f_Chara,type)
+#endif
+
+#ifndef CH_JSON_STRING_n_CHARA_FUNCTION
+#define CH_JSON_STRING_n_CHARA_FUNCTION(type) CH_NUMBER_FUNCTION(Get_n_Chara,type)
+#endif
+
+#ifndef CH_JSON_STRING_r_CHARA_FUNCTION
+#define CH_JSON_STRING_r_CHARA_FUNCTION(type) CH_NUMBER_FUNCTION(Get_r_Chara,type)
+#endif
+
+#ifndef CH_JSON_STRING_t_CHARA_FUNCTION
+#define CH_JSON_STRING_t_CHARA_FUNCTION(type) CH_NUMBER_FUNCTION(Get_t_Chara,type)
+#endif
+
+#ifndef CH_JSON_STRING_v_CHARA_FUNCTION
+#define CH_JSON_STRING_v_CHARA_FUNCTION(type) CH_NUMBER_FUNCTION(Get_v_Chara,type)
+#endif
+
+#ifndef CH_JSON_STRING_o_CHARA_FUNCTION
+#define CH_JSON_STRING_o_CHARA_FUNCTION(type) CH_NUMBER_FUNCTION(Get_o_Chara,type)
+#endif
+
+#ifndef CH_JSON_STRING_x_CHARA_FUNCTION
+#define CH_JSON_STRING_x_CHARA_FUNCTION(type) CH_NUMBER_FUNCTION(Get_x_Chara,type)
+#endif
+
 using namespace ChStr;
+
+namespace ChStr
+{
+
+	CH_TO_NUMBER_FUNCTION(CH_JSON_STRING_a_CHARA_FUNCTION, "a");
+
+	CH_TO_NUMBER_FUNCTION(CH_JSON_STRING_b_CHARA_FUNCTION, "b");
+
+	CH_TO_NUMBER_FUNCTION(CH_JSON_STRING_f_CHARA_FUNCTION, "f");
+
+	CH_TO_NUMBER_FUNCTION(CH_JSON_STRING_n_CHARA_FUNCTION, "n");
+
+	CH_TO_NUMBER_FUNCTION(CH_JSON_STRING_r_CHARA_FUNCTION, "r");
+
+	CH_TO_NUMBER_FUNCTION(CH_JSON_STRING_t_CHARA_FUNCTION, "t");
+
+	CH_TO_NUMBER_FUNCTION(CH_JSON_STRING_v_CHARA_FUNCTION, "v");
+
+	CH_TO_NUMBER_FUNCTION(CH_JSON_STRING_o_CHARA_FUNCTION, "o");
+
+	CH_TO_NUMBER_FUNCTION(CH_JSON_STRING_x_CHARA_FUNCTION, "x");
+	template<typename CharaType>
+	std::map<CharaType, std::basic_string<CharaType>>GetToEscapeSequenceMap()
+	{
+		static std::map<CharaType, std::basic_string<CharaType>> res;
+		if (!res.empty())return res;
+		res[ChStr::Get_a_Chara<CharaType>()[0]] = ChStd::GetBellChara<CharaType>();
+		res[ChStr::Get_b_Chara<CharaType>()[0]] = ChStd::GetBackChara<CharaType>();
+		res[ChStr::Get_f_Chara<CharaType>()[0]] = ChStd::GetNextPageChara<CharaType>();
+		res[ChStr::Get_n_Chara<CharaType>()[0]] = ChStd::GetLFChara<CharaType>();
+		res[ChStr::Get_r_Chara<CharaType>()[0]] = ChStd::GetCRChara<CharaType>();
+		res[ChStr::Get_t_Chara<CharaType>()[0]] = ChStd::GetHTabChara<CharaType>();
+		res[ChStr::Get_v_Chara<CharaType>()[0]] = ChStd::GetVTabChara<CharaType>();
+		res[ChStd::GetDBQuotation<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetDBQuotation<CharaType>()[0]] += ChStd::GetDBQuotation<CharaType>();
+		res[ChStd::GetSGQuotation<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetSGQuotation<CharaType>()[0]] += ChStd::GetSGQuotation<CharaType>();
+		return res;
+	}
+
+	template<typename CharaType>
+	std::map<CharaType, std::basic_string<CharaType>>GetFromEscapeSequenceMap()
+	{
+		static std::map<CharaType, std::basic_string<CharaType>> res;
+		if (!res.empty())return res;
+		res[ChStd::GetBellChara<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetBellChara<CharaType>()[0]] += ChStr::Get_a_Chara<CharaType>();
+		res[ChStd::GetBackChara<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetBackChara<CharaType>()[0]] += ChStr::Get_b_Chara<CharaType>();
+		res[ChStd::GetNextPageChara<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetNextPageChara<CharaType>()[0]] += ChStr::Get_f_Chara<CharaType>();
+		res[ChStd::GetLFChara<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetLFChara<CharaType>()[0]] += ChStr::Get_n_Chara<CharaType>();
+		res[ChStd::GetCRChara<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetCRChara<CharaType>()[0]] += ChStr::Get_r_Chara<CharaType>();
+		res[ChStd::GetHTabChara<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetHTabChara<CharaType>()[0]] += ChStr::Get_t_Chara<CharaType>();
+		res[ChStd::GetVTabChara<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetVTabChara<CharaType>()[0]] += ChStr::Get_v_Chara<CharaType>();
+		res[ChStd::GetDBQuotation<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetDBQuotation<CharaType>()[0]] += ChStd::GetDBQuotation<CharaType>();
+		res[ChStd::GetSGQuotation<CharaType>()[0]] = ChStd::GetYenChara<CharaType>();
+		res[ChStd::GetSGQuotation<CharaType>()[0]] += ChStd::GetSGQuotation<CharaType>();
+		return res;
+	}
+
+}
 
 //文字の置き換え//
 template<typename CharaType>
@@ -223,6 +326,90 @@ std::basic_string<CharaType> ChStr::GetCharsToRangeCode(
 	return out;
 }
 
+//文字列からエスケープシーケンスへ置換する//
+template<typename CharaType>
+std::basic_string<CharaType>ChStr::StringToEscapeSequence(const std::basic_string<CharaType>& _base)
+{
+	std::basic_string<CharaType> res = ChStd::GetZeroChara<CharaType>();
+
+	std::map<CharaType, std::basic_string<CharaType>> TO_ESCAPE_SEQUENCE_MAP = ChStr::GetToEscapeSequenceMap<CharaType>();
+
+	for (int i = 0; i < _base.length(); i++)
+	{
+		CharaType c = _base[i];
+
+		if (c == ChStd::GetYenChara<CharaType>()[0] && _base.length() > i + 1)
+		{
+			i++;
+			if ((_base[i] == ChStr::Get_o_Chara<CharaType>()[0] || _base[i] == ChStr::Get_x_Chara<CharaType>()[0]) && _base.length() > i + 3)
+			{
+				std::basic_string<CharaType> baseType = _base[i] == ChStr::Get_o_Chara<CharaType>()[0] ? ChStd::OCTAL<CharaType>() : ChStd::HEXA_DECIMAL<CharaType>();
+				std::basic_string<CharaType> value = ChStd::GetZeroChara<CharaType>();
+
+				for (int j = 0; j < 2; j++)
+				{
+					value += _base[i + 1 + j];
+				}
+				int num = ChStd::BaseNumberToDecimalNumber(value, baseType);
+
+				i += 2;
+				res += (CharaType)num;
+				continue;
+			}
+			auto&& find = TO_ESCAPE_SEQUENCE_MAP.find(_base[i]);
+			if (find != TO_ESCAPE_SEQUENCE_MAP.end())
+			{
+				res += find->second;
+				continue;
+			}
+
+			res += ChStd::GetYenChara<CharaType>();
+			res += ChStd::GetYenChara<CharaType>();
+			continue;
+		}
+
+		res += c;
+	}
+
+	return res;
+}
+
+//エスケープシーケンスから文字列へ置換する//
+template<typename CharaType>
+std::basic_string<CharaType>ChStr::StringFromEscapeSequence(const std::basic_string<CharaType>& _base)
+{
+	std::basic_string<CharaType> res = ChStd::GetZeroChara<CharaType>();
+
+	std::map<CharaType, std::basic_string<CharaType>> FROM_ESCAPE_SEQUENCE_MAP = ChStr::GetFromEscapeSequenceMap<CharaType>();
+
+	for (int i = 0; i < _base.length(); i++)
+	{
+		char c = _base[i];
+
+		auto&& find = FROM_ESCAPE_SEQUENCE_MAP.find(c);
+		if (find != FROM_ESCAPE_SEQUENCE_MAP.end())
+		{
+			res += find->second;
+			continue;
+		}
+
+		if (c <= 0x1e)
+		{
+			std::basic_string<CharaType> baseNum = ChStd::DecimalNumberToBaseNumber<CharaType>(c, ChStd::HEXA_DECIMAL<CharaType>());
+
+			res += ChStd::GetYenChara<CharaType>();
+			res += ChStr::Get_x_Chara<CharaType>();
+			res += baseNum;
+
+			continue;
+		}
+
+		res += c;
+	}
+
+	return res;
+}
+
 #define EXPLICIT_DECLARATION(_CharaType)\
 template std::basic_string<_CharaType> ChStr::StrReplase(\
 	const std::basic_string<_CharaType>& _base,\
@@ -243,7 +430,10 @@ template std::vector<std::basic_string<_CharaType>> ChStr::Split(\
 template std::basic_string<_CharaType> ChStr::GetCharsToRangeCode(\
 	const std::basic_string<_CharaType>& _str,\
 	const _CharaType _min,\
-	const _CharaType _max)
+	const _CharaType _max);\
+template std::basic_string<_CharaType>ChStr::StringToEscapeSequence(const std::basic_string<_CharaType>& _base);\
+template std::basic_string<_CharaType>ChStr::StringFromEscapeSequence(const std::basic_string<_CharaType>& _base)
+
 
 std::wstring GetMBSFormWCS(const std::string& _str, const std::string& _locale)
 {

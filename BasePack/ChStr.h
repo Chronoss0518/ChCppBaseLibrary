@@ -34,10 +34,37 @@
 
 namespace ChStr
 {
+	//"a"//
+	CH_NUMBER_FUNCTION_BASE(Get_a_Chara);
+
+	//"b"//
+	CH_NUMBER_FUNCTION_BASE(Get_b_Chara);
+
+	//"f"//
+	CH_NUMBER_FUNCTION_BASE(Get_f_Chara);
+
+	//"n"//
+	CH_NUMBER_FUNCTION_BASE(Get_n_Chara);
+
+	//"r"//
+	CH_NUMBER_FUNCTION_BASE(Get_r_Chara);
+
+	//"t"//
+	CH_NUMBER_FUNCTION_BASE(Get_t_Chara);
+
+	//"v"//
+	CH_NUMBER_FUNCTION_BASE(Get_v_Chara);
+
+	//"o"//
+	CH_NUMBER_FUNCTION_BASE(Get_o_Chara);
+
+	//"x"//
+	CH_NUMBER_FUNCTION_BASE(Get_x_Chara);
+
 	template<typename T>
 	struct Bytes
 	{
-		Bytes(){}
+		Bytes() {}
 
 		union
 		{
@@ -48,7 +75,7 @@ namespace ChStr
 
 	//文字列をバイナリデータにして//
 	//整数型に変換する//
-	template<typename T,typename CharaType>
+	template<typename T, typename CharaType>
 	inline T StrBinaryToNum(
 		const CharaType* const _str,
 		const unsigned long _strLen,
@@ -174,7 +201,7 @@ namespace ChStr
 			const size_t& _endPos = std::basic_string<wchar_t>::npos)
 	{
 		std::basic_string<wchar_t> text = RemoveToUnFloatingNumCharas<wchar_t>(_text.substr(_startPos, _endPos - _startPos));
-		return static_cast<BaseType>(wcstoll(text.c_str(),nullptr,10));
+		return static_cast<BaseType>(wcstoll(text.c_str(), nullptr, 10));
 	}
 
 #ifdef CPP20
@@ -234,7 +261,7 @@ namespace ChStr
 			const size_t& _endPos = std::basic_string<wchar_t>::npos)
 	{
 		std::basic_string<wchar_t> text = RemoveToUnFloatingNumCharas<wchar_t>(_text.substr(_startPos, _endPos - _startPos));
-		return static_cast<BaseType>(wcstold(text.c_str(),nullptr));
+		return static_cast<BaseType>(wcstold(text.c_str(), nullptr));
 	}
 
 #ifdef CPP20
@@ -452,8 +479,13 @@ namespace ChStr
 		const std::vector<CharaType>& _subTab);
 
 
+	//文字列からエスケープシーケンスへ置換する//
+	template<typename CharaType>
+	std::basic_string<CharaType>StringToEscapeSequence(const std::basic_string<CharaType>& _base);
 
+	//エスケープシーケンスから文字列へ置換する//
+	template<typename CharaType>
+	std::basic_string<CharaType>StringFromEscapeSequence(const std::basic_string<CharaType>& _base);
 }
-
 
 #endif
