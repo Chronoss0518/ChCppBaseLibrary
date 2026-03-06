@@ -81,10 +81,10 @@ void DocumentFormatter<CharaType>::SetIndentText(
 	if (_indentBeforeText == ChStd::GetZeroChara<CharaType>())return;
 	if (_indentText == ChStd::GetZeroChara<CharaType>())return;
 
-	checker->SetCheckText(indentText);
+	checker->SetCheckText(_indentBeforeText);
 
-	indentText = _indentText;
 	indentBeforeText = _indentBeforeText;
+	indentText = _indentText;
 }
 
 template<typename CharaType>
@@ -155,6 +155,10 @@ std::basic_string<CharaType> DocumentFormatter<CharaType>::Format(const std::bas
 		if (indentData != indentCountMap.end())
 		{
 			nowIndent += indentData->second->count;
+			if (indentData->second->removeFlg)
+			{
+				result.pop_back();
+			}
 		}
 
 		result += resultBase[i];
