@@ -38,7 +38,6 @@ template<typename CharaType>
 void DocumentFormatter<CharaType>::SetInsertText(
 	const std::basic_string<CharaType>& _indentText,
 	const std::basic_string<CharaType>& _insertText,
-	bool _useIndentCount,
 	bool _intoBeforeFlg)
 {
 	if (_indentText == ChStd::GetZeroChara<CharaType>())return;
@@ -51,7 +50,6 @@ void DocumentFormatter<CharaType>::SetInsertText(
 		test->second;
 
 	checker->SetCheckText(_indentText);
-	data->useIndentCount = _useIndentCount;
 	data->insertText = _insertText;
 	data->intoBeforeFlg = _intoBeforeFlg;
 	insertTextMap[_indentText] = data;
@@ -76,15 +74,28 @@ void DocumentFormatter<CharaType>::SetIndent(
 }
 
 template<typename CharaType>
+void DocumentFormatter<CharaType>::SetIndentText(
+	const std::basic_string<CharaType>& _indentBeforeText,
+	const std::basic_string<CharaType>& _indentText)
+{
+	if (_indentBeforeText == ChStd::GetZeroChara<CharaType>())return;
+	if (_indentText == ChStd::GetZeroChara<CharaType>())return;
+
+	checker->SetCheckText(indentText);
+
+	indentText = _indentText;
+	indentBeforeText = _indentBeforeText;
+}
+
+template<typename CharaType>
 std::basic_string<CharaType> DocumentFormatter<CharaType>::Format(const std::basic_string<CharaType>& _base)
 {
-	std::basic_string<CharaType> result = ChStd::GetZeroChara<CharaType>();
+	std::basic_string<CharaType> resultBase = ChStd::GetZeroChara<CharaType>();
 
-	if (_base.length() <= 0)return result;
+	if (_base.length() <= 0)return resultBase;
 	if (insertTextMap.empty() && indentCountMap.empty())return _base;
 
 	std::basic_string<CharaType>insertTextData = ChStd::GetZeroChara<CharaType>();
-	int nowIndent = 0;
 	
 	std::basic_string<CharaType> checkText = ChStd::GetZeroChara<CharaType>();
 	std::basic_string<CharaType> baseText = _base;
@@ -93,41 +104,60 @@ std::basic_string<CharaType> DocumentFormatter<CharaType>::Format(const std::bas
 	{
 		checkText = checker->CheckFirstText(baseText, i);
 
-		if (checkText == ChStd::GetZeroChara<CharaType>())
+		auto&& insertData = insertTextMap.find(checkText);
+		if (insertData == insertTextMap.end())
 		{
-			result += baseText[i];
+			resultBase += baseText[i];
 			continue;
 		}
 
-		auto&& indentCount = indentCountMap.find(checkText);
-		if (indentCount != indentCountMap.end())
+		std::basic_string<CharaType> tmp = insertData->second->insertText;
+
+		if (insertData->second->intoBeforeFlg)
 		{
-			nowIndent += indentCount->second->count;
-			if (indentCount->second->removeFlg)
-				result.erase(result.begin() + (result.length()));
+			resultBase += tmp;
 		}
 
-		result += checkText;
-		i += checkText.length() - 1;
+		resultBase += insertData->first;
+		i += insertData->first.length() - 1;
 
-		auto&& insertData = insertTextMap.find(checkText);
-		if (insertData != insertTextMap.end())
+		if (!insertData->second->intoBeforeFlg)
 		{
-			std::basic_string<CharaType> tmp = insertData->second->insertText;
+			resultBase += tmp;
+		}
 
-			if (insertData->second->useIndentCount)
+	}
+
+	std::basic_string<CharaType>result = ChStd::GetZeroChara<CharaType>();
+
+	int nowIndent = 0;
+	for (size_t i = 0; i < resultBase.length(); i++)
+	{
+		checkText = checker->CheckFirstText(resultBase, i);
+
+		if (checkText == indentBeforeText)
+		{
+			result += indentBeforeText;
+
+			std::basic_string<CharaType>indent = ChStd::GetZeroChara<CharaType>();
+
+			for (size_t j = 0; j < nowIndent; j++)
 			{
-				for (int j = 0; j < nowIndent - 1; j++)
-				{
-					tmp += insertData->second->insertText;
-				}
+				indent += indentText;
 			}
 
-			if(i + checkText.length() >= baseText.length())
-				baseText = baseText + tmp;
-			else
-				baseText.insert(i + 1, tmp);
+			result += indent;
+
+			continue;
 		}
+
+		auto&& indentData = indentCountMap.find(checkText);
+		if (indentData != indentCountMap.end())
+		{
+			nowIndent += indentData->second->count;
+		}
+
+		result += resultBase[i];
 	}
 
 	return result;

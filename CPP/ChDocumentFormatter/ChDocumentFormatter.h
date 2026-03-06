@@ -17,7 +17,6 @@ namespace ChCpp
 		struct InsertTextData
 		{
 			bool intoBeforeFlg = false;
-			bool useIndentCount = false;
 			std::basic_string<CharaType>insertText;
 		};
 
@@ -38,7 +37,6 @@ namespace ChCpp
 		void SetInsertText(
 			const std::basic_string<CharaType>& _indentText,
 			const std::basic_string<CharaType>& _insertText,
-			bool _useIndentCount = true,
 			bool _intoBeforeFlg = false);
 
 		void SetIndent(
@@ -46,7 +44,9 @@ namespace ChCpp
 			int _indentCount,
 			bool removeFlg = false);
 
-		void SetIndentText(const std::basic_string<CharaType>& _indentText);
+		void SetIndentText(
+			const std::basic_string<CharaType>& _indentBeforeText,
+			const std::basic_string<CharaType>& _indentText);
 
 	public:
 
@@ -57,7 +57,11 @@ namespace ChCpp
 		TextChecker<CharaType>* checker = nullptr;
 		std::map<std::basic_string<CharaType>, InsertTextData*>insertTextMap;
 
+		std::basic_string<CharaType>indentBeforeText;
 		std::basic_string<CharaType>indentText;
+		int indentCount = 0;
+
+
 		std::map<std::basic_string<CharaType>, IndentTextData*>indentCountMap;
 
 	};
