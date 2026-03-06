@@ -20,23 +20,6 @@ JsonString(const _type & _value){\
 
 namespace ChCpp
 {
-	namespace Json
-	{
-		//"b"//
-		CH_NUMBER_FUNCTION_BASE(Get_b_Chara);
-
-		//"f"//
-		CH_NUMBER_FUNCTION_BASE(Get_f_Chara);
-
-		//"n"//
-		CH_NUMBER_FUNCTION_BASE(Get_n_Chara);
-		
-		//"r"//
-		CH_NUMBER_FUNCTION_BASE(Get_r_Chara);
-		
-		//"t"//
-		CH_NUMBER_FUNCTION_BASE(Get_t_Chara);
-	}
 
 	template<typename CharaType>
 	class JsonString :public JsonBaseType<CharaType>
@@ -134,8 +117,7 @@ namespace ChCpp
 
 		bool IsCutChar(CharaType _char)const
 		{
-			return _char == ChStd::GetSGQuotation<CharaType>()[0] ||
-				_char == ChStd::GetDBQuotation<CharaType>()[0];
+			return _char == ChStd::GetDBQuotation<CharaType>()[0];
 		}
 
 	private:
