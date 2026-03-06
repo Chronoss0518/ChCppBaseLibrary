@@ -182,6 +182,8 @@ namespace ChStd
 	CH_NUMBER_FUNCTION_BASE(GetHyphenChara);
 	//"\r\n"//
 	CH_NUMBER_FUNCTION_BASE(GetCRLFChara);
+	//"\a"//
+	CH_NUMBER_FUNCTION_BASE(GetBellChara);
 	//"\r//
 	CH_NUMBER_FUNCTION_BASE(GetCRChara);
 	//"\n"//
@@ -190,8 +192,10 @@ namespace ChStd
 	CH_NUMBER_FUNCTION_BASE(GetBackChara);
 	//"\f"//
 	CH_NUMBER_FUNCTION_BASE(GetNextPageChara);
-	//"\t"//
-	CH_NUMBER_FUNCTION_BASE(GetTabChara);
+	//"\t"(水平タブ)//
+	CH_NUMBER_FUNCTION_BASE(GetHTabChara);
+	//"\v"(垂直タブ)//
+	CH_NUMBER_FUNCTION_BASE(GetVTabChara);
 	//","//
 	CH_NUMBER_FUNCTION_BASE(GetCommaChara);
 	//"."//
