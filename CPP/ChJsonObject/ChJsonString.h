@@ -112,14 +112,6 @@ namespace ChCpp
 			return value;
 		}
 
-
-	private:
-
-		bool IsCutChar(CharaType _char)const
-		{
-			return _char == ChStd::GetDBQuotation<CharaType>()[0];
-		}
-
 	private:
 
 		bool AddDecimal(std::basic_string<CharaType>& _outText, const std::basic_string<CharaType>& _inText, const std::basic_string<CharaType>& _baseDecimal);
