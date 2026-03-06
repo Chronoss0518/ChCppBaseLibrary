@@ -95,7 +95,7 @@ std::basic_string<CharaType> ChCpp::JsonObject<CharaType>::GetRawData()const
 	{
 		str.SetString(val.first);
 		if (initFlg)res += ChStd::GetCommaChara<CharaType>();
-		res += ChStd::GetDBQuotation<CharaType>() + str.GetRawData() + ChStd::GetDBQuotation<CharaType>() + ChStd::GetDoubleColonChara<CharaType>() + val.second->GetRawData();
+		res += str.GetRawData() + ChStd::GetDoubleColonChara<CharaType>() + val.second->GetRawData();
 		initFlg = true;
 	}
 
