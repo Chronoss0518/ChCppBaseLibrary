@@ -172,7 +172,7 @@ void ChCpp::BasicObject::UpdateFunction()
 
 	if (!childList.empty())
 	{
-		for (size_t i = 0; i < childList.size(); i++)
+		for (size_t i = 0; i < childList.size(); i)
 		{
 			if (childList[i]->dFlg)
 			{
