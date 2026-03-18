@@ -181,7 +181,7 @@ void ChCpp::BasicObject::UpdateFunction()
 				if (childList.empty())break;
 				continue;
 			}
-			if (childList[i]->useFlg)childList[i]->Update();
+			if (childList[i]->useFlg)childList[i]->UpdateFunction();
 
 			if (childList.empty())break;
 			i++;
