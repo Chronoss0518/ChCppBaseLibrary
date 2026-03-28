@@ -24,10 +24,10 @@ namespace ChCpp
 
 		friend BaseComponent;
 
-	protected:
+	private:
 
 		//Release時に走る関数//
-		virtual void BaseRelease();
+		void BaseRelease();
 
 	public://Initialize Deserialize//
 
@@ -40,12 +40,12 @@ namespace ChCpp
 	public://Destroy Function//
 
 		//自身を捨てたい時に走らせる関数//
-		virtual void Destroy();
+		void Destroy();
 
 	public://Destroy Functions//
 
 		//自身が持つ子を削除する//
-		virtual void DestroyToChild();
+		void DestroyToChild();
 
 		//自身が持つ子を削除する//
 		void DestroyToChild(ChPtr::Shared<BasicObject>& _child)
@@ -61,7 +61,7 @@ namespace ChCpp
 		void DestroyComponent();
 
 		//削除される子オブジェクトが存在するかを確認しつつ削除する//
-		virtual void DestroyToChildTest();
+		void DestroyToChildTest();
 
 		//削除されるコンポーネントがあるかどうかを確認しつつ削除する//
 		void DestroyComponentTest();

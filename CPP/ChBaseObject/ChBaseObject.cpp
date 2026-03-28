@@ -27,13 +27,13 @@ using namespace ChCpp;
 
 void ChCpp::BasicObject::BaseRelease()
 {
+	Release();
+
 	DestroyComponent();
 
 	DestroyToChild();
 
 	WithdrawParent();
-
-	Release();
 
 	dFlg = true;
 	useFlg = false;
@@ -48,7 +48,7 @@ void ChCpp::BasicObject::Destroy() { BaseRelease(); }
 
 void ChCpp::BasicObject::DestroyToChild()
 {
-	if (childList.size() <= 0)return;
+	if (childList.empty())return;
 	for (size_t i = 0; i < childList.size(); i++)
 	{
 		childList[i]->BaseRelease();
@@ -58,8 +58,8 @@ void ChCpp::BasicObject::DestroyToChild()
 
 void ChCpp::BasicObject::DestroyComponent()
 {
-	if (comList.size() <= 0)return;
-	for (size_t i = 0; i < childList.size(); i++)
+	if (comList.empty())return;
+	for (size_t i = 0; i < comList.size(); i++)
 	{
 		comList[i]->Release();
 	}
@@ -68,7 +68,7 @@ void ChCpp::BasicObject::DestroyComponent()
 
 void ChCpp::BasicObject::DestroyToChildTest()
 {
-	if (childList.size())return;
+	if (childList.empty())return;
 	for (size_t i = 0; i < childList.size(); i)
 	{
 		if (!childList[i]->IsDethFlg())
@@ -83,7 +83,7 @@ void ChCpp::BasicObject::DestroyToChildTest()
 
 void ChCpp::BasicObject::DestroyComponentTest()
 {
-	if (comList.size())return;
+	if (comList.empty())return;
 	for (size_t i = 0; i < comList.size(); i)
 	{
 		if (!comList[i]->IsDeth())
