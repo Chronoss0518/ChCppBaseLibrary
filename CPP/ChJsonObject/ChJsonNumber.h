@@ -107,7 +107,11 @@ namespace ChCpp
 
 	public:
 
+		inline void SetOutputDecimalPointFlg(bool _flg) { isOutputDecimalPoint = _flg; }
+
 		bool SetRawData(const std::basic_string<CharaType>& _jsonText)override;
+
+		inline void SetValue(long double _val) { value = _val; }
 
 	public:
 
@@ -116,6 +120,10 @@ namespace ChCpp
 			return ToString();
 		}
 
+		inline long long GetIntValue() { return static_cast<long long>(value); }
+
+		inline long double GetFloatValue() { return static_cast<long double>(value); }
+
 	public:
 
 		std::basic_string<CharaType> ToString()const;
@@ -123,6 +131,9 @@ namespace ChCpp
 	private:
 
 		long double value = 0.0;
+
+		bool isOutputDecimalPoint = true;
+
 	};
 
 }

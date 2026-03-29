@@ -14,8 +14,15 @@ bool JsonNumber<CharaType>::SetRawData(const std::basic_string<CharaType>& _json
 template<typename CharaType>
 std::basic_string<CharaType> JsonNumber<CharaType>::ToString()const
 {
+	if (!isOutputDecimalPoint)
+		return ChStr::GetTextFromNum<CharaType>(static_cast<long long>(value));
+
 	std::basic_string<CharaType> tmpStr = ChStr::GetTextFromNum<CharaType>(value);
 	unsigned long endPoint = tmpStr.find(ChStd::GetDotChara<CharaType>());
+
+	if (endPoint == std::basic_string<CharaType>::npos)
+		return tmpStr;
+
 	for (unsigned long i = endPoint + 1; i < tmpStr.size(); i++)
 	{
 		if (tmpStr[i] == ChStd::GetZeroChara<CharaType>()[0])continue;
