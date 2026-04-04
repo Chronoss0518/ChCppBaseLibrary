@@ -58,6 +58,8 @@
 #include"CPP/ChBaseFrame/ChBaseFrame.h"
 #include"CPP/ChTextObject/ChTextObject.h"
 #include"CPP/ChMultiThread/ChMultiThread.h"
+#include"CPP/ChThreadObject/ChThreadObject.h"
+#include"CPP/ChThreadObject/ChThreadObjectManager.h"
 #include"CPP/ChMathSquare/ChMathSquare.h"
 
 #include"BaseSystem/ChBaseSystem/ChBaseSystem.h"
