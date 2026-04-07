@@ -353,12 +353,12 @@ void ChLMatrix::SetRotationXAxis(const float _x)
 {
 	Identity();
 
-	float x = -ChMath::GetFMod(_x, ChMath::PI * 2.0f);
+	float x = ChMath::GetFMod(_x, ChMath::PI * 2.0f);
 
 	l_22 = ChMath::GetCos(x);
-	l_23 = ChMath::GetSin(x);
+	l_23 = -ChMath::GetSin(x);
 
-	l_32 = -ChMath::GetSin(x);
+	l_32 = ChMath::GetSin(x);
 	l_33 = ChMath::GetCos(x);
 }
 
@@ -366,12 +366,12 @@ void ChLMatrix::SetRotationYAxis(const float _y)
 {
 	Identity();
 
-	float  y = -ChMath::GetFMod(_y, ChMath::PI * 2.0f);
+	float  y = ChMath::GetFMod(_y, ChMath::PI * 2.0f);
 
 	l_11 = ChMath::GetCos(y);
-	l_13 = -ChMath::GetSin(y);
+	l_13 = ChMath::GetSin(y);
 
-	l_31 = ChMath::GetSin(y);
+	l_31 = -ChMath::GetSin(y);
 	l_33 = ChMath::GetCos(y);
 }
 
@@ -379,12 +379,12 @@ void ChLMatrix::SetRotationZAxis(const float _z)
 {
 	Identity();
 
-	float z = -ChMath::GetFMod(_z, ChMath::PI * 2.0f);
+	float z = ChMath::GetFMod(_z, ChMath::PI * 2.0f);
 
 	l_11 = ChMath::GetCos(z);
-	l_12 = ChMath::GetSin(z);
+	l_12 = -ChMath::GetSin(z);
 
-	l_21 = -ChMath::GetSin(z);
+	l_21 = ChMath::GetSin(z);
 	l_22 = ChMath::GetCos(z);
 }
 
