@@ -38,6 +38,7 @@ ChVector4 ChVector4::_FunctionName(const float _##_X, const float _##_Y, const f
 #define CH_MATH3D_METHOD_VECTOR_CAST(_BaseClass,_OutClass)\
 _BaseClass::operator const _OutClass() const {\
 	_OutClass res;\
+	res.val.Identity();\
 	res.val.Set(val);\
 	return res;\
 }

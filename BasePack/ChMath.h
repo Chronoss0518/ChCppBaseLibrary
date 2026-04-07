@@ -764,7 +764,7 @@ namespace ChMath
 				{
 					res.m[i][j] = _rowBase[i][0] * _columnBase.m[0][j];
 
-					for (unsigned long k = 1; k < Column && k < Row; k++)
+					for (unsigned long k = 1; (k < Column) && (k < Row); k++)
 					{
 						res.m[i][j] += _rowBase[i][k] * _columnBase.m[k][j];
 					}
@@ -783,25 +783,25 @@ namespace ChMath
 		template<unsigned long _Arrarys>
 		inline VectorBase<T, _Arrarys> VerticalMul(const VectorBase<T, _Arrarys> _vec)const
 		{
-			MatrixBase<T, Row, Column> tmpMat;
+			MatrixBase<T, Row, Column> colMat;
 
-			tmpMat.Set(static_cast<T>(0.0f));
+			colMat.Set(static_cast<T>(0.0f));
 
-			unsigned long maxSize = _Arrarys >= Row ? Row : _Arrarys;
+			unsigned long maxSize = _Arrarys >= Column ? Column : _Arrarys;
 
 			unsigned long i = 0;
 			for (i = 0; i < maxSize; i++)
 			{
-				tmpMat.m[i][0] = _vec[i];
+				colMat.m[i][0] = _vec[i];
 			}
 
-			tmpMat = Mul((*this), tmpMat);
+			colMat = Mul((*this), colMat);
 
 			VectorBase<T, _Arrarys> out;
 
 			for (i = 0; i < maxSize; i++)
 			{
-				out[i] = tmpMat.m[i][0];
+				out[i] = colMat.m[i][0];
 			}
 
 			return out;
@@ -812,25 +812,25 @@ namespace ChMath
 		template<unsigned long _Arrarys>
 		inline VectorBase<T, _Arrarys>HorizontalMul(const VectorBase<T, _Arrarys>& _vec)const
 		{
-			MatrixBase<T, Row, Column> tmpMat;
+			MatrixBase<T, Row, Column> rowMat;
 
-			tmpMat.Set(static_cast<T>(0.0f));
+			rowMat.Set(static_cast<T>(0.0f));
 
-			unsigned long maxSize = _Arrarys >= Column ? Column : _Arrarys;
+			unsigned long maxSize = _Arrarys >= Row ? Row : _Arrarys;
 
 			unsigned long i = 0;
 			for (i = 0; i < maxSize; i++)
 			{
-				tmpMat.m[0][i] = _vec[i];
+				rowMat.m[0][i] = _vec[i];
 			}
 
-			tmpMat = Mul(tmpMat, (*this));
+			rowMat = Mul(rowMat, (*this));
 
 			VectorBase<T, _Arrarys> out;
 
 			for (i = 0; i < maxSize; i++)
 			{
-				out[i] = tmpMat.m[0][i];
+				out[i] = rowMat.m[0][i];
 			}
 
 			return out;
@@ -1512,8 +1512,8 @@ namespace ChMath
 			QuaternionBase<T> idn = _qua;
 			idn.Inverse();
 
-			tmp.SetMul(tmp, idn);
-			tmp.SetMul(_qua, tmp);
+			tmp.SetMul(tmp, _qua);
+			tmp.SetMul(idn, tmp);
 
 			res.val = tmp.val;
 
