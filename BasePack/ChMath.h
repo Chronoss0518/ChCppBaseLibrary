@@ -126,7 +126,7 @@ const std::basic_string<CharaType>&_cutTo4Char = ChStd::GetCRLFChara<CharaType>(
 inline ChEular##_AxisOrder<T> GetEulerRotation##_AxisOrder(const unsigned long _digit = 6)const\
 {\
 	ChEular##_AxisOrder<T> res;\
-	res._ZeroTestAxis = ChMath::GetSin _ZeroTestAxisFunction;\
+	res._ZeroTestAxis = ChMath::GetASin _ZeroTestAxisFunction;\
 	T ww = w * w * static_cast<T>(2.0f);\
 	if (CH_FLOAT_TEST(ChMath::GetCos(res._ZeroTestAxis), Ch_FLOAT_TEST_VALUE)){\
 		res._Axiz1 = _ZeroAxiz1Function;\
@@ -209,6 +209,7 @@ namespace ChMath
 		inline operator VectorBase<T, _ArrayCount>()const
 		{
 			VectorBase<T, _ArrayCount> res;
+			res.Identity();
 
 			unsigned long maxVal = _ArrayCount > Array ? Array : _ArrayCount;
 
@@ -224,6 +225,7 @@ namespace ChMath
 		inline operator VectorBase<_T, Array>()const
 		{
 			VectorBase<_T, Array> res;
+			res.Identity();
 
 			for (unsigned long i = 0; i < Array; i++)
 			{
@@ -751,49 +753,55 @@ namespace ChMath
 			}
 		}
 
-		inline void Mul(const MatrixBase& _mat)
+		//_rowBase * _columnBase//
+		inline static MatrixBase Mul(const MatrixBase& _rowBase, const MatrixBase& _columnBase)
 		{
-			MatrixBase tmp;
-			tmp.Set(*this);
+			MatrixBase res;
 
 			for (unsigned long i = 0; i < Column; i++)
 			{
-				for (unsigned long j = 0; j < Column; j++)
+				for (unsigned long j = 0; j < Row; j++)
 				{
-					m[i][j] = tmp[i][0] * _mat.m[0][j];
+					res.m[i][j] = _rowBase[i][0] * _columnBase.m[0][j];
 
-					for (unsigned long k = 1; k < Row; k++)
+					for (unsigned long k = 1; (k < Column) && (k < Row); k++)
 					{
-						m[i][j] += tmp[i][k] * _mat.m[k][j];
+						res.m[i][j] += _rowBase[i][k] * _columnBase.m[k][j];
 					}
 				}
 			}
+			return res;
+		}
 
+		//_mat * this//
+		inline void Mul(const MatrixBase& _mat)
+		{
+			Set(Mul(*this, _mat));
 		}
 
 		//ècé≤ÇÃä|ÇØéZ//
 		template<unsigned long _Arrarys>
 		inline VectorBase<T, _Arrarys> VerticalMul(const VectorBase<T, _Arrarys> _vec)const
 		{
-			MatrixBase<T, Row, Column> tmpMat;
+			MatrixBase<T, Row, Column> colMat;
 
-			tmpMat.Set(static_cast<T>(0.0f));
+			colMat.Set(static_cast<T>(0.0f));
 
-			unsigned long maxSize = _Arrarys >= Row ? Row : _Arrarys;
+			unsigned long maxSize = _Arrarys >= Column ? Column : _Arrarys;
 
 			unsigned long i = 0;
 			for (i = 0; i < maxSize; i++)
 			{
-				tmpMat.m[i][0] = _vec[i];
+				colMat.m[i][0] = _vec[i];
 			}
 
-			tmpMat = (*this) * tmpMat;
+			colMat = Mul((*this), colMat);
 
 			VectorBase<T, _Arrarys> out;
 
 			for (i = 0; i < maxSize; i++)
 			{
-				out[i] = tmpMat.m[i][0];
+				out[i] = colMat.m[i][0];
 			}
 
 			return out;
@@ -802,27 +810,27 @@ namespace ChMath
 
 		//â°é≤ÇÃä|ÇØéZ//
 		template<unsigned long _Arrarys>
-		inline VectorBase<T, _Arrarys>HorizontalMul(const VectorBase<T, _Arrarys> _vec)const
+		inline VectorBase<T, _Arrarys>HorizontalMul(const VectorBase<T, _Arrarys>& _vec)const
 		{
-			MatrixBase<T, Row, Column> tmpMat;
+			MatrixBase<T, Row, Column> rowMat;
 
-			tmpMat.Set(static_cast<T>(0.0f));
+			rowMat.Set(static_cast<T>(0.0f));
 
-			unsigned long maxSize = _Arrarys >= Column ? Column : _Arrarys;
+			unsigned long maxSize = _Arrarys >= Row ? Row : _Arrarys;
 
 			unsigned long i = 0;
 			for (i = 0; i < maxSize; i++)
 			{
-				tmpMat.m[0][i] = _vec[i];
+				rowMat.m[0][i] = _vec[i];
 			}
 
-			tmpMat = tmpMat * (*this);
+			rowMat = Mul(rowMat, (*this));
 
 			VectorBase<T, _Arrarys> out;
 
 			for (i = 0; i < maxSize; i++)
 			{
-				out[i] = tmpMat.m[0][i];
+				out[i] = rowMat.m[0][i];
 			}
 
 			return out;
@@ -1418,13 +1426,16 @@ namespace ChMath
 
 		inline Vector3Base<T> GetMul(const Vector3Base<T>& _dir) const { return QuaternionBase<T>::GetMul(*this, _dir); }
 
+		//à»â∫ÇÃãLéñÇéQçl//
+		//https://qiita.com/aa_debdeb/items/3d02e28fb9ebfa357eaf#%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%8B%E3%82%AA%E3%83%B3%E3%81%8B%E3%82%89%E3%82%AA%E3%82%A4%E3%83%A9%E3%83%BC%E8%A7%92
+
 		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
 			XYZ,
 			y,
 			(2.0f * x * z + 2.0f * y * w),
 			x,
-			ChMath::GetATan((y* z + x * w) / (ww + 2.0f * y * y - 1.0f)),
-			ChMath::GetATan(-(y * z - x * w) / (ww + 2.0f * z * z - 1.0f)),
+			ChMath::GetATan((2.0f * y * z + 2.0f * x * w) / (ww + 2.0f * y * y - 1.0f)),
+			ChMath::GetATan(-(2.0f * y * z - 2.0f * x * w) / (ww + 2.0f * z * z - 1.0f)),
 			z,
 			0.0f,
 			ChMath::GetATan(-(2.0f * x * y - 2.0f * z * w) / (ww + 2.0f * x * x - 1.0f)));
@@ -1434,8 +1445,8 @@ namespace ChMath
 			z,
 			(-(2.0f * x * y - 2.0f * z * w)),
 			x,
-			ChMath::GetATan(-(y * z - x * w) / (ww + 2.0f * z * z - 1.0f)),
-			ChMath::GetATan((y* z + x * w) / (ww + 2.0f * y * y - 1.0f)),
+			ChMath::GetATan(-(2.0f * y * z - 2.0f * x * w) / (ww + 2.0f * z * z - 1.0f)),
+			ChMath::GetATan((2.0f * y * z + 2.0f * x * w) / (ww + 2.0f * y * y - 1.0f)),
 			y,
 			0.0f,
 			ChMath::GetATan((2.0f * x * z + 2.0f * y * w) / (ww + 2.0f * x * x - 1.0f))
@@ -1446,8 +1457,8 @@ namespace ChMath
 			x,
 			(-(2.0f * y * z - 2.0f * x * w)),
 			y,
-			ChMath::GetATan(-(x * z - y * w) / (ww + 2.0f * x * x - 1.0f)),
-			ChMath::GetATan((x* z + y * w) / (ww + 2.0f * z * z - 1.0f)),
+			ChMath::GetATan(-(2.0f * x * z - 2.0f * y * w) / (ww + 2.0f * x * x - 1.0f)),
+			ChMath::GetATan((2.0f * x * z + 2.0f * y * w) / (ww + 2.0f * z * z - 1.0f)),
 			z,
 			0.0f,
 			ChMath::GetATan((2.0f * x * y + 2.0f * z * w) / (ww + 2.0f * y * y - 1.0f))
@@ -1461,8 +1472,8 @@ namespace ChMath
 			0.0f,
 			ChMath::GetATan(-(2.0f * y * z - 2.0f * x * w) / (ww + 2.0f * y * y - 1.0f)),
 			y,
-			ChMath::GetATan((x* z + y * w) / (ww + 2.0f * z * z - 1.0f)),
-			ChMath::GetATan(-(x * z - y * w) / (ww + 2.0f * x * x - 1.0f))
+			ChMath::GetATan((2.0f * x * z + 2.0f * y * w) / (ww + 2.0f * z * z - 1.0f)),
+			ChMath::GetATan(-(2.0f * x * z - 2.0f * y * w) / (ww + 2.0f * x * x - 1.0f))
 		);
 
 		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
@@ -1473,8 +1484,8 @@ namespace ChMath
 			0.0f,
 			ChMath::GetATan(-(2.0f * x * y - 2.0f * z * w) / (ww + 2.0f * y * y - 1.0f)),
 			z,
-			ChMath::GetATan((x* z + y * w) / (ww + 2.0f * x * x - 1.0f)),
-			ChMath::GetATan(-(x * z - y * w) / (ww + 2.0f * z * z - 1.0f))
+			ChMath::GetATan((2.0f * x * z + 2.0f * y * w) / (ww + 2.0f * x * x - 1.0f)),
+			ChMath::GetATan(-(2.0f * x * z - 2.0f * y * w) / (ww + 2.0f * z * z - 1.0f))
 		);
 
 		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
@@ -1485,8 +1496,8 @@ namespace ChMath
 			0.0f,
 			ChMath::GetATan((2.0f * y * z + 2.0f * x * w) / (ww + 2.0f * z * z - 1.0f)),
 			z,
-			ChMath::GetATan(-(x * y - z * w) / (ww + 2.0f * y * y - 1.0f)),
-			ChMath::GetATan((x* y + z * w) / (ww + 2.0f * x * x - 1.0f))
+			ChMath::GetATan(-(2.0f * x * y - 2.0f * z * w) / (ww + 2.0f * y * y - 1.0f)),
+			ChMath::GetATan((2.0f * x * y + 2.0f * z * w) / (ww + 2.0f * x * x - 1.0f))
 		);
 
 	public://Static Get Functions//
@@ -1501,8 +1512,8 @@ namespace ChMath
 			QuaternionBase<T> idn = _qua;
 			idn.Inverse();
 
-			tmp.SetMul(tmp, idn);
-			tmp.SetMul(_qua, tmp);
+			tmp.SetMul(tmp, _qua);
+			tmp.SetMul(idn, tmp);
 
 			res.val = tmp.val;
 

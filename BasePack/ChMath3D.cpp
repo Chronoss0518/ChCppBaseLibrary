@@ -38,6 +38,7 @@ ChVector4 ChVector4::_FunctionName(const float _##_X, const float _##_Y, const f
 #define CH_MATH3D_METHOD_VECTOR_CAST(_BaseClass,_OutClass)\
 _BaseClass::operator const _OutClass() const {\
 	_OutClass res;\
+	res.val.Identity();\
 	res.val.Set(val);\
 	return res;\
 }
@@ -53,7 +54,8 @@ ChMath::ChEular##_AxisOrder<float> _MatrixType::GetEulerRotation##_AxisOrder(con
 	outM.m[1].Normalize(_digit);\
 	outM.m[2].Normalize(_digit);\
 	res._ZeroTestAxis = _ZeroTestAxisFunction;\
-	if(CH_FLOAT_TEST(res._ZeroTestAxis,Ch_FLOAT_TEST_VALUE)){\
+	float test = ChMath::GetCos(res._ZeroTestAxis);\
+	if(CH_FLOAT_TEST(test,Ch_FLOAT_TEST_VALUE)){\
 	res._Axiz1 = _ZeroAxiz1Function; \
 	res._Axiz2 = _ZeroAxiz2Function; \
 	}else{\
@@ -311,14 +313,14 @@ void ChLMatrix::SetRotation(const ChQuaternion& _qua, const unsigned long _digit
 		m[i][i] = (squaredW + (2.0f * _qua.val[i] * _qua.val[i]) - 1.0f) * scl.val[i];
 	}
 
-	m[0][1] = 2.0f * ((_qua.x * _qua.y) + (_qua.z * _qua.w)) * scl.x;
-	m[0][2] = 2.0f * ((_qua.x * _qua.z) - (_qua.y * _qua.w)) * scl.x;
+	m[0][1] = ((2.0f * _qua.x * _qua.y) - (2.0f * _qua.z * _qua.w)) * scl.x;
+	m[0][2] = ((2.0f * _qua.x * _qua.z) + (2.0f * _qua.y * _qua.w)) * scl.x;
 
-	m[1][0] = 2.0f * ((_qua.y * _qua.x) - (_qua.z * _qua.w)) * scl.y;
-	m[1][2] = 2.0f * ((_qua.y * _qua.z) + (_qua.x * _qua.w)) * scl.y;
+	m[1][0] = ((2.0f * _qua.y * _qua.x) + (2.0f * _qua.z * _qua.w)) * scl.y;
+	m[1][2] = ((2.0f * _qua.y * _qua.z) - (2.0f * _qua.x * _qua.w)) * scl.y;
 
-	m[2][0] = 2.0f * ((_qua.z * _qua.x) + (_qua.y * _qua.w)) * scl.z;
-	m[2][1] = 2.0f * ((_qua.z * _qua.y) - (_qua.x * _qua.w)) * scl.z;
+	m[2][0] = ((2.0f * _qua.z * _qua.x) - (2.0f * _qua.y * _qua.w)) * scl.z;
+	m[2][1] = ((2.0f * _qua.z * _qua.y) + (2.0f * _qua.x * _qua.w)) * scl.z;
 }
 
 void ChLMatrix::SetRotationYPR(const float _x, const float _y, const float _z, const unsigned long _digit)
@@ -421,38 +423,42 @@ ChQuaternion ChLMatrix::GetRotation(const unsigned long _digit)const
 	return res;
 }
 
+//以下のサイトを参照//
+//https://qiita.com/aa_debdeb/items/3d02e28fb9ebfa357eaf#%E5%9B%9E%E8%BB%A2%E9%A0%86xyz-3
+//
+
 CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
 	XYZ,
 	y,
-	ChMath::GetSin(-outM.m[0][2]),
+	ChMath::GetASin(outM.m[0][2]),
 	x,
-	ChMath::GetATan(-outM.m[2][1] / outM.m[1][1]),
-	ChMath::GetATan(outM.m[1][2] / outM.m[2][2]),
+	ChMath::GetATan(outM.m[2][1] / outM.m[1][1]),
+	ChMath::GetATan(-outM.m[1][2] / outM.m[2][2]),
 	z,
 	0.0f,
-	ChMath::GetATan(outM.m[0][1] / outM.m[0][0]));
+	ChMath::GetATan(-outM.m[0][1] / outM.m[0][0]));
 
 CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
 	XZY,
 	z,
-	ChMath::GetSin(outM.m[0][1]),
+	ChMath::GetASin(-outM.m[0][1]),
 	x,
-	ChMath::GetATan(outM.m[1][2] / outM.m[2][2]),
-	ChMath::GetATan(-outM.m[0][2] / outM.m[2][2]),
+	ChMath::GetATan(-outM.m[1][2] / outM.m[2][2]),
+	ChMath::GetATan(outM.m[2][1] / outM.m[1][1]),
 	y,
 	0.0f,
-	ChMath::GetATan(-outM.m[0][2] / outM.m[0][0]));
+	ChMath::GetATan(outM.m[0][2] / outM.m[0][0]));
 
 CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
 	YXZ,
 	x,
-	ChMath::GetSin(outM.m[1][2]),
+	ChMath::GetASin(-outM.m[1][2]),
 	y,
-	ChMath::GetATan(outM.m[2][0] / outM.m[0][0]),
-	ChMath::GetATan(-outM.m[0][2] / outM.m[2][2]),
+	ChMath::GetATan(-outM.m[2][0] / outM.m[0][0]),
+	ChMath::GetATan(outM.m[0][2] / outM.m[2][2]),
 	z,
 	0.0f,
 	ChMath::GetATan(-outM.m[1][0] / outM.m[1][1]));
@@ -461,37 +467,37 @@ CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
 	YZX,
 	z,
-	ChMath::GetSin(-outM.m[1][0]),
+	ChMath::GetASin(outM.m[1][0]),
 	x,
 	0.0f,
-	ChMath::GetATan(outM.m[1][2] / outM.m[1][1]),
+	ChMath::GetATan(-outM.m[1][2] / outM.m[1][1]),
 	y,
-	ChMath::GetATan(-outM.m[0][2] / outM.m[2][2]),
-	ChMath::GetATan(outM.m[2][0] / outM.m[0][0]));
+	ChMath::GetATan(outM.m[0][2] / outM.m[2][2]),
+	ChMath::GetATan(-outM.m[2][0] / outM.m[0][0]));
 
 CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
 	ZXY,
 	x,
-	ChMath::GetSin(-outM.m[2][1]),
+	ChMath::GetASin(outM.m[2][1]),
 	y,
 	0.0f,
-	ChMath::GetATan(outM.m[2][0] / outM.m[2][2]),
+	ChMath::GetATan(-outM.m[2][0] / outM.m[2][2]),
 	z,
-	ChMath::GetATan(-outM.m[1][0] / outM.m[0][0]),
-	ChMath::GetATan(outM.m[0][1] / outM.m[1][1]));
+	ChMath::GetATan(outM.m[1][0] / outM.m[0][0]),
+	ChMath::GetATan(-outM.m[0][1] / outM.m[1][1]));
 
 CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
 	ZYX,
 	y,
-	ChMath::GetSin(outM.m[2][0]),
+	ChMath::GetASin(-outM.m[2][0]),
 	x,
 	0.0f,
 	ChMath::GetATan(outM.m[2][1] / outM.m[2][2]),
 	z,
-	ChMath::GetATan(-outM.m[1][0] / outM.m[0][0]),
-	ChMath::GetATan(outM.m[0][1] / outM.m[1][1]));
+	ChMath::GetATan(-outM.m[0][1] / outM.m[1][1]),
+	ChMath::GetATan(outM.m[1][0] / outM.m[0][0]));
 
 ChVector3 ChLMatrix::GetScalling(const unsigned long _digit)const
 {
@@ -503,7 +509,7 @@ ChVector4 ChLMatrix::Transform(const ChVector4& _base)const
 	ChVector4 res;
 
 	res = _base;
-	res.w = 1.0f;
+
 	res.val = m.HorizontalMul(res.val);
 
 	return res;
