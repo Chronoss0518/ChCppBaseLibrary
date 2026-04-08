@@ -121,25 +121,6 @@ const std::basic_string<CharaType>&_cutTo4Char = ChStd::GetCRLFChara<CharaType>(
 #endif
 
 
-#ifndef CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION
-#define CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(_AxisOrder,_ZeroTestAxis,_ZeroTestAxisFunction,_Axiz1,_ZeroAxiz1Function,_NotZeroAxiz1Function,_Axiz2,_ZeroAxiz2Function,_NotZeroAxiz2Function)\
-inline ChEular##_AxisOrder<T> GetEulerRotation##_AxisOrder(const unsigned long _digit = 6)const\
-{\
-	ChEular##_AxisOrder<T> res;\
-	res._ZeroTestAxis = ChMath::GetASin _ZeroTestAxisFunction;\
-	T ww = w * w * static_cast<T>(2.0f);\
-	if (CH_FLOAT_TEST(ChMath::GetCos(res._ZeroTestAxis), Ch_FLOAT_TEST_VALUE)){\
-		res._Axiz1 = _ZeroAxiz1Function;\
-		res._Axiz2 =_ZeroAxiz2Function;\
-	}else{\
-		res._Axiz1 = _NotZeroAxiz1Function;\
-		res._Axiz2 = _NotZeroAxiz2Function;\
-	}\
-	return res;\
-}
-#endif
-
-
 namespace ChMath
 {
 	double Round(const double& _val, const unsigned long _digit = 307);
@@ -1433,76 +1414,17 @@ namespace ChMath
 		//à»â∫ÇÃãLéñÇéQçl//
 		//https://qiita.com/aa_debdeb/items/3d02e28fb9ebfa357eaf#%E3%82%AF%E3%82%A9%E3%83%BC%E3%82%BF%E3%83%8B%E3%82%AA%E3%83%B3%E3%81%8B%E3%82%89%E3%82%AA%E3%82%A4%E3%83%A9%E3%83%BC%E8%A7%92
 
-		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
-			XYZ,
-			y,
-			(2.0f * x * z + 2.0f * y * w),
-			x,
-			ChMath::GetATan2((2.0f * y * z + 2.0f * x * w),(ww + 2.0f * y * y - 1.0f)),
-			ChMath::GetATan2(-(2.0f * y * z - 2.0f * x * w),(ww + 2.0f * z * z - 1.0f)),
-			z,
-			0.0f,
-			ChMath::GetATan2(-(2.0f * x * y - 2.0f * z * w),(ww + 2.0f * x * x - 1.0f)));
+		ChEularXYZ<T> GetEulerRotationXYZ(const unsigned long _digit = 6)const;
 
-		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
-			XZY,
-			z,
-			(-(2.0f * x * y - 2.0f * z * w)),
-			x,
-			ChMath::GetATan2(-(2.0f * y * z - 2.0f * x * w),(ww + 2.0f * z * z - 1.0f)),
-			ChMath::GetATan2((2.0f * y * z + 2.0f * x * w),(ww + 2.0f * y * y - 1.0f)),
-			y,
-			0.0f,
-			ChMath::GetATan2((2.0f * x * z + 2.0f * y * w),(ww + 2.0f * x * x - 1.0f))
-		);
+		ChEularXZY<T> GetEulerRotationXZY(const unsigned long _digit = 6)const;
 
-		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
-			YXZ,
-			x,
-			(-(2.0f * y * z - 2.0f * x * w)),
-			y,
-			ChMath::GetATan2(-(2.0f * x * z - 2.0f * y * w),(ww + 2.0f * x * x - 1.0f)),
-			ChMath::GetATan2((2.0f * x * z + 2.0f * y * w),(ww + 2.0f * z * z - 1.0f)),
-			z,
-			0.0f,
-			ChMath::GetATan2((2.0f * x * y + 2.0f * z * w),(ww + 2.0f * y * y - 1.0f))
-		);
+		ChEularYXZ<T> GetEulerRotationYXZ(const unsigned long _digit = 6)const;
 
-		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
-			YZX,
-			z,
-			(2.0f * x * y + 2.0f * z * w),
-			x,
-			0.0f,
-			ChMath::GetATan2(-(2.0f * y * z - 2.0f * x * w),(ww + 2.0f * y * y - 1.0f)),
-			y,
-			ChMath::GetATan2((2.0f * x * z + 2.0f * y * w),(ww + 2.0f * z * z - 1.0f)),
-			ChMath::GetATan2(-(2.0f * x * z - 2.0f * y * w),(ww + 2.0f * x * x - 1.0f))
-		);
+		ChEularYZX<T> GetEulerRotationYZX(const unsigned long _digit = 6)const;
 
-		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
-			ZXY,
-			x,
-			((2.0f * y * z + 2.0f * x * w)),
-			y,
-			0.0f,
-			ChMath::GetATan2(-(2.0f * x * y - 2.0f * z * w),(ww + 2.0f * y * y - 1.0f)),
-			z,
-			ChMath::GetATan2((2.0f * x * z + 2.0f * y * w),(ww + 2.0f * x * x - 1.0f)),
-			ChMath::GetATan2(-(2.0f * x * z - 2.0f * y * w),(ww + 2.0f * z * z - 1.0f))
-		);
+		ChEularZXY<T> GetEulerRotationZXY(const unsigned long _digit = 6)const;
 
-		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
-			ZYX,
-			y,
-			(-(2.0f * x * z - 2.0f * y * w)),
-			x,
-			0.0f,
-			ChMath::GetATan2((2.0f * y * z + 2.0f * x * w),(ww + 2.0f * z * z - 1.0f)),
-			z,
-			ChMath::GetATan2(-(2.0f * x * y - 2.0f * z * w),(ww + 2.0f * y * y - 1.0f)),
-			ChMath::GetATan2((2.0f * x * y + 2.0f * z * w),(ww + 2.0f * x * x - 1.0f))
-		);
+		ChEularZYX<T> GetEulerRotationZYX(const unsigned long _digit = 6)const;
 
 	public://Static Get Functions//
 

@@ -4,16 +4,37 @@
 #include <cmath>
 
 #ifndef CH_MATH_FUNCTION
-#define CH_MATH_FUNCTION(_Type,_FunctionName,_FunctionArg,_UseFunctionName,_UseFunctionArg)\
- _Type ChMath::_FunctionName ( _FunctionArg ) { return std::_UseFunctionName ( _UseFunctionArg ); }
-#endif
-
-#ifndef CH_FMOD_ARGUMENT
-#define CH_FMOD_ARGUMENT(_Type) _Type _valx, _Type _valy 
+#define CH_MATH_FUNCTION(_Type,_FunctionName,_UseFunctionName)\
+ _Type ChMath::_FunctionName (_Type _val) { return std::_UseFunctionName (_val); }
 #endif
 
 #ifndef CH_FMOD_USE_ARGUMENT
 #define CH_FMOD_USE_ARGUMENT  _valx, _valy 
+#endif
+
+#ifndef CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION
+#define CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(_AxisOrder,_ZeroTestAxis,_ZeroTestAxisFunction,_Axiz1,_ZeroAxiz1Function,_NotZeroAxiz1Function,_Axiz2,_ZeroAxiz2Function,_NotZeroAxiz2Function)\
+template<typename T> ChMath::ChEular##_AxisOrder<T> ChMath::QuaternionBase<T>::GetEulerRotation##_AxisOrder(const unsigned long _digit)const\
+{\
+	ChEular##_AxisOrder<T> res;\
+	res._ZeroTestAxis = ChMath::GetASin _ZeroTestAxisFunction;\
+	T ww = w * w * static_cast<T>(2.0f);\
+	if (CH_FLOAT_TEST(ChMath::GetCos(res._ZeroTestAxis), Ch_FLOAT_TEST_VALUE)){\
+		res._Axiz1 = _ZeroAxiz1Function;\
+		res._Axiz2 =_ZeroAxiz2Function;\
+	}else{\
+		res._Axiz1 = _NotZeroAxiz1Function;\
+		res._Axiz2 = _NotZeroAxiz2Function;\
+	}\
+	return res;\
+}
+#endif
+
+#ifndef CH_FLOATING_TYPE_EXPLICIT_DECLARATION
+#define CH_FLOATING_TYPE_EXPLICIT_DECLARATION(_Class)\
+template class _Class<float>;\
+template class _Class<double>;\
+template class _Class<long double>;
 #endif
 
 float ChMath::Round(const float& _val, const unsigned long _digit)
@@ -80,36 +101,109 @@ long double ChMath::SqrtEx(const long double& _base, const unsigned long _digit)
 	return out;
 }
 
-CH_MATH_FUNCTION(float, GetSin, float _val, sin, _val);
-CH_MATH_FUNCTION(double, GetSin, double _val, sin, _val);
-CH_MATH_FUNCTION(long double, GetSin, long double _val, sin, _val);
+CH_MATH_FUNCTION(float, GetSin, sin);
+CH_MATH_FUNCTION(double, GetSin,  sin);
+CH_MATH_FUNCTION(long double, GetSin,  sin);
 
-CH_MATH_FUNCTION(float, GetASin, float _val, asin, _val);
-CH_MATH_FUNCTION(double, GetASin, double _val, asin, _val);
-CH_MATH_FUNCTION(long double, GetASin, long double _val, asin, _val);
+CH_MATH_FUNCTION(float, GetASin, asin);
+CH_MATH_FUNCTION(double, GetASin, asin);
+CH_MATH_FUNCTION(long double, GetASin, asin);
 
-CH_MATH_FUNCTION(float, GetCos, float _val, cos, _val);
-CH_MATH_FUNCTION(double, GetCos, double _val, cos, _val);
-CH_MATH_FUNCTION(long double, GetCos, long double _val, cos, _val);
+CH_MATH_FUNCTION(float, GetCos, cos);
+CH_MATH_FUNCTION(double, GetCos, cos);
+CH_MATH_FUNCTION(long double, GetCos, cos);
 
-CH_MATH_FUNCTION(float, GetACos, float _val, acos, _val);
-CH_MATH_FUNCTION(double, GetACos, double _val, acos, _val);
-CH_MATH_FUNCTION(long double, GetACos, long double _val, acos, _val);
+CH_MATH_FUNCTION(float, GetACos, acos);
+CH_MATH_FUNCTION(double, GetACos, acos);
+CH_MATH_FUNCTION(long double, GetACos, acos);
 
-CH_MATH_FUNCTION(float, GetATan, float _val, atan, _val);
-CH_MATH_FUNCTION(double, GetATan, double _val, atan, _val);
-CH_MATH_FUNCTION(long double, GetATan, long double _val, atan, _val);
+CH_MATH_FUNCTION(float, GetATan, atan);
+CH_MATH_FUNCTION(double, GetATan, atan);
+CH_MATH_FUNCTION(long double, GetATan, atan);
 
 float ChMath::GetATan2(float _val1, float _val2) { return std::atan2(_val1,_val2); }
 double ChMath::GetATan2(double _val1, double _val2) { return std::atan2(_val1,_val2); }
 long double ChMath::GetATan2(long double _val1, long double _val2) { return std::atan2(_val1,_val2); }
 
-CH_MATH_FUNCTION(float, GetFMod, CH_FMOD_ARGUMENT(float), fmod, CH_FMOD_USE_ARGUMENT);
-CH_MATH_FUNCTION(double, GetFMod, CH_FMOD_ARGUMENT(double), fmod, CH_FMOD_USE_ARGUMENT);
-CH_MATH_FUNCTION(long double, GetFMod, CH_FMOD_ARGUMENT(long double), fmod, CH_FMOD_USE_ARGUMENT);
-
+float ChMath::GetFMod(float _val1, float _val2) { return std::fmod(_val1, _val2); }
+double ChMath::GetFMod(double _val1, double _val2) { return std::fmod(_val1, _val2); }
+long double ChMath::GetFMod(long double _val1, long double _val2) { return std::fmod(_val1, _val2); }
 
 float ChMath::GetMaxFloat()
 {
 	return FLT_MAX;
 }
+
+CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
+	XYZ,
+	y,
+	(2.0f * x * z + 2.0f * y * w),
+	x,
+	ChMath::GetATan2((2.0f * y * z + 2.0f * x * w), (ww + 2.0f * y * y - 1.0f)),
+	ChMath::GetATan2(-(2.0f * y * z - 2.0f * x * w), (ww + 2.0f * z * z - 1.0f)),
+	z,
+	0.0f,
+	ChMath::GetATan2(-(2.0f * x * y - 2.0f * z * w), (ww + 2.0f * x * x - 1.0f)));
+
+CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
+	XZY,
+	z,
+	(-(2.0f * x * y - 2.0f * z * w)),
+	x,
+	ChMath::GetATan2(-(2.0f * y * z - 2.0f * x * w), (ww + 2.0f * z * z - 1.0f)),
+	ChMath::GetATan2((2.0f * y * z + 2.0f * x * w), (ww + 2.0f * y * y - 1.0f)),
+	y,
+	0.0f,
+	ChMath::GetATan2((2.0f * x * z + 2.0f * y * w), (ww + 2.0f * x * x - 1.0f))
+);
+
+CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
+	YXZ,
+	x,
+	(-(2.0f * y * z - 2.0f * x * w)),
+	y,
+	ChMath::GetATan2(-(2.0f * x * z - 2.0f * y * w), (ww + 2.0f * x * x - 1.0f)),
+	ChMath::GetATan2((2.0f * x * z + 2.0f * y * w), (ww + 2.0f * z * z - 1.0f)),
+	z,
+	0.0f,
+	ChMath::GetATan2((2.0f * x * y + 2.0f * z * w), (ww + 2.0f * y * y - 1.0f))
+);
+
+CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
+	YZX,
+	z,
+	(2.0f * x * y + 2.0f * z * w),
+	x,
+	0.0f,
+	ChMath::GetATan2(-(2.0f * y * z - 2.0f * x * w), (ww + 2.0f * y * y - 1.0f)),
+	y,
+	ChMath::GetATan2((2.0f * x * z + 2.0f * y * w), (ww + 2.0f * z * z - 1.0f)),
+	ChMath::GetATan2(-(2.0f * x * z - 2.0f * y * w), (ww + 2.0f * x * x - 1.0f))
+);
+
+CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
+	ZXY,
+	x,
+	((2.0f * y * z + 2.0f * x * w)),
+	y,
+	0.0f,
+	ChMath::GetATan2(-(2.0f * x * y - 2.0f * z * w), (ww + 2.0f * y * y - 1.0f)),
+	z,
+	ChMath::GetATan2((2.0f * x * z + 2.0f * y * w), (ww + 2.0f * x * x - 1.0f)),
+	ChMath::GetATan2(-(2.0f * x * z - 2.0f * y * w), (ww + 2.0f * z * z - 1.0f))
+);
+
+CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
+	ZYX,
+	y,
+	(-(2.0f * x * z - 2.0f * y * w)),
+	x,
+	0.0f,
+	ChMath::GetATan2((2.0f * y * z + 2.0f * x * w), (ww + 2.0f * z * z - 1.0f)),
+	z,
+	ChMath::GetATan2(-(2.0f * x * y - 2.0f * z * w), (ww + 2.0f * y * y - 1.0f)),
+	ChMath::GetATan2((2.0f * x * y + 2.0f * z * w), (ww + 2.0f * x * x - 1.0f))
+);
+
+CH_FLOATING_TYPE_EXPLICIT_DECLARATION(ChMath::QuaternionBase);
+
