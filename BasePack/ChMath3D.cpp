@@ -433,11 +433,11 @@ CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	y,
 	ChMath::GetASin(outM.m[0][2]),
 	x,
-	ChMath::GetATan(outM.m[2][1] / outM.m[1][1]),
-	ChMath::GetATan(-outM.m[1][2] / outM.m[2][2]),
+	ChMath::GetATan2(outM.m[2][1],outM.m[1][1]),
+	ChMath::GetATan2(-outM.m[1][2],outM.m[2][2]),
 	z,
 	0.0f,
-	ChMath::GetATan(-outM.m[0][1] / outM.m[0][0]));
+	ChMath::GetATan2(-outM.m[0][1],outM.m[0][0]));
 
 CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
@@ -445,11 +445,11 @@ CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	z,
 	ChMath::GetASin(-outM.m[0][1]),
 	x,
-	ChMath::GetATan(-outM.m[1][2] / outM.m[2][2]),
-	ChMath::GetATan(outM.m[2][1] / outM.m[1][1]),
+	ChMath::GetATan2(-outM.m[1][2],outM.m[2][2]),
+	ChMath::GetATan2(outM.m[2][1],outM.m[1][1]),
 	y,
 	0.0f,
-	ChMath::GetATan(outM.m[0][2] / outM.m[0][0]));
+	ChMath::GetATan2(outM.m[0][2],outM.m[0][0]));
 
 CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
@@ -457,11 +457,11 @@ CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	x,
 	ChMath::GetASin(-outM.m[1][2]),
 	y,
-	ChMath::GetATan(-outM.m[2][0] / outM.m[0][0]),
-	ChMath::GetATan(outM.m[0][2] / outM.m[2][2]),
+	ChMath::GetATan2(-outM.m[2][0],outM.m[0][0]),
+	ChMath::GetATan2(outM.m[0][2],outM.m[2][2]),
 	z,
 	0.0f,
-	ChMath::GetATan(-outM.m[1][0] / outM.m[1][1]));
+	ChMath::GetATan2(-outM.m[1][0],outM.m[1][1]));
 
 CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
@@ -470,10 +470,10 @@ CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChMath::GetASin(outM.m[1][0]),
 	x,
 	0.0f,
-	ChMath::GetATan(-outM.m[1][2] / outM.m[1][1]),
+	ChMath::GetATan2(-outM.m[1][2],outM.m[1][1]),
 	y,
-	ChMath::GetATan(outM.m[0][2] / outM.m[2][2]),
-	ChMath::GetATan(-outM.m[2][0] / outM.m[0][0]));
+	ChMath::GetATan2(outM.m[0][2],outM.m[2][2]),
+	ChMath::GetATan2(-outM.m[2][0],outM.m[0][0]));
 
 CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
@@ -482,10 +482,10 @@ CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChMath::GetASin(outM.m[2][1]),
 	y,
 	0.0f,
-	ChMath::GetATan(-outM.m[2][0] / outM.m[2][2]),
+	ChMath::GetATan2(-outM.m[2][0],outM.m[2][2]),
 	z,
-	ChMath::GetATan(outM.m[1][0] / outM.m[0][0]),
-	ChMath::GetATan(-outM.m[0][1] / outM.m[1][1]));
+	ChMath::GetATan2(outM.m[1][0],outM.m[0][0]),
+	ChMath::GetATan2(-outM.m[0][1],outM.m[1][1]));
 
 CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChLMatrix,
@@ -494,10 +494,10 @@ CH_MATH_METHOD_MATRIX_GET_EULER_ROTATION(
 	ChMath::GetASin(-outM.m[2][0]),
 	x,
 	0.0f,
-	ChMath::GetATan(outM.m[2][1] / outM.m[2][2]),
+	ChMath::GetATan2(outM.m[2][1],outM.m[2][2]),
 	z,
-	ChMath::GetATan(-outM.m[0][1] / outM.m[1][1]),
-	ChMath::GetATan(outM.m[1][0] / outM.m[0][0]));
+	ChMath::GetATan2(-outM.m[0][1],outM.m[1][1]),
+	ChMath::GetATan2(outM.m[1][0],outM.m[0][0]));
 
 ChVector3 ChLMatrix::GetScalling(const unsigned long _digit)const
 {

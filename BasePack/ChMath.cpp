@@ -100,6 +100,10 @@ CH_MATH_FUNCTION(float, GetATan, float _val, atan, _val);
 CH_MATH_FUNCTION(double, GetATan, double _val, atan, _val);
 CH_MATH_FUNCTION(long double, GetATan, long double _val, atan, _val);
 
+float ChMath::GetATan2(float _val1, float _val2) { return std::atan2(_val1,_val2); }
+double ChMath::GetATan2(double _val1, double _val2) { return std::atan2(_val1,_val2); }
+long double ChMath::GetATan2(long double _val1, long double _val2) { return std::atan2(_val1,_val2); }
+
 CH_MATH_FUNCTION(float, GetFMod, CH_FMOD_ARGUMENT(float), fmod, CH_FMOD_USE_ARGUMENT);
 CH_MATH_FUNCTION(double, GetFMod, CH_FMOD_ARGUMENT(double), fmod, CH_FMOD_USE_ARGUMENT);
 CH_MATH_FUNCTION(long double, GetFMod, CH_FMOD_ARGUMENT(long double), fmod, CH_FMOD_USE_ARGUMENT);

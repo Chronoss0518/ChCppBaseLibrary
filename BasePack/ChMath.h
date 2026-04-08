@@ -172,6 +172,10 @@ namespace ChMath
 	double GetATan(double _val);
 	long double GetATan(long double _val);
 
+	float GetATan2(float _val1, float _val2);
+	double GetATan2(double _val1, double _val2);
+	long double GetATan2(long double _val1, long double _val2);
+
 	float GetFMod(float _valx, float _valy);
 	double GetFMod(double _valx, double _valy);
 	long double GetFMod(long double _valx, long double _valy);
@@ -1434,22 +1438,22 @@ namespace ChMath
 			y,
 			(2.0f * x * z + 2.0f * y * w),
 			x,
-			ChMath::GetATan((2.0f * y * z + 2.0f * x * w) / (ww + 2.0f * y * y - 1.0f)),
-			ChMath::GetATan(-(2.0f * y * z - 2.0f * x * w) / (ww + 2.0f * z * z - 1.0f)),
+			ChMath::GetATan2((2.0f * y * z + 2.0f * x * w),(ww + 2.0f * y * y - 1.0f)),
+			ChMath::GetATan2(-(2.0f * y * z - 2.0f * x * w),(ww + 2.0f * z * z - 1.0f)),
 			z,
 			0.0f,
-			ChMath::GetATan(-(2.0f * x * y - 2.0f * z * w) / (ww + 2.0f * x * x - 1.0f)));
+			ChMath::GetATan2(-(2.0f * x * y - 2.0f * z * w),(ww + 2.0f * x * x - 1.0f)));
 
 		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
 			XZY,
 			z,
 			(-(2.0f * x * y - 2.0f * z * w)),
 			x,
-			ChMath::GetATan(-(2.0f * y * z - 2.0f * x * w) / (ww + 2.0f * z * z - 1.0f)),
-			ChMath::GetATan((2.0f * y * z + 2.0f * x * w) / (ww + 2.0f * y * y - 1.0f)),
+			ChMath::GetATan2(-(2.0f * y * z - 2.0f * x * w),(ww + 2.0f * z * z - 1.0f)),
+			ChMath::GetATan2((2.0f * y * z + 2.0f * x * w),(ww + 2.0f * y * y - 1.0f)),
 			y,
 			0.0f,
-			ChMath::GetATan((2.0f * x * z + 2.0f * y * w) / (ww + 2.0f * x * x - 1.0f))
+			ChMath::GetATan2((2.0f * x * z + 2.0f * y * w),(ww + 2.0f * x * x - 1.0f))
 		);
 
 		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
@@ -1457,11 +1461,11 @@ namespace ChMath
 			x,
 			(-(2.0f * y * z - 2.0f * x * w)),
 			y,
-			ChMath::GetATan(-(2.0f * x * z - 2.0f * y * w) / (ww + 2.0f * x * x - 1.0f)),
-			ChMath::GetATan((2.0f * x * z + 2.0f * y * w) / (ww + 2.0f * z * z - 1.0f)),
+			ChMath::GetATan2(-(2.0f * x * z - 2.0f * y * w),(ww + 2.0f * x * x - 1.0f)),
+			ChMath::GetATan2((2.0f * x * z + 2.0f * y * w),(ww + 2.0f * z * z - 1.0f)),
 			z,
 			0.0f,
-			ChMath::GetATan((2.0f * x * y + 2.0f * z * w) / (ww + 2.0f * y * y - 1.0f))
+			ChMath::GetATan2((2.0f * x * y + 2.0f * z * w),(ww + 2.0f * y * y - 1.0f))
 		);
 
 		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
@@ -1470,10 +1474,10 @@ namespace ChMath
 			(2.0f * x * y + 2.0f * z * w),
 			x,
 			0.0f,
-			ChMath::GetATan(-(2.0f * y * z - 2.0f * x * w) / (ww + 2.0f * y * y - 1.0f)),
+			ChMath::GetATan2(-(2.0f * y * z - 2.0f * x * w),(ww + 2.0f * y * y - 1.0f)),
 			y,
-			ChMath::GetATan((2.0f * x * z + 2.0f * y * w) / (ww + 2.0f * z * z - 1.0f)),
-			ChMath::GetATan(-(2.0f * x * z - 2.0f * y * w) / (ww + 2.0f * x * x - 1.0f))
+			ChMath::GetATan2((2.0f * x * z + 2.0f * y * w),(ww + 2.0f * z * z - 1.0f)),
+			ChMath::GetATan2(-(2.0f * x * z - 2.0f * y * w),(ww + 2.0f * x * x - 1.0f))
 		);
 
 		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
@@ -1482,10 +1486,10 @@ namespace ChMath
 			((2.0f * y * z + 2.0f * x * w)),
 			y,
 			0.0f,
-			ChMath::GetATan(-(2.0f * x * y - 2.0f * z * w) / (ww + 2.0f * y * y - 1.0f)),
+			ChMath::GetATan2(-(2.0f * x * y - 2.0f * z * w),(ww + 2.0f * y * y - 1.0f)),
 			z,
-			ChMath::GetATan((2.0f * x * z + 2.0f * y * w) / (ww + 2.0f * x * x - 1.0f)),
-			ChMath::GetATan(-(2.0f * x * z - 2.0f * y * w) / (ww + 2.0f * z * z - 1.0f))
+			ChMath::GetATan2((2.0f * x * z + 2.0f * y * w),(ww + 2.0f * x * x - 1.0f)),
+			ChMath::GetATan2(-(2.0f * x * z - 2.0f * y * w),(ww + 2.0f * z * z - 1.0f))
 		);
 
 		CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
@@ -1494,10 +1498,10 @@ namespace ChMath
 			(-(2.0f * x * z - 2.0f * y * w)),
 			x,
 			0.0f,
-			ChMath::GetATan((2.0f * y * z + 2.0f * x * w) / (ww + 2.0f * z * z - 1.0f)),
+			ChMath::GetATan2((2.0f * y * z + 2.0f * x * w),(ww + 2.0f * z * z - 1.0f)),
 			z,
-			ChMath::GetATan(-(2.0f * x * y - 2.0f * z * w) / (ww + 2.0f * y * y - 1.0f)),
-			ChMath::GetATan((2.0f * x * y + 2.0f * z * w) / (ww + 2.0f * x * x - 1.0f))
+			ChMath::GetATan2(-(2.0f * x * y - 2.0f * z * w),(ww + 2.0f * y * y - 1.0f)),
+			ChMath::GetATan2((2.0f * x * y + 2.0f * z * w),(ww + 2.0f * x * x - 1.0f))
 		);
 
 	public://Static Get Functions//
