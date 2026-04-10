@@ -205,5 +205,24 @@ CH_MATH_METHOD_QUATERNION_GET_EULER_ROTATION(
 	ChMath::GetATan2((2.0f * x * y + 2.0f * z * w), (ww + 2.0f * x * x - 1.0f))
 );
 
+template<typename T>
+ChMath::Vector3Base<T> ChMath::QuaternionBase<T>::GetMul(const ChMath::QuaternionBase<T>& _qua, const ChMath::Vector3Base<T>& _dir)
+{
+	ChMath::Vector3Base<T> res = _dir;
+	res.val.Normalize();
+
+	ChMath::QuaternionBase<T> tmp = ChMath::QuaternionBase<T>(res);
+
+	ChMath::QuaternionBase<T> idn = _qua;
+	idn.Inverse();
+
+	tmp.SetMul(tmp, idn);
+	tmp.SetMul(_qua, tmp);
+
+	res.val = tmp.val;
+
+	return res;
+}
+
 CH_FLOATING_TYPE_EXPLICIT_DECLARATION(ChMath::QuaternionBase);
 

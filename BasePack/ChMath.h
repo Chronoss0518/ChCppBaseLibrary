@@ -1428,23 +1428,7 @@ namespace ChMath
 
 	public://Static Get Functions//
 
-		inline static Vector3Base<T> GetMul(const QuaternionBase<T>& _qua, const Vector3Base<T>& _dir)
-		{
-			Vector3Base<T> res = _dir;
-			res.val.Normalize();
-
-			QuaternionBase<T> tmp = QuaternionBase<T>(res);
-
-			QuaternionBase<T> idn = _qua;
-			idn.Inverse();
-
-			tmp.SetMul(tmp, _qua);
-			tmp.SetMul(idn, tmp);
-
-			res.val = tmp.val;
-
-			return res;
-		}
+		static Vector3Base<T> GetMul(const QuaternionBase<T>& _qua, const Vector3Base<T>& _dir);
 
 	public://Other Functions//
 
