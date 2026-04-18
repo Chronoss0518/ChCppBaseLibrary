@@ -47,7 +47,7 @@ namespace ChCpp
 		bool GetBitFlg(const unsigned long _argsNum)const;
 
 		//使用可能サイズ//
-		unsigned long  GetSize()const
+		unsigned long  GetBitSize()const
 ;
 		unsigned char GetValue(const unsigned char _byteCount = 0)const;
 
@@ -67,7 +67,7 @@ namespace ChCpp
 
 		inline unsigned long GetTrueCnt()const
 		{
-			return GetTrueCnt(GetSize());
+			return GetTrueCnt(GetBitSize());
 		}
 
 	private:

@@ -43,33 +43,33 @@ void BitBool::SetBitFlg(const unsigned long _argsNum, const bool _flg)
 
 void BitBool::SetBitTrue(const unsigned long _argsNum)
 {
-	if (_argsNum >= GetSize())return;
+	if (_argsNum >= GetBitSize())return;
 
 	flgs[GET_ARGS(_argsNum)] = flgs[GET_ARGS(_argsNum)] | GET_MASK(_argsNum);
 }
 
 void BitBool::SetBitFalse(const unsigned long _argsNum)
 {
-	if (_argsNum >= GetSize())return;
+	if (_argsNum >= GetBitSize())return;
 
 	flgs[GET_ARGS(_argsNum)] = flgs[GET_ARGS(_argsNum)] & (MAX_UCHAR - GET_MASK(_argsNum));
 }
 
 void BitBool::SetValue(const unsigned char _value, const unsigned char _byteCount)
 {
-	if (_byteCount >= GetSize())return;
+	if (_byteCount >= GetBitSize())return;
 
 	flgs[_byteCount] = _value;
 }
 
-unsigned long  ChCpp::BitBool::GetSize()const
+unsigned long  ChCpp::BitBool::GetBitSize()const
 {
 	return static_cast<unsigned long>(flgs.size() * 8);
 }
 
 bool BitBool::GetBitFlg(const unsigned long _argsNum)const
 {
-	if (_argsNum >= GetSize())return false;
+	if (_argsNum >= GetBitSize())return false;
 
 	return flgs[GET_ARGS(_argsNum)] & GET_MASK(_argsNum);
 }
