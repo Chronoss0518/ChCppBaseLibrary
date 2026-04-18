@@ -57,7 +57,7 @@ void BitBool::SetBitFalse(const unsigned long _argsNum)
 
 void BitBool::SetValue(const unsigned char _value, const unsigned char _byteCount)
 {
-	if (_byteCount >= GetBitSize())return;
+	if (_byteCount >= GetByteSize())return;
 
 	flgs[_byteCount] = _value;
 }
@@ -81,7 +81,7 @@ bool BitBool::GetBitFlg(const unsigned long _argsNum)const
 
 unsigned char ChCpp::BitBool::GetValue(const unsigned char _byteCount)const
 {
-	if (flgs.size() < _byteCount)return 0;
+	if (GetByteSize() <= _byteCount)return 0;
 	return flgs[_byteCount];
 }
 
