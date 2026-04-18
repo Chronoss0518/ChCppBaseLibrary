@@ -13,6 +13,8 @@ namespace ChCpp
 
 		BitBool(const unsigned char _size);
 
+		BitBool(const BitBool& _bitBool);
+
 	public://Set Functions//
 
 		//第一引数はアドレス内の一番小さいビットから数えた数値を入力//
@@ -33,6 +35,8 @@ namespace ChCpp
 		//第一引数はセットする値//
 		//第二引数はアドレス内の一番小さいビットから数えた数値を入力//
 		void SetValue(const unsigned char _value, const unsigned char _byteCount = 0);
+
+		void SetBitBool(const BitBool& _bitBool);
 
 		void SetAllDownFlg();
 

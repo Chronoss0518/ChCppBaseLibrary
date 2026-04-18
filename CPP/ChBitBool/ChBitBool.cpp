@@ -10,17 +10,22 @@ using namespace ChCpp;
 //ChBitBoolÉÅÉ\ÉbÉh
 ///////////////////////////////////////////////////////////////////////////////////////
 
-ChCpp::BitBool::BitBool()
+BitBool::BitBool()
 {
 	flgs.resize(1);
 }
 
-ChCpp::BitBool::BitBool(const unsigned char _size)
+BitBool::BitBool(const unsigned char _size)
 {
 	flgs.resize(_size);
 }
 
-void ChCpp::BitBool::SetAllDownFlg()
+BitBool::BitBool(const BitBool& _bitBool)
+{
+	SetBitBool(_bitBool);
+}
+
+void BitBool::SetAllDownFlg()
 {
 	for (size_t i = 0; i < flgs.size(); i++)
 	{
@@ -28,7 +33,7 @@ void ChCpp::BitBool::SetAllDownFlg()
 	}
 }
 
-void ChCpp::BitBool::SetSize(const unsigned char _byteCount)
+void BitBool::SetSize(const unsigned char _byteCount)
 {
 	if (_byteCount <= 0)return;
 	flgs.resize(_byteCount);
@@ -62,12 +67,23 @@ void BitBool::SetValue(const unsigned char _value, const unsigned char _byteCoun
 	flgs[_byteCount] = _value;
 }
 
-unsigned long ChCpp::BitBool::GetByteSize()const
+void BitBool::SetBitBool(const BitBool& _bitBool)
+{
+	if (GetByteSize() != _bitBool.GetByteSize())
+		SetSize(_bitBool.GetByteSize());
+
+	for (unsigned long i = 0; i < _bitBool.GetByteSize(); i++)
+	{
+		SetValue(_bitBool.GetValue(i), i);
+	}
+}
+
+unsigned long BitBool::GetByteSize()const
 {
 	return static_cast<unsigned long>(flgs.size());
 }
 
-unsigned long  ChCpp::BitBool::GetBitSize()const
+unsigned long BitBool::GetBitSize()const
 {
 	return static_cast<unsigned long>(flgs.size() * 8);
 }
@@ -79,13 +95,13 @@ bool BitBool::GetBitFlg(const unsigned long _argsNum)const
 	return flgs[GET_ARGS(_argsNum)] & GET_MASK(_argsNum);
 }
 
-unsigned char ChCpp::BitBool::GetValue(const unsigned char _byteCount)const
+unsigned char BitBool::GetValue(const unsigned char _byteCount)const
 {
 	if (GetByteSize() <= _byteCount)return 0;
 	return flgs[_byteCount];
 }
 
-unsigned long ChCpp::BitBool::GetTrueCnt(const unsigned long& _cnt)const
+unsigned long BitBool::GetTrueCnt(const unsigned long& _cnt)const
 {
 	unsigned long cnt = 0;
 
