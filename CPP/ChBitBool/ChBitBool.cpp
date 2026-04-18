@@ -84,3 +84,17 @@ unsigned char ChCpp::BitBool::GetValue(const unsigned char _byteCount)const
 	if (flgs.size() < _byteCount)return 0;
 	return flgs[_byteCount];
 }
+
+unsigned long ChCpp::BitBool::GetTrueCnt(const unsigned long& _cnt)const
+{
+	unsigned long cnt = 0;
+
+	for (unsigned long i = 0; i < _cnt; i++)
+	{
+		if (!GetBitFlg(i))continue;
+		cnt++;
+	}
+
+	return cnt;
+}
+

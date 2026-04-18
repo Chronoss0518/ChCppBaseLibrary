@@ -55,18 +55,7 @@ namespace ChCpp
 		unsigned char GetValue(const unsigned char _byteCount = 0)const;
 
 		//ƒtƒ‰ƒO”‚Ìw’è‚Å‚ÌTrue‚ÌŒÂ”æ“¾//
-		inline unsigned long GetTrueCnt(const unsigned long& _cnt)const
-		{
-			unsigned long cnt = 0;
-
-			for (unsigned long i = 0; i < _cnt; i++)
-			{
-				if (!GetBitFlg(i))continue;
-				cnt++;
-			}
-
-			return cnt;
-		}
+		unsigned long GetTrueCnt(const unsigned long& _cnt)const;
 
 		inline unsigned long GetTrueCnt()const
 		{
