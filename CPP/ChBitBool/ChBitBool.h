@@ -46,6 +46,9 @@ namespace ChCpp
 		//ChStd::TrueかChStd::Falseを返す//
 		bool GetBitFlg(const unsigned long _argsNum)const;
 
+		//使用可能バイト数//
+		unsigned long GetByteSize()const;
+
 		//使用可能サイズ//
 		unsigned long  GetBitSize()const
 ;

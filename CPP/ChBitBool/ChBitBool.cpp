@@ -62,6 +62,11 @@ void BitBool::SetValue(const unsigned char _value, const unsigned char _byteCoun
 	flgs[_byteCount] = _value;
 }
 
+unsigned long ChCpp::BitBool::GetByteSize()const
+{
+	return static_cast<unsigned long>(flgs.size());
+}
+
 unsigned long  ChCpp::BitBool::GetBitSize()const
 {
 	return static_cast<unsigned long>(flgs.size() * 8);
