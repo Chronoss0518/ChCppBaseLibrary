@@ -17,7 +17,8 @@ BitBool::BitBool()
 
 BitBool::BitBool(const unsigned char _size)
 {
-	flgs.resize(_size);
+	flgs.resize(1);
+	SetSize(_size);
 }
 
 BitBool::BitBool(const BitBool& _bitBool)
