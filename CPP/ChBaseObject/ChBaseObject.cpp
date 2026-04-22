@@ -9,14 +9,20 @@
 void ChCpp::BasicObject::_FunctionNameBase##Function()\
 {\
 	_FunctionNameBase();\
-	for(size_t i = 0; i < comList.size(); i++){\
-		if (!comList[i]->useFlg)continue; \
-		comList[i]->_FunctionNameBase(); \
-		if (comList.empty())break;}\
+	_FunctionNameBase##Component();\
 	for (size_t i = 0; i < childList.size(); i++) {\
 		if (!childList[i]->useFlg)continue; \
 		childList[i]->_FunctionNameBase##Function(); \
 		if (childList.empty())break;}\
+}
+
+#define CH_COMPONENT_FUNCTION(_FunctionNameBase) \
+void ChCpp::BasicObject::_FunctionNameBase##Component()\
+{\
+	for(size_t i = 0; i < comList.size(); i++){\
+		if (!comList[i]->useFlg)continue; \
+		comList[i]->_FunctionNameBase(); \
+		if (comList.empty())break;}\
 }
 
 using namespace ChCpp;
@@ -153,22 +159,7 @@ void ChCpp::BasicObject::UpdateFunction()
 {
 	Update();
 
-	if (!comList.empty())
-	{
-		for (size_t i = 0; i < comList.size(); i)
-		{
-			if (comList[i]->IsDeth())
-			{
-				comList[i]->Release();
-				comList.erase(comList.begin() + i);
-				if (comList.empty())break;
-				continue;
-			}
-			if (comList[i]->IsUseFlg())comList[i]->Update();
-			if (comList.empty())break;
-			i++;
-		}
-	}
+	UpdateComponent();
 
 	if (!childList.empty())
 	{
@@ -201,5 +192,49 @@ CH_OBJECT_FUNCTION(Draw3D);
 CH_OBJECT_FUNCTION(DrawEnd);
 
 
+CH_COMPONENT_FUNCTION(UpdateBegin);
+
+void ChCpp::BasicObject::UpdateComponent()
+{
+	if (!comList.empty())
+	{
+		for (size_t i = 0; i < comList.size(); i)
+		{
+			if (comList[i]->IsDeth())
+			{
+				comList[i]->Release();
+				comList.erase(comList.begin() + i);
+				if (comList.empty())break;
+				continue;
+			}
+			if (comList[i]->IsUseFlg())comList[i]->Update();
+			if (comList.empty())break;
+			i++;
+		}
+	}
+
+}
+
+CH_COMPONENT_FUNCTION(UpdateEnd);
+
+CH_COMPONENT_FUNCTION(MoveBegin);
+CH_COMPONENT_FUNCTION(Move);
+CH_COMPONENT_FUNCTION(MoveEnd);
+
+CH_COMPONENT_FUNCTION(DrawBegin);
+CH_COMPONENT_FUNCTION(Draw2D);
+CH_COMPONENT_FUNCTION(Draw3D);
+CH_COMPONENT_FUNCTION(DrawEnd);
+
+//オブジェクト自身の機能//
+void ChCpp::BasicObject::FunctionAll()
+{
+	Function();
+
+	for (auto&& child : childList)
+	{
+		child->FunctionAll();
+	}
+}
 
 CH_STRING_TYPE_EXPLICIT_DECLARATION(ChCpp::BaseObject);

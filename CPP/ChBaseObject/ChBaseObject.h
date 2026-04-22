@@ -227,6 +227,7 @@ namespace ChCpp
 	public://Life Cycle Base//
 
 		void UpdateBeginFunction();
+		//Destroyの処理はUpdateで行われる//
 		void UpdateFunction();
 		void UpdateEndFunction();
 
@@ -240,7 +241,7 @@ namespace ChCpp
 		void DrawEndFunction();
 
 		//オブジェクト自身の機能//
-		virtual void Function() {}
+		void FunctionAll();
 
 	protected://Life Cycle Base//
 
@@ -258,6 +259,27 @@ namespace ChCpp
 		virtual void Draw3D() {}
 		virtual void Draw2D() {}
 		virtual void DrawEnd() {}
+
+		//オブジェクト自身の機能//
+		virtual void Function() {}
+
+	protected://Componentだけを回す機能//
+
+		void UpdateBeginComponent();
+		//Destroyの処理はUpdateで行われる//
+		void UpdateComponent();
+		void UpdateEndComponent();
+
+		//MoveFuncsions//
+		void MoveBeginComponent();
+		void MoveComponent();
+		void MoveEndComponent();
+
+		//DrawFuncsions//
+		void DrawBeginComponent();
+		void Draw3DComponent();
+		void Draw2DComponent();
+		void DrawEndComponent();
 
 	public:
 
