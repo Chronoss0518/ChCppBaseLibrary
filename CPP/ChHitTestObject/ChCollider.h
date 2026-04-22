@@ -17,6 +17,15 @@ namespace ChCpp
 	//対象のHitTestObjectから衝突したかを判断するクラス//
 	class Collider :public HitTestObject
 	{
+	public:
+
+		enum class UseHandType
+		{
+			None,
+			LeftHand,
+			RightHand,
+		};
+
 	public://Is Functions//
 
 		//対象のオブジェクトの外から衝突しているかの判定//
@@ -36,7 +45,7 @@ namespace ChCpp
 
 	protected:
 
-		bool HitTestTri(ChVec3& _thisHitVectol, const ChVec3& _pos, const ChVec3& _dir, const ChVec3& _vec1, const ChVec3& _vec2, const ChVec3& _vec3);
+		bool HitTestTri(float& _len,ChVec3& _thisHitVectol, const ChVec3& _pos, const ChVec3& _dir, const ChVec3& _vec1, const ChVec3& _vec2, const ChVec3& _vec3);
 
 		bool IsHitSphereToPanel(ChVec3& _thisHitVectol, const bool _leftHandFlg, const ChVec3& _spherePos, const ChVec3& _sphereSize, const std::vector<ChVec3*>& _vertexs);
 

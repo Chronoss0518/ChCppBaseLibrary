@@ -75,6 +75,7 @@ float Collider::CreateDat(const ChVec3& _vec1, const ChVec3& _vec2, const ChVec3
 }
 
 bool Collider::HitTestTri(
+	float& _len,
 	ChVec3& _thisHitVectol, 
 	const ChVec3& _pos,
 	const ChVec3& _dir,
@@ -102,16 +103,13 @@ bool Collider::HitTestTri(
 
 	_thisHitVectol = 0.0f;
 
-	float u = 0.0f, v = 0.0f, len = 0.0f;
+	float u = 0.0f, v = 0.0f;
+	_len = 0.0f;
 
 	ChVec3 eg1 = _vec2 - _vec1, eg2 = _vec3 - _vec1, v2sp = _pos - _vec1;
 
 	ChVec3 mdir = _dir * -1;
 	float divDat = 0.0f;
-
-	ChVec3 cross = ChVec3::GetCross(eg1, eg2);
-	if (ChVec3::GetCos(cross, _dir) == 0.0f)return false;
-
 
 	divDat = CreateDat(eg1, eg2, mdir);
 
@@ -132,12 +130,10 @@ bool Collider::HitTestTri(
 
 	if (tmpVal < 0.0f || tmpVal > 1.0f)return false;
 
-	len = CreateDat(eg1, eg2, v2sp);
-	len = len / divDat;
+	_len = CreateDat(eg1, eg2, v2sp);
+	_len = _len / divDat;
 
-	if (len <= 0.0f)return false;
-
-	_thisHitVectol = _dir * len;
+	_thisHitVectol = _dir * std::abs(_len);
 
 	return true;
 }

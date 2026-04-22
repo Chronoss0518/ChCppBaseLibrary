@@ -29,15 +29,15 @@ template<typename CharaType>
 bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, FrameObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const bool _nowHitFlg)
 {
 
+	auto&& frameCom = GetFrameComponent(_object);
+
+	if (frameCom == nullptr)return _nowHitFlg;
+
+	if (frameCom->vertexList.size() < 3)return _nowHitFlg;
+
 	_object.UpdateDrawTransform();
 
 	ChLMat tmpMat = _object.GetDrawLHandMatrix() * GetMat();
-
-	auto&& frameCom = GetFrameComponent(_object);
-
-	if (frameCom == nullptr)return false;
-
-	if (frameCom->vertexList.size() < 3)return false;
 
 	bool hitFlg = _nowHitFlg;
 
@@ -46,13 +46,14 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, FrameObject<Ch
 	for (unsigned long i = 0; i < frameCom->vertexList.size(); i++)
 		posList.push_back(ChPtr::Make_S<ChVec3>(tmpMat.Transform(frameCom->vertexList[i]->pos)));
 
+	float tmpLen = 0.0f;
 	ChVec3 poss[3];
 	unsigned long nos[3]{ 0,1,2 };
 	for (auto&& primitive : frameCom->primitives)
 	{
 		for (unsigned char j = 0; j < 3; j++)
 		{
-			nos[j] = !leftHandFlg ? primitive->vertexData.size() - j - 1 : j;
+			nos[j] = handType == UseHandType::RightHand ? primitive->vertexData.size() - j - 1 : j;
 			poss[j] = *posList[primitive->vertexData[nos[j]]->vertexNo];
 		}
 
@@ -72,11 +73,12 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, FrameObject<Ch
 
 			for (unsigned char j = 1; j < 3; j++)
 			{
-				nos[j] = !leftHandFlg ? primitive->vertexData.size() - j - i : i + j - 1;
+				nos[j] = handType == UseHandType::RightHand ? primitive->vertexData.size() - j - i : i + j - 1;
 				poss[j] = *posList[primitive->vertexData[nos[j]]->vertexNo];
 			}
 
 			if (!HitTestTri(
+				tmpLen,
 				tmpVec,
 				_rayPos,
 				_rayDir,
@@ -84,7 +86,7 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, FrameObject<Ch
 				poss[1],
 				poss[2]))continue;
 
-			float tmpLen = tmpVec.GetLen();
+
 			if (tmpLen > _outLen)continue;
 			hitFlg = true;
 			if (_outLen < tmpLen)continue;

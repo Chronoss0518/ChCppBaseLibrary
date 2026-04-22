@@ -41,7 +41,7 @@ bool  PanelCollider::IsHit(HitTestRay* _target)
 
 	unsigned long numbers[4]{ 0,1,2,3 };
 
-	if (!leftHandFlg)
+	if (handType == UseHandType::RightHand)
 	{
 		numbers[0] = 3;
 		numbers[1] = 2;
@@ -49,11 +49,16 @@ bool  PanelCollider::IsHit(HitTestRay* _target)
 		numbers[3] = 0;
 	}
 
-	bool hitFlg = HitTestTri(tmpVec, pos ,ray, square.pos[numbers[0]], square.pos[numbers[1]], square.pos[numbers[2]]);
+	float tmpLen = 0.0f;
+	bool hitFlg = HitTestTri(tmpLen,tmpVec, pos ,ray, square.pos[numbers[0]], square.pos[numbers[1]], square.pos[numbers[2]]);
+
+	if (handType != UseHandType::None && tmpLen < 0.0f)hitFlg = false;
 
 	if (tmpVec.GetLen() > maxLen)hitFlg = false;
 
-	if (!hitFlg)hitFlg = HitTestTri(tmpVec, pos, ray, square.pos[numbers[0]], square.pos[numbers[2]], square.pos[numbers[3]]);
+	if (!hitFlg)hitFlg = HitTestTri(tmpLen, tmpVec, pos, ray, square.pos[numbers[0]], square.pos[numbers[2]], square.pos[numbers[3]]);
+
+	if (handType != UseHandType::None && tmpLen < 0.0f)hitFlg = false;
 
 	if (tmpVec.GetLen() > maxLen)hitFlg = false;
 

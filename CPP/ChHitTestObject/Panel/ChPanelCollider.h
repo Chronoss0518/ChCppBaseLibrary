@@ -1,14 +1,12 @@
 #ifndef Ch_CPP_HTP_h
 #define Ch_CPP_HTP_h
 
-#include"../ChCollider.h"
+#include"../ChPanelColliderBase.h"
 
 namespace ChCpp
 {
-
-
 	//äÓñ{ìIÇ…ñ ÇÕè„å¸Ç´//
-	class PanelCollider :public Collider
+	class PanelCollider :public PanelColliderBase
 	{
 	public:
 
@@ -24,10 +22,6 @@ namespace ChCpp
 			size = _size;
 		}
 
-		inline void SetRightHandFlg() { leftHandFlg = false; }
-
-		inline void SetLeftHandFlg() { leftHandFlg = true; }
-	
 	public://GetFunction//
 
 		inline ChVec2 GetSize() { return size; }
@@ -52,8 +46,6 @@ namespace ChCpp
 		bool IsInnerHit(HitTestSphere* _target)override;
 
 	private:
-
-		bool leftHandFlg = true;
 
 		ChVec2 size;
 	};

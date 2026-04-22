@@ -4,7 +4,7 @@
 #include<string>
 #include<vector>
 
-#include"../ChCollider.h"
+#include"../ChPanelColliderBase.h"
 
 #include"../../../BasePack/ChStd.h"
 
@@ -16,16 +16,12 @@ namespace ChCpp
 	class FrameObject;
 
 	template<typename CharaType>
-	class PolygonCollider :public Collider
+	class PolygonCollider :public PanelColliderBase
 	{
 	public://SetFunction//
 
 		void SetModel(FrameObject<CharaType>& _model);
 
-		inline void SetRightHandFlg() { leftHandFlg = false; }
-
-		inline void SetLeftHandFlg() { leftHandFlg = true; }
-	
 	public://GetFunction//
 
 		FrameObject<CharaType>* GetModel()const;
@@ -63,7 +59,6 @@ namespace ChCpp
 
 	private:
 
-		bool leftHandFlg = true;
 		bool cullHitFlg = true;
 		bool lHandWorldFlg = true;
 		float minLen = 0.0f;
