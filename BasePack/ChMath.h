@@ -486,18 +486,7 @@ namespace ChMath
 		{
 			VectorBase tmp1 = *this, tmp2 = _vec;
 
-			T len1 = tmp1.GetLen();
-			T len2 = tmp2.GetLen();
-
-			if (len1 <= static_cast<T>(0.0f) || len2 <= static_cast<T>(0.0f))return 0.0f;
-
-			T testVal = static_cast<T>(1.0f);
-
-			for (unsigned long i = 0; i < Array; i++)
-			{
-				tmp1.val[i] = len1 == testVal ? tmp1.val[i] : tmp1.val[i] / len1;
-				tmp2.val[i] = len2 == testVal ? tmp2.val[i] : tmp2.val[i] / len1;
-			}
+			if (!tmp1.Normalize() || !tmp2.Normalize())return 0.0f;
 
 			return tmp1.GetDot(tmp2);
 		}
