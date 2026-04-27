@@ -86,7 +86,8 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, FrameObject<Ch
 				poss[1],
 				poss[2]))continue;
 
-
+			if (handType != UseHandType::None && tmpLen < 0.0f)continue;
+			tmpLen = std::abs(tmpLen);
 			if (tmpLen > _outLen)continue;
 			hitFlg = true;
 			if (_outLen < tmpLen)continue;
