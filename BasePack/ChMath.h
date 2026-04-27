@@ -557,8 +557,7 @@ namespace ChMath
 			VectorBase start = _start;
 			VectorBase end = _end;
 
-			T rad = start.GetDot(end);
-			rad = GetACos(rad);
+			T rad = start.GetRadian(end);
 			if (rad == 0.0f)return start;
 
 			float baseSin = GetSin(rad);
