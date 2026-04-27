@@ -265,21 +265,21 @@ namespace ChCpp
 
 	protected://ComponentÇæÇØÇâÒÇ∑ã@î\//
 
-		void UpdateBeginComponent();
+		void UpdateBeginComponentFunction();
 		//DestroyÇÃèàóùÇÕUpdateÇ≈çsÇÌÇÍÇÈ//
-		void UpdateComponent();
-		void UpdateEndComponent();
+		void UpdateComponentFunction();
+		void UpdateEndComponentFunction();
 
 		//MoveFuncsions//
-		void MoveBeginComponent();
-		void MoveComponent();
-		void MoveEndComponent();
+		void MoveBeginComponentFunction();
+		void MoveComponentFunction();
+		void MoveEndComponentFunction();
 
 		//DrawFuncsions//
-		void DrawBeginComponent();
-		void Draw3DComponent();
-		void Draw2DComponent();
-		void DrawEndComponent();
+		void DrawBeginComponentFunction();
+		void Draw3DComponentFunction();
+		void Draw2DComponentFunction();
+		void DrawEndComponentFunction();
 
 	public:
 

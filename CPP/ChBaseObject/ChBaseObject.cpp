@@ -9,7 +9,7 @@
 void ChCpp::BasicObject::_FunctionNameBase##Function()\
 {\
 	_FunctionNameBase();\
-	_FunctionNameBase##Component();\
+	_FunctionNameBase##ComponentFunction();\
 	for (size_t i = 0; i < childList.size(); i++) {\
 		if (!childList[i]->useFlg)continue; \
 		childList[i]->_FunctionNameBase##Function(); \
@@ -17,7 +17,7 @@ void ChCpp::BasicObject::_FunctionNameBase##Function()\
 }
 
 #define CH_COMPONENT_FUNCTION(_FunctionNameBase) \
-void ChCpp::BasicObject::_FunctionNameBase##Component()\
+void ChCpp::BasicObject::_FunctionNameBase##ComponentFunction()\
 {\
 	for(size_t i = 0; i < comList.size(); i++){\
 		if (!comList[i]->useFlg)continue; \
@@ -159,7 +159,7 @@ void ChCpp::BasicObject::UpdateFunction()
 {
 	Update();
 
-	UpdateComponent();
+	UpdateComponentFunction();
 
 	if (!childList.empty())
 	{
@@ -194,7 +194,7 @@ CH_OBJECT_FUNCTION(DrawEnd);
 
 CH_COMPONENT_FUNCTION(UpdateBegin);
 
-void ChCpp::BasicObject::UpdateComponent()
+void ChCpp::BasicObject::UpdateComponentFunction()
 {
 	if (!comList.empty())
 	{
