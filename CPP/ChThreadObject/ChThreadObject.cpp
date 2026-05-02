@@ -23,15 +23,21 @@ void ThreadObjectList::Init()
 	endFlg = false;
 	thread.Init([&]() {
 
+		bool addObjectFlg = false;
+		bool removeObjectFlg = false;
+
 		while (!endFlg)
 		{
+			addObjectFlg = false;
+
 			for (size_t i = 0; i < addObjects.size(); i++)
 			{
 				addObjects[i]->Init();
 				objects.push_back(addObjects[i]);
+				addObjectFlg = true;
 			}
 
-			addObjects.clear();
+			if(addObjectFlg)addObjects.clear();
 
 			for (size_t i = 0; i < objects.size(); i)
 			{
@@ -39,6 +45,7 @@ void ThreadObjectList::Init()
 				{
 					if (objects[i].get() == removeObjects[j].get())
 						objects[i]->Destroy();
+					removeObjectFlg = true;
 				}
 
 				if (objects[i]->IsDestroy())
@@ -50,7 +57,7 @@ void ThreadObjectList::Init()
 				objects[i]->Update();
 				i++;
 			}
-			removeObjects.clear();
+			if(removeObjectFlg)removeObjects.clear();
 		}
 
 	});
@@ -66,4 +73,16 @@ void ThreadObjectList::Release()
 		objects[i]->Release();
 	}
 	objects.clear();
+}
+
+void ThreadObjectList::AddObject(ChPtr::Shared<ThreadObject> _object)
+{
+	if (_object == nullptr)return;
+	addObjects.push_back(_object);
+}
+
+void ThreadObjectList::RemoveObject(ChPtr::Shared<ThreadObject> _object)
+{
+	if (_object == nullptr)return;
+	removeObjects.push_back(_object);
 }
