@@ -150,6 +150,7 @@ namespace ChSystem
 		typename std::enable_if
 			<std::is_base_of<BaseSystem, T>::value, T* const>::type GetSystem()
 		{
+			if (baseSystems == nullptr)return nullptr;
 			return ChPtr::SafeCast<T>(baseSystems.get());
 		}
 
