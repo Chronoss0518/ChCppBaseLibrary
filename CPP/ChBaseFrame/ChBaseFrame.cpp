@@ -19,6 +19,13 @@ void ChCpp::FrameList::Release()
 	GetNowFrame() = nullptr;
 }
 
+void ChCpp::FrameList::UpdateBegin()
+{
+	auto&& nowframe = GetNowFrame();
+	if (nowframe == nullptr)return;
+	nowframe->UpdateBegin();
+}
+
 void ChCpp::FrameList::Update()
 {
 	auto&& nowframe = GetNowFrame();
@@ -26,6 +33,13 @@ void ChCpp::FrameList::Update()
 	nowframe->Update();
 
 	Changes();
+}
+
+void ChCpp::FrameList::UpdateEnd()
+{
+	auto&& nowframe = GetNowFrame();
+	if (nowframe == nullptr)return;
+	nowframe->UpdateEnd();
 }
 
 void ChCpp::FrameList::ChangeFrame(const unsigned long _frameNo)

@@ -80,7 +80,11 @@ namespace ChCpp
 
 	public://UpdateFunction//
 
+		void UpdateBegin();
+
 		void Update();
+
+		void UpdateEnd();
 
 	public://Release Funciton//
 
@@ -190,7 +194,11 @@ namespace ChCpp
 
 	public://Update Function//
 
+		inline void UpdateBegin() { FrameList::UpdateBegin(); }
+
 		inline void Update() { FrameList::Update(); }
+
+		inline void UpdateEnd() { FrameList::UpdateEnd(); }
 
 	public://Other Functions//
 
@@ -251,7 +259,11 @@ namespace ChCpp
 
 	public://Update Function//
 
+		virtual void UpdateBegin(){}
+
 		virtual void Update() = 0;
+
+		virtual void UpdateEnd(){}
 
 	public:
 
