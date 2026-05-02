@@ -67,15 +67,3 @@ void ThreadObjectList::Release()
 	}
 	objects.clear();
 }
-
-void ThreadObjectList::AddObject(ChPtr::Shared<ThreadObject> _object)
-{
-	if (_object == nullptr)return;
-	addObjects.push_back(_object);
-}
-
-void ThreadObjectList::RemoveObject(ChPtr::Shared<ThreadObject> _object)
-{
-	if (_object == nullptr)return;
-	removeObjects.push_back(_object);
-}

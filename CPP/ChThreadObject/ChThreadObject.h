@@ -43,9 +43,17 @@ namespace ChCpp
 
 	public:
 
-		void AddObject(ChPtr::Shared<ThreadObject> _object);
+		inline void AddObject(ChPtr::Shared<ThreadObject> _object)
+		{
+			if (_object == nullptr)return;
+			addObjects.push_back(_object);
+		}
 
-		void RemoveObject(ChPtr::Shared<ThreadObject> _object);
+		void RemoveObject(ChPtr::Shared<ThreadObject> _object)
+		{
+			if (_object == nullptr)return;
+			removeObjects.push_back(_object);
+		}
 
 	private:
 
