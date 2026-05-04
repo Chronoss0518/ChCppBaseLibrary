@@ -122,9 +122,9 @@ namespace ChCpp
 
 			struct XMesh
 			{
-				std::vector<ChPtr::Shared<XVertex>>vertexList;
+				std::vector<XVertex>vertexList;
 				std::vector<ChPtr::Shared<XMaterial>>materialList;
-				std::vector<ChPtr::Shared<XFace>>faceList;
+				std::vector<XFace>faceList;
 			};
 
 			struct XFrame
@@ -259,13 +259,13 @@ namespace ChCpp
 			template<class T>
 			typename std::enable_if
 				<std::is_base_of<BaseType, T>::value,
-				std::vector<ChPtr::Shared<T>>>::type GetArrayValues(
+				std::vector<T>>::type GetArrayValues(
 					const std::basic_string<CharaType>& _text,
 					const size_t& _startPos = 0,
 					const std::basic_string<CharaType>& _cutChar = ChStd::GetCommaChara<CharaType>(),
 					const std::basic_string<CharaType>& _endChar = ChStd::GetSemiColonChara<CharaType>()) {
 
-				std::vector<ChPtr::Shared<T>> res;
+				std::vector<T> res;
 
 				std::basic_string<CharaType> useText = ChStd::GetZeroChara<CharaType>();
 
@@ -286,6 +286,8 @@ namespace ChCpp
 
 				if (arrayCount <= 0)return res;
 
+				res.resize(arrayCount);
+
 				for (unsigned long i = 0; i < arrayCount; i++)
 				{
 					size_t sPos = tmpPos + 1;
@@ -304,9 +306,7 @@ namespace ChCpp
 						return res;
 					}
 
-					auto&& value = ChPtr::Make_S<T>();
-					value->Desirialise(useText, sPos, tmpEnd);
-					res.push_back(value);
+					res[i].Desirialise(useText, sPos, tmpEnd);
 					tmpPos += _endChar.length();
 				}
 
