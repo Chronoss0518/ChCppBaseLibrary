@@ -1,6 +1,13 @@
 
 #include"ChMCXFile.h"
 
+
+#define LOAD_SPEED_CHECKER_FLG true
+
+#if LOAD_SPEED_CHECKER_FLG
+#include<Windows.h>
+#endif
+
 #ifndef	CH_LM_XFILE_TAG_XFILE_PREFIX_FUNCTION
 #define	CH_LM_XFILE_TAG_XFILE_PREFIX_FUNCTION(type) CH_NUMBER_FUNCTION(GetXFilePrefixTag, type)
 #endif
@@ -132,9 +139,33 @@ void ChCpp::ModelController::XFile<CharaType>::LoadModel(const std::basic_string
 	tmpLen = text.find(ChStd::GetEndBraceChara<CharaType>(), tmpLen);
 	if (tmpLen == text.npos)return;
 
+#if LOAD_SPEED_CHECKER_FLG
+
+	unsigned long startTime = timeGetTime();
+
+#endif
+
 	ChPtr::Shared<TemplateRange> templates = ChPtr::Make_S<TemplateRange>();
 
 	LoadToTemplates(templates, textPos, text);
+
+#if LOAD_SPEED_CHECKER_FLG
+
+	unsigned long endTime = timeGetTime();
+
+	std::wstring timeString = L"";
+
+	timeString = L"\n\nLoadToTemplates‚É‚©‚©‚Á‚½ŽžŠÔ[" + std::to_wstring(endTime - startTime) + L"]ms\n\n\n";
+
+	OutputDebugStringW(timeString.c_str());
+
+#endif
+
+#if LOAD_SPEED_CHECKER_FLG
+
+	startTime = timeGetTime();
+
+#endif
 
 	auto&& tmpXModel = ChPtr::Make_S<XFileModelFrame>();
 
@@ -144,10 +175,21 @@ void ChCpp::ModelController::XFile<CharaType>::LoadModel(const std::basic_string
 
 		DesMesh(tmpXModel->modelData, tmp, text);
 	}
-
 	if (exceptionFlg)return;
 
 	xModel = tmpXModel;
+
+
+#if LOAD_SPEED_CHECKER_FLG
+
+	endTime = timeGetTime();
+
+	timeString = L"\n\nDeserialize‚É‚©‚©‚Á‚½ŽžŠÔ[" + std::to_wstring(endTime - startTime) + L"]ms\n\n\n";
+
+	OutputDebugStringW(timeString.c_str());
+
+#endif
+
 }
 
 template<typename CharaType>
@@ -299,14 +341,11 @@ bool ChCpp::ModelController::XFile<CharaType>::DesMesh(
 
 	{
 		auto values = GetArrayValues<XVECTOR>(_text, tmpPos, arrayFirstTag, arraySeccondTag);
+		mesh->vertexList.resize(values.size());
 
-		for (auto&& poss : values)
+		for (size_t i = 0; i < values.size();i++)
 		{
-			auto vertex = ChPtr::Make_S<XVertex>();
-
-			vertex->pos = poss->value;
-
-			mesh->vertexList.push_back(vertex);
+			mesh->vertexList[i].pos = values[i].value;
 		}
 	}
 
@@ -316,16 +355,17 @@ bool ChCpp::ModelController::XFile<CharaType>::DesMesh(
 	{
 		auto&& values = GetArrayValues<XMESHFACE>(_text, tmpPos, arrayFirstTag, arraySeccondTag);
 
-		for (auto&& poss : values)
+		mesh->faceList.resize(values.size());
+
+		for (size_t i = 0; i < values.size();i++)
 		{
-			auto face = ChPtr::Make_S<XFace>();
+			auto&& poss = values[i];
 
-			for (auto&& no : poss->value)
+			mesh->faceList[i].vertexNos.resize(poss.value.size());
+			for (size_t j = 0;j < poss.value.size();j++)
 			{
-				face->vertexNos.push_back(no);
+				mesh->faceList[i].vertexNos[j] = poss.value[j];
 			}
-
-			mesh->faceList.push_back(face);
 
 		}
 	}
@@ -378,19 +418,19 @@ bool ChCpp::ModelController::XFile<CharaType>::DesMeshNormal(
 	{
 		auto mesh = _frames->mesh->faceList[i];
 
-		for (unsigned long j = 0; j < mesh->vertexNos.size(); j++)
+		for (unsigned long j = 0; j < mesh.vertexNos.size(); j++)
 		{
 
-			_frames->mesh->vertexList[mesh->vertexNos[j]]->normal +=
-				normals[faces[i]->value[j]]->value;
+			_frames->mesh->vertexList[mesh.vertexNos[j]].normal +=
+				normals[faces[i].value[j]].value;
 
 		}
 	}
 
 	for (auto&& vertex : _frames->mesh->vertexList)
 	{
-		if (vertex->normal.GetLen() == 1.00000000f)continue;
-		vertex->normal.Normalize();
+		if (vertex.normal.GetLen() == 1.00000000f)continue;
+		vertex.normal.Normalize();
 	}
 
 	return true;
@@ -424,7 +464,7 @@ bool ChCpp::ModelController::XFile<CharaType>::DesMeshTextureCoords(
 
 	for (unsigned long i = 0; i < vertexList.size(); i++)
 	{
-		vertexList[i]->uv = UVs[i]->value;
+		vertexList[i].uv = UVs[i].value;
 	}
 
 	return true;
@@ -454,7 +494,7 @@ bool ChCpp::ModelController::XFile<CharaType>::DesMeshMaterialList(
 
 	for (unsigned long i = 0; i < faces.size(); i++)
 	{
-		faces[i]->mateNo = mateNo[i]->value;
+		faces[i].mateNo = mateNo[i].value;
 	}
 
 	for (auto&& tmp : _targetTemplate->nest)
@@ -852,13 +892,13 @@ void ChCpp::ModelController::XFile<CharaType>::XFrameToChFrame(
 
 			for (size_t j = 0; j < chVertexList.size(); j++)
 			{
-				if (chVertexList[j]->pos != xVertexList[i]->pos)continue;
+				if (chVertexList[j]->pos != xVertexList[i].pos)continue;
 
 				summarizeVertex[i] = j;
 
 				chVertex = chVertexList[j];
 
-				chVertex->normal += xVertexList[i]->normal;
+				chVertex->normal += xVertexList[i].normal;
 				lookFlg = true;
 
 				break;
@@ -870,8 +910,8 @@ void ChCpp::ModelController::XFile<CharaType>::XFrameToChFrame(
 
 			chVertex = ChPtr::Make_S<Ch3D::SavePolyVertex>();
 
-			chVertex->pos = xVertexList[i]->pos;
-			chVertex->normal = xVertexList[i]->normal;
+			chVertex->pos = xVertexList[i].pos;
+			chVertex->normal = xVertexList[i].normal;
 
 			for (size_t j = 0; j < _xFrame->skinWeightDatas.size() && j < maxBoneNum; j++)
 			{
@@ -912,21 +952,21 @@ void ChCpp::ModelController::XFile<CharaType>::XFrameToChFrame(
 
 			auto chFace = ChPtr::Make_S<Ch3D::Primitive>();
 
-			for (size_t i = 0; i < xFace->vertexNos.size(); i++)
+			for (size_t i = 0; i < xFace.vertexNos.size(); i++)
 			{
 
 				auto chVertexData = ChPtr::Make_S<Ch3D::SavePolyData>();
 
-				size_t VertexNo = summarizeVertex[xFace->vertexNos[i]];
+				size_t VertexNo = summarizeVertex[xFace.vertexNos[i]];
 
 				chVertexData->vertexNo = static_cast<unsigned long>(VertexNo);
-				chVertexData->uv = xVertexList[xFace->vertexNos[i]]->uv;
+				chVertexData->uv = xVertexList[xFace.vertexNos[i]].uv;
 				chFace->faceNormal += chVertexList[VertexNo]->normal;
 
 				chFace->vertexData.push_back(chVertexData);
 			}
 			chFace->faceNormal.Normalize();
-			chFace->mateNo = xFace->mateNo;
+			chFace->mateNo = xFace.mateNo;
 			chFaceList.push_back(chFace);
 		}
 	}
