@@ -47,11 +47,11 @@ namespace ChCpp
 
 	private:
 
-		bool IsHitRayToMesh(FrameObject<CharaType>& _object, const ChVec3& _rayPos,const ChVec3& _rayDir,const float _rayLen,const bool _nowHitFlg = false);
+		bool IsHitRayToMesh(TransformObject<CharaType>& _object, const ChVec3& _rayPos,const ChVec3& _rayDir,const float _rayLen,const bool _nowHitFlg = false);
 
-		bool IsHitTest(float& _outLen,FrameObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const bool _nowHitFlg = false);
+		bool IsHitTest(float& _outLen, TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const bool _nowHitFlg = false);
 
-		ChPtr::Shared<FrameComponent<CharaType>> GetFrameComponent(FrameObject<CharaType>& _object)
+		ChPtr::Shared<FrameComponent<CharaType>> GetFrameComponent(TransformObject<CharaType>& _object)
 		{
 			auto&& frameCom = _object.GetComponent<FrameComponent<CharaType>>();
 			return frameCom;

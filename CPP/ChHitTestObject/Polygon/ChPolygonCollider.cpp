@@ -9,7 +9,7 @@
 
 
 template<typename CharaType>
-bool ChCpp::PolygonCollider<CharaType>::IsHitRayToMesh(FrameObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const float _rayLen, const bool _nowHitFlg)
+bool ChCpp::PolygonCollider<CharaType>::IsHitRayToMesh(TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const float _rayLen, const bool _nowHitFlg)
 {
 	bool hitFlg = _nowHitFlg;
 
@@ -17,7 +17,7 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitRayToMesh(FrameObject<CharaType>& _
 
 	hitFlg = IsHitTest(minLen, _object, _rayPos, _rayDir, hitFlg);
 
-	for (auto&& child : _object.GetChildlen<FrameObject<CharaType>>())
+	for (auto&& child : _object.GetChildlen<TransformObject<CharaType>>())
 	{
 		hitFlg = IsHitRayToMesh(*child.lock(), _rayPos, _rayDir, minLen, hitFlg) || hitFlg;
 	}
@@ -26,16 +26,15 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitRayToMesh(FrameObject<CharaType>& _
 }
 
 template<typename CharaType>
-bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, FrameObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const bool _nowHitFlg)
+bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const bool _nowHitFlg)
 {
+	_object.UpdateDrawTransform();
 
 	auto&& frameCom = GetFrameComponent(_object);
 
 	if (frameCom == nullptr)return _nowHitFlg;
 
 	if (frameCom->vertexList.size() < 3)return _nowHitFlg;
-
-	_object.UpdateDrawTransform();
 
 	ChLMat tmpMat = _object.GetDrawLHandMatrix() * GetMat();
 
