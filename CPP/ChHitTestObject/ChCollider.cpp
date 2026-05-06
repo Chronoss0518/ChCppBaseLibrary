@@ -85,6 +85,7 @@ bool ChCpp::Collider::HitTestTri(
 
 	return true;
 }
+
 bool ChCpp::Collider::GetTriNearPoint(ChVec3& _hitVector, ChVec3& _normal, const ChVec3& _point, const ChVec3& _pos1, const ChVec3& _pos2, const ChVec3& _pos3)
 {
 	//https://shikousakugo.wordpress.com/2012/06/27/ray-intersection-2/
@@ -132,7 +133,7 @@ bool ChCpp::Collider::GetTriNearPoint(ChVec3& _hitVector, ChVec3& _normal, const
 		len = CreateDat(uEdge, vEdge, v2sp);
 		len = len / divDat;
 
-		_hitVector = dir * -1.0f * len;
+		_hitVector = dir * len;
 
 		return true;
 	}
