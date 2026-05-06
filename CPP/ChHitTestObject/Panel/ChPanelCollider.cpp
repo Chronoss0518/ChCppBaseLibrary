@@ -13,6 +13,51 @@ bool PanelCollider::IsHit(HitTestBox* _target)
 
 bool PanelCollider::IsHit(HitTestSphere* _target)
 {
+	auto square = GetSquarePositions();
+
+	ChVec3 pos = _target->GetPos();;
+
+	ChVec3 nearVec = ChVec3(0.0f);
+	ChVec3 nearNormal = ChVec3(0.0f, 1.0f, 0.0f);
+	
+	ChVec3 tmpVec = ChVec3();
+	ChVec3 normal = ChVec3();
+
+	if (GetTriNearPoint(tmpVec, normal, pos, square.pos[0], square.pos[1], square.pos[2]))
+	{
+		nearVec = tmpVec;
+		nearNormal = normal;
+	}
+
+	if (GetTriNearPoint(tmpVec, normal, pos, square.pos[0], square.pos[2], square.pos[3]))
+	{
+		if (nearVec.GetLen() > tmpVec.GetLen())
+		{
+			nearVec = tmpVec;
+			nearNormal = normal;
+		}
+	}
+
+	if (nearVec.GetLen() < _target->GetSize())
+	{
+		if (nearVec != ChVec3(0.0f))
+		{
+			float len = _target->GetSize() - nearVec.GetLen();
+			nearVec.Normalize();
+
+			_target->SetHitVector(nearVec * len);
+			SetHitVector(nearVec * -len);
+		}
+		else
+		{
+			_target->SetHitVector(nearNormal * _target->GetSize());
+			SetHitVector(nearNormal * -_target->GetSize());
+		}
+
+		return true;
+	}
+
+
 	return false;
 }
 
@@ -20,18 +65,7 @@ bool PanelCollider::IsHit(HitTestRay* _target)
 {
 	auto square = GetSquarePositions();
 
-	ChVec3 tmpVec;
-
-	ChVec3 pos = _target->GetPos();;
-	ChVec3 ray = _target->GetRayDir();
 	float maxLen = _target->GetMaxLen();
-
-	{
-		ChLMat tmpMat = GetMat();
-
-		for (auto&& pos : square.pos)
-			pos = tmpMat.Transform(pos);
-	}
 
 	unsigned long numbers[4]{ 0,1,2,3 };
 
@@ -42,6 +76,11 @@ bool PanelCollider::IsHit(HitTestRay* _target)
 		numbers[2] = 1;
 		numbers[3] = 0;
 	}
+
+	ChVec3 pos = _target->GetPos();;
+	ChVec3 ray = _target->GetRayDir();
+
+	ChVec3 tmpVec;
 
 	float tmpLen = 0.0f;
 	bool hitFlg = HitTestTri(tmpLen,tmpVec, pos ,ray, square.pos[numbers[0]], square.pos[numbers[1]], square.pos[numbers[2]]);
@@ -86,6 +125,7 @@ PanelCollider::Square PanelCollider::GetSquarePositions()
 		ChVec3(-size.x / 2.0f,-size.y / 2.0f,0.0f) };
 
 	{
+		
 		auto tmpMat = GetMat();
 
 		for (unsigned char i = 0; i < 4; i++)
