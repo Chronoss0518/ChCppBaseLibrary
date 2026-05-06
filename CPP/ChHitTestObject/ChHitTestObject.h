@@ -13,7 +13,7 @@ namespace ChCpp
 
 	public:
 
-		inline void SetPos(const ChVec3& _pos) { position = _pos; }
+		inline void SetPosition(const ChVec3& _pos) { position = _pos; }
 
 	public:
 
@@ -32,13 +32,13 @@ namespace ChCpp
 
 	public:
 
-		inline void SetPos(const ChVec3& _pos) { mat.SetPosition(_pos); }
+		inline void SetPosition(const ChVec3& _pos) { mat.SetPosition(_pos); }
 		
-		inline void SetRot(const ChQua& _rot) { mat.SetRotation(_rot); }
+		inline void SetRotation(const ChQua& _rot) { mat.SetRotation(_rot); }
 		
-		inline void SetScl(const ChVec3& _scl) { mat.SetScalling(_scl); }
+		inline void SetScalling(const ChVec3& _scl) { mat.SetScalling(_scl); }
 
-		inline void SetMat(const ChLMat& _mat) { mat = _mat; }
+		inline void SetMatrix(const ChLMat& _mat) { mat = _mat; }
 
 	public:
 
