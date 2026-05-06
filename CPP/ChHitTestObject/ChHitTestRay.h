@@ -5,7 +5,7 @@
 
 namespace ChCpp
 {
-	class HitTestRay :public HitTestObject
+	class HitTestRay :public HitTestObject,public HitTestPositionClass
 	{
 	public://SetFunction//
 

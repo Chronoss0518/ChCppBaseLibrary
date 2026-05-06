@@ -6,7 +6,7 @@
 namespace ChCpp
 {
 	//基本的に面は上向き//
-	class PanelCollider :public PanelColliderBase
+	class PanelCollider :public PanelColliderBase,public HitTestMatrixClass
 	{
 	public:
 
@@ -44,6 +44,10 @@ namespace ChCpp
 
 		//対象のオブジェクトがオブジェクト内から衝突しているかの判定//
 		bool IsInnerHit(HitTestSphere* _target)override;
+
+	public:
+
+		bool GetNearPoint(ChVec3& _toVector, const ChVec3& _point);
 
 	private:
 

@@ -16,7 +16,7 @@ namespace ChCpp
 	class FrameObject;
 
 	template<typename CharaType>
-	class PolygonCollider :public PanelColliderBase
+	class PolygonCollider :public PanelColliderBase,public HitTestMatrixClass
 	{
 	public://SetFunction//
 

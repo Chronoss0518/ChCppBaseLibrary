@@ -6,8 +6,16 @@
 namespace ChCpp
 {
 
-	class SphereCollider :public Collider
+	class SphereCollider :public Collider,public HitTestPositionClass
 	{
+	public:
+
+		inline void SetSize(float _size) { if (_size > 0.0f)size = _size; }
+
+	public:
+
+		inline float GetSize() { return size; }
+
 	public://IsFunction//
 
 		//対象のオブジェクトがオブジェクト外から衝突しているかの判定//
@@ -25,6 +33,9 @@ namespace ChCpp
 		//対象のオブジェクトがオブジェクト内から衝突しているかの判定//
 		bool IsInnerHit(HitTestSphere* _target)override;
 
+	private:
+
+		float size = 1.0f;
 	};
 }
 

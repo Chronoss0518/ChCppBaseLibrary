@@ -30,7 +30,7 @@ namespace ChCpp
 		};
 	};
 
-	class BoxCollider :public Collider
+	class BoxCollider :public Collider,public HitTestMatrixClass
 	{
 	public://IsFunction//
 

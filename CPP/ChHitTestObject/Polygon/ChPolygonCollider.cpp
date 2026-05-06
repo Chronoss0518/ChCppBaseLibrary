@@ -146,15 +146,9 @@ bool ChCpp::PolygonCollider<CharaType>::IsHit(HitTestRay* _target)
 	if (ChPtr::NullCheck(model))return false;
 
 	float maxLen = _target->GetMaxLen();
-	ChVec3 pos;
+	ChVec3 pos = _target->GetPos();
 	ChVec3 ray = _target->GetRayDir();
 	minLen = maxLen;
-
-	{
-		ChLMat tmp = _target->GetMat();
-		pos = tmp.GetPosition();
-		ray = tmp.TransformCoord(ray);
-	}
 
 	bool hitFlg = IsHitRayToMesh(*model, pos, ray, minLen);
 

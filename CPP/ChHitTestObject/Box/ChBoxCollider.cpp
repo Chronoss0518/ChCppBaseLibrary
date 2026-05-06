@@ -48,7 +48,7 @@ bool BoxCollider::IsHit(HitTestSphere* _target)
 	ChVec3 mPos = GetPos();
 
 	
-	ChVec3 tScl = _target->GetScl(), mScl = GetScl();
+	ChVec3 tScl = _target->GetSize(), mScl = GetScl();
 
 	ChVec3 tmpVec = (tPos)-(mPos);
 
@@ -92,7 +92,7 @@ bool BoxCollider::IsHit(HitTestSphere* _target)
 
 	tSize.Normalize();
 
-	tSize *= _target->GetScl();
+	tSize *= _target->GetSize();
 
 	//x1,w1,x2,w2
 	//x1 < x2 && x1 + w1 > x2

@@ -10,7 +10,7 @@ bool SphereCollider::IsHit(HitTestBox* _target)
 	return _target->IsHit(this);
 }
 
-bool  SphereCollider::IsHit(HitTestSphere* _target)
+bool SphereCollider::IsHit(HitTestSphere* _target)
 {
 	//ˆÊ’uî•ñ‚¾‚¯‚Ì“–‚½‚è”»’è//
 
@@ -18,7 +18,7 @@ bool  SphereCollider::IsHit(HitTestSphere* _target)
 
 	ChVec3 mPos = GetPos();
 
-	ChVec3 tScl = _target->GetScl(), mScl = GetScl();
+	ChVec3 tScl = _target->GetSize(), mScl = GetSize();
 
 	ChVec3 tmpVec = (tPos)-(mPos);
 
@@ -84,7 +84,7 @@ bool  SphereCollider::IsHit(HitTestRay* _target)
 
 	ChVec3 toDir = vec2 - vec1;
 	toDir.Normalize();
-	float tmpLen = toDir.GetLen() - GetScl().GetLen();
+	float tmpLen = toDir.GetLen() - GetSize();
 
 	if (tmpLen < 0.0f)return false;
 	toDir *= tmpLen;

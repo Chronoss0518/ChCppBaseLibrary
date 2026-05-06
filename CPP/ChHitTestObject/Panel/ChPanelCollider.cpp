@@ -11,26 +11,20 @@ bool PanelCollider::IsHit(HitTestBox* _target)
 	return false;
 }
 
-bool  PanelCollider::IsHit(HitTestSphere* _target)
+bool PanelCollider::IsHit(HitTestSphere* _target)
 {
 	return false;
 }
 
-bool  PanelCollider::IsHit(HitTestRay* _target)
+bool PanelCollider::IsHit(HitTestRay* _target)
 {
 	auto square = GetSquarePositions();
 
 	ChVec3 tmpVec;
 
-	ChVec3 pos;
+	ChVec3 pos = _target->GetPos();;
 	ChVec3 ray = _target->GetRayDir();
 	float maxLen = _target->GetMaxLen();
-
-	{
-		auto tmp = _target->GetMat();
-		pos = tmp.GetPosition();
-		ray = tmp.TransformCoord(ray);
-	}
 
 	{
 		ChLMat tmpMat = GetMat();
@@ -71,7 +65,7 @@ bool  PanelCollider::IsHit(HitTestRay* _target)
 	return hitFlg;
 }
 
-bool  PanelCollider::IsInnerHit(HitTestBox* _target)
+bool PanelCollider::IsInnerHit(HitTestBox* _target)
 {
 	return false;
 }
