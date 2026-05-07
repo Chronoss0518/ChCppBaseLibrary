@@ -66,7 +66,7 @@ namespace ChCpp
 	public://Get Functions//
 
 		//Õ“Ë‚µ‚Ä‚¢‚½ê‡‚É’†S‚©‚çŒ©‚Ä‚Ç‚ÌˆÊ’u‚Ü‚Å‚ß‚è‚ñ‚Å‚¢‚½‚©‚Ì”’l//
-		inline ChVec3 GetHitVectol() { return hitVector; }
+		inline ChVec3 GetHitVector() { return hitVector; }
 
 	private:
 
