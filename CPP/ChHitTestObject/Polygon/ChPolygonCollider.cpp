@@ -7,38 +7,38 @@
 #include"../Sphere/ChSphereCollider.h"
 #include"../Box/ChBoxCollider.h"
 
+#define SET_INIT_MAX_VALUE(_value) _value = -ChMath::GetMaxFloat()
+#define SET_INIT_MIN_VALUE(_value) _value = ChMath::GetMaxFloat()
 
 template<typename CharaType>
-bool ChCpp::PolygonCollider<CharaType>::IsHitRayToMesh(TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const float _rayLen, const bool _nowHitFlg)
+bool ChCpp::PolygonCollider<CharaType>::IsHitRayToMesh(TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const float _rayLen)
 {
-	bool hitFlg = _nowHitFlg;
-
 	float minLen = _rayLen;
 
-	hitFlg = IsHitTest(minLen, _object, _rayPos, _rayDir, hitFlg);
+	bool hitFlg = IsHitTestRay(minLen, _object, _rayPos, _rayDir);
 
 	for (auto&& child : _object.GetChildlen<TransformObject<CharaType>>())
 	{
-		hitFlg = IsHitRayToMesh(*child.lock(), _rayPos, _rayDir, minLen, hitFlg) || hitFlg;
+		hitFlg = IsHitRayToMesh(*child.lock(), _rayPos, _rayDir, minLen) || hitFlg;
 	}
 
 	return hitFlg;
 }
 
 template<typename CharaType>
-bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const bool _nowHitFlg)
+bool ChCpp::PolygonCollider<CharaType>::IsHitTestRay(float& _outLen, TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir)
 {
 	_object.UpdateDrawTransform();
 
-	auto&& frameCom = GetFrameComponent(_object);
+	ChPtr::Shared<FrameComponent<CharaType>>&& frameCom = GetFrameComponent(_object);
 
-	if (frameCom == nullptr)return _nowHitFlg;
+	if (frameCom == nullptr)return false;
 
-	if (frameCom->vertexList.size() < 3)return _nowHitFlg;
+	if (frameCom->vertexList.size() < 3)return false;
 
 	ChLMat tmpMat = _object.GetDrawLHandMatrix() * GetMat();
 
-	bool hitFlg = _nowHitFlg;
+	bool hitFlg = false;
 
 	std::vector<ChPtr::Shared<ChVec3>>posList;
 
@@ -47,13 +47,13 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, TransformObjec
 
 	float tmpLen = 0.0f;
 	ChVec3 poss[3];
-	unsigned long nos[3]{ 0,1,2 };
-	for (auto&& primitive : frameCom->primitives)
+	for (ChPtr::Shared<Ch3D::Primitive>& primitive : frameCom->primitives)
 	{
+		if (primitive->vertexData.size() <= 2)continue;
+
 		for (unsigned char j = 0; j < 3; j++)
 		{
-			nos[j] = handType == UseHandType::RightHand ? primitive->vertexData.size() - j - 1 : j;
-			poss[j] = *posList[primitive->vertexData[nos[j]]->vertexNo];
+			poss[j] = *posList[primitive->vertexData[handType == UseHandType::RightHand ? primitive->vertexData.size() - j - 1 : j]->vertexNo];
 		}
 
 		{
@@ -66,14 +66,13 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, TransformObjec
 			if (faceLen > minLen)continue;
 		}
 
-		for (unsigned long i = 1; i < primitive->vertexData.size() - 1; i++)
+		for (size_t i = 1; i < primitive->vertexData.size() - 1; i++)
 		{
 			ChVec3 tmpVec;
 
 			for (unsigned char j = 1; j < 3; j++)
 			{
-				nos[j] = handType == UseHandType::RightHand ? primitive->vertexData.size() - j - i : i + j - 1;
-				poss[j] = *posList[primitive->vertexData[nos[j]]->vertexNo];
+				poss[j] = *posList[primitive->vertexData[handType == UseHandType::RightHand ? primitive->vertexData.size() - j - i : i + j - 1]->vertexNo];
 			}
 
 			if (!HitTestTri(
@@ -93,11 +92,86 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTest(float& _outLen, TransformObjec
 			_outLen = tmpLen;
 			hitMaterialName = frameCom->materialList[primitive->mateNo]->mateName;
 			SetHitVector(tmpVec);
-			return true;
 		}
 	}
-	return false;
+	return hitFlg;
 
+}
+
+template<typename CharaType>
+bool ChCpp::PolygonCollider<CharaType>::IsHitSphereToMesh(TransformObject<CharaType>& _object, ChVec3& _nearNormal, const ChVec3& _spherePos, float _sphereSize)
+{
+	bool res = IsHitTestSphere(_object, _nearNormal, _spherePos, _sphereSize);
+
+	for (auto&& child : _object.GetChildlen<ChCpp::TransformObject<CharaType>>())
+	{
+		if (child.expired())continue;
+		auto childObject = child.lock();
+		res = IsHitSphereToMesh(*childObject, _nearNormal, _spherePos, _sphereSize) || res;
+	}
+
+	return res;
+}
+
+template<typename CharaType>
+bool ChCpp::PolygonCollider<CharaType>::IsHitTestSphere(TransformObject<CharaType>& _object, ChVec3& _nearNormal, const ChVec3& spherePos, float _sphereSize)
+{
+	_object.UpdateDrawTransform();
+
+	ChPtr::Shared<FrameComponent<CharaType>>&& frameCom = GetFrameComponent(_object);
+	if (frameCom == nullptr)return false;
+
+	if (frameCom->vertexList.size() < 3)return false;
+
+	ChLMat tmpMat = _object.GetDrawLHandMatrix() * GetMat();
+
+	bool hitFlg = false;
+
+	std::vector<ChPtr::Shared<ChVec3>>posList;
+
+	for (size_t i = 0; i < frameCom->vertexList.size(); i++)
+		posList.push_back(ChPtr::Make_S<ChVec3>(tmpMat.Transform(frameCom->vertexList[i]->pos)));
+	
+	ChVec3 testPoint[3];
+
+	float nearVectorLen = GetHitVector().GetLen();
+	ChVec3 testVector = ChVec3();
+	ChVec3 normal = ChVec3(0.0f, 1.0f, 0.0f);
+
+	for (ChPtr::Shared<Ch3D::Primitive>& primitive : frameCom->primitives)
+	{
+		if (primitive->vertexData.size() <= 2)continue;
+		testPoint[0] = *posList[primitive->vertexData[0]->vertexNo];
+		
+		for (size_t i = 0; i < primitive->vertexData.size() - 2; i++)
+		{
+			for (unsigned char j = 1; j < 3; j++)
+			{
+				testPoint[j] = *posList[primitive->vertexData[j + i]->vertexNo];
+			}
+
+			if(!GetTriNearPoint(testVector, normal, spherePos, testPoint[0], testPoint[1], testPoint[2], _sphereSize))continue;
+
+			max.x = max.x > testVector.x ? max.x : testVector.x;
+			max.y = max.y > testVector.y ? max.y : testVector.y;
+			max.z = max.z > testVector.z ? max.z : testVector.z;
+
+			max.x = min.x < testVector.x ? min.x : testVector.x;
+			max.y = min.y < testVector.y ? min.y : testVector.y;
+			max.z = min.z < testVector.z ? min.z : testVector.z;
+
+			if (nearVectorLen < testVector.GetLen())continue;
+
+			hitFlg = true;
+			nearVectorLen = testVector.GetLen();
+			SetHitVector(testVector * -1.0f);
+			_nearNormal = normal;
+			hitMaterialName = frameCom->materialList[primitive->mateNo]->mateName;
+		}
+
+	}
+
+	return hitFlg;
 }
 
 template<typename CharaType>
@@ -127,9 +201,49 @@ bool ChCpp::PolygonCollider<CharaType>::IsInnerHit(HitTestBox* _target)
 template<typename CharaType>
 bool ChCpp::PolygonCollider<CharaType>::IsHit(HitTestSphere* _target)
 {
-	auto&& model = GetModel();
+	if (_target == nullptr)return false;
 	if (ChPtr::NullCheck(model))return false;
-	return true;
+
+	SetHitVector(ChVec3(_target->GetSize()));
+
+	//_target->GetPos();
+
+	SET_INIT_MAX_VALUE(max.x);
+	SET_INIT_MAX_VALUE(max.y);
+	SET_INIT_MAX_VALUE(max.z);
+
+	SET_INIT_MIN_VALUE(min.x);
+	SET_INIT_MIN_VALUE(min.y);
+	SET_INIT_MIN_VALUE(min.z);
+
+	ChVec3 normal;
+
+	bool res = IsHitSphereToMesh(*model, normal, _target->GetPos(), _target->GetSize());
+
+	if (res)
+	{
+		ChVec3 tmp = GetHitVector();
+
+		float tmpLen = tmp.GetLen();
+
+		if (tmpLen <= 0.0f)
+		{
+			tmp = normal * _target->GetSize();
+			SetHitVector(tmp);
+		}
+		else
+		{
+			tmpLen = _target->GetSize() - tmpLen;
+
+			tmp.Normalize();
+			tmp *= tmpLen;
+			SetHitVector(tmp);
+		}
+
+		_target->SetHitVector(tmp * -1.0f);
+	}
+
+	return res;
 }
 
 template<typename CharaType>
@@ -141,8 +255,9 @@ bool ChCpp::PolygonCollider<CharaType>::IsInnerHit(HitTestSphere* _target)
 template<typename CharaType>
 bool ChCpp::PolygonCollider<CharaType>::IsHit(HitTestRay* _target)
 {
-	auto&& model = GetModel();
+	if (ChPtr::NullCheck(_target))return false;
 
+	auto&& model = GetModel();
 	if (ChPtr::NullCheck(model))return false;
 
 	float maxLen = _target->GetMaxLen();
@@ -153,7 +268,7 @@ bool ChCpp::PolygonCollider<CharaType>::IsHit(HitTestRay* _target)
 	bool hitFlg = IsHitRayToMesh(*model, pos, ray, minLen);
 
 	if (hitFlg)
-		_target->SetHitVector(GetHitVectol() * -1.0f);
+		_target->SetHitVector(GetHitVector() * -1.0f);
 
 	return hitFlg;
 }

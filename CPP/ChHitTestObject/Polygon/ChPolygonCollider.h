@@ -28,6 +28,10 @@ namespace ChCpp
 
 		std::basic_string<CharaType> GetHitMaterialName() { return hitMaterialName; }
 
+		inline ChVec3 GetHitMinVector() { return min; }
+
+		inline ChVec3 GetHitMaxVector() { return max; }
+
 	public://IsFunction//
 
 		//対象のオブジェクトがオブジェクト外から衝突しているかの判定//
@@ -47,21 +51,27 @@ namespace ChCpp
 
 	private:
 
-		bool IsHitRayToMesh(TransformObject<CharaType>& _object, const ChVec3& _rayPos,const ChVec3& _rayDir,const float _rayLen,const bool _nowHitFlg = false);
+		bool IsHitRayToMesh(TransformObject<CharaType>& _object, const ChVec3& _rayPos,const ChVec3& _rayDir,const float _rayLen);
 
-		bool IsHitTest(float& _outLen, TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const bool _nowHitFlg = false);
+		bool IsHitTestRay(float& _outLen, TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir);
 
-		ChPtr::Shared<FrameComponent<CharaType>> GetFrameComponent(TransformObject<CharaType>& _object)
+		inline ChPtr::Shared<FrameComponent<CharaType>> GetFrameComponent(TransformObject<CharaType>& _object)
 		{
 			auto&& frameCom = _object.GetComponent<FrameComponent<CharaType>>();
 			return frameCom;
 		}
+
+		bool IsHitSphereToMesh(TransformObject<CharaType>& _object,ChVec3& _nearNormal, const ChVec3& _spherePos, float _sphereSize);
+	
+		bool IsHitTestSphere(TransformObject<CharaType>& _object, ChVec3& _nearNormal, const ChVec3& _spherePos, float _sphereSize);
 
 	private:
 
 		bool cullHitFlg = true;
 		bool lHandWorldFlg = true;
 		float minLen = 0.0f;
+
+		ChVec3 max, min;
 
 		std::basic_string<CharaType> hitMaterialName = ChStd::GetZeroChara<CharaType>();
 		FrameObject<CharaType>* model = nullptr;
