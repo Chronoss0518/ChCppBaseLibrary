@@ -36,7 +36,7 @@ namespace ChCpp
 
 	public:
 
-		bool GetTriNearPoint(ChVec3& _hitVector, ChVec3& _normal, const ChVec3& _point, const ChVec3& _pos1, const ChVec3& _pos2, const ChVec3& _pos3);
+		bool GetTriNearPoint(ChVec3& _hitVector, ChVec3& _normal, const ChVec3& _point, const ChVec3& _pos1, const ChVec3& _pos2, const ChVec3& _pos3, float _maxLen = ChMath::GetMaxFloat());
 
 		bool HitTestTri(float& _len, ChVec3& _thisHitVectol, const ChVec3& _pos, const ChVec3& _dir, const ChVec3& _vec1, const ChVec3& _vec2, const ChVec3& _vec3);
 
