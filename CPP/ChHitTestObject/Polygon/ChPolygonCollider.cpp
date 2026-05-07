@@ -228,6 +228,7 @@ bool ChCpp::PolygonCollider<CharaType>::IsHit(HitTestSphere* _target)
 
 		if (tmpLen <= 0.0f)
 		{
+			normal.Normalize();
 			tmp = normal * _target->GetSize();
 			SetHitVector(tmp);
 		}
