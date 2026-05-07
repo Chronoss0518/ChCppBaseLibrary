@@ -122,11 +122,6 @@ bool ChCpp::Collider::GetTriNearPoint(ChVec3& _hitVector, ChVec3& _normal, const
 
 	if (divDat <= 0.0f)return false;
 
-	len = CreateDat(uEdge, vEdge, v2sp);
-	len = len / divDat;
-
-	if (std::abs(len) > _maxLen)return false;
-
 	u = CreateDat(v2sp, vEdge, dir);
 	u = u / divDat;
 
@@ -135,6 +130,11 @@ bool ChCpp::Collider::GetTriNearPoint(ChVec3& _hitVector, ChVec3& _normal, const
 
 	if ((u >= 0.0f && u <= 1.0f) && (v >= 0.0f && v < 1.0f) && u + v <= 1.0f)
 	{
+		len = CreateDat(uEdge, vEdge, v2sp);
+		len = len / divDat;
+
+		if (std::abs(len) > _maxLen)return false;
+
 		_hitVector = dir * len;
 
 		return true;
