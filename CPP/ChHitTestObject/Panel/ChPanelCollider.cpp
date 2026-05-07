@@ -23,13 +23,13 @@ bool PanelCollider::IsHit(HitTestSphere* _target)
 	ChVec3 tmpVec = ChVec3();
 	ChVec3 normal = ChVec3();
 
-	if (GetTriNearPoint(tmpVec, normal, pos, square.pos[0], square.pos[1], square.pos[2]))
+	if (GetTriNearPoint(tmpVec, normal, pos, square.pos[0], square.pos[1], square.pos[2], _target->GetSize()))
 	{
 		nearVec = tmpVec;
 		nearNormal = normal;
 	}
 
-	if (GetTriNearPoint(tmpVec, normal, pos, square.pos[0], square.pos[2], square.pos[3]))
+	if (GetTriNearPoint(tmpVec, normal, pos, square.pos[0], square.pos[2], square.pos[3], _target->GetSize()))
 	{
 		if (nearVec.GetLen() > tmpVec.GetLen())
 		{
@@ -40,9 +40,10 @@ bool PanelCollider::IsHit(HitTestSphere* _target)
 
 	if (nearVec.GetLen() < _target->GetSize())
 	{
-		if (nearVec != ChVec3(0.0f))
+		float len = nearVec.GetLen();
+		if (len > 0.0f)
 		{
-			float len = _target->GetSize() - nearVec.GetLen();
+			len = _target->GetSize() - len;
 			nearVec.Normalize();
 
 			_target->SetHitVector(nearVec * len);
@@ -50,8 +51,8 @@ bool PanelCollider::IsHit(HitTestSphere* _target)
 		}
 		else
 		{
-			_target->SetHitVector(nearNormal * _target->GetSize());
-			SetHitVector(nearNormal * -_target->GetSize());
+			_target->SetHitVector(nearNormal * -_target->GetSize());
+			SetHitVector(nearNormal * _target->GetSize());
 		}
 
 		return true;
