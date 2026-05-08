@@ -11,15 +11,13 @@
 #define SET_INIT_MIN_VALUE(_value) _value = ChMath::GetMaxFloat()
 
 template<typename CharaType>
-bool ChCpp::PolygonCollider<CharaType>::IsHitRayToMesh(TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir, const float _rayLen)
+bool ChCpp::PolygonCollider<CharaType>::IsHitRayToMesh(TransformObject<CharaType>& _object, float& _outLen, const ChVec3& _rayPos, const ChVec3& _rayDir)
 {
-	float minLen = _rayLen;
-
-	bool hitFlg = IsHitTestRay(minLen, _object, _rayPos, _rayDir);
+	bool hitFlg = IsHitTestRay(_outLen, _object, _rayPos, _rayDir);
 
 	for (auto&& child : _object.GetChildlen<TransformObject<CharaType>>())
 	{
-		hitFlg = IsHitRayToMesh(*child.lock(), _rayPos, _rayDir, minLen) || hitFlg;
+		hitFlg = IsHitRayToMesh(*child.lock(), _outLen, _rayPos, _rayDir) || hitFlg;
 	}
 
 	return hitFlg;
@@ -63,7 +61,7 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTestRay(float& _outLen, TransformOb
 
 			float faceLen = ChVec3::GetDot(faceNormal, pos0ToRay);
 
-			if (faceLen > minLen)continue;
+			if (faceLen > _outLen)continue;
 		}
 
 		for (size_t i = 1; i < primitive->vertexData.size() - 1; i++)
@@ -135,6 +133,7 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTestSphere(TransformObject<CharaTyp
 	ChVec3 testPoint[3];
 
 	float nearVectorLen = GetHitVector().GetLen();
+	float testLen = 0.0f;
 	ChVec3 testVector = ChVec3();
 	ChVec3 normal = ChVec3(0.0f, 1.0f, 0.0f);
 
@@ -156,14 +155,16 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTestSphere(TransformObject<CharaTyp
 			max.y = max.y > testVector.y ? max.y : testVector.y;
 			max.z = max.z > testVector.z ? max.z : testVector.z;
 
-			max.x = min.x < testVector.x ? min.x : testVector.x;
-			max.y = min.y < testVector.y ? min.y : testVector.y;
-			max.z = min.z < testVector.z ? min.z : testVector.z;
+			min.x = min.x < testVector.x ? min.x : testVector.x;
+			min.y = min.y < testVector.y ? min.y : testVector.y;
+			min.z = min.z < testVector.z ? min.z : testVector.z;
+			
+			testLen = testVector.GetLen();
 
-			if (nearVectorLen < testVector.GetLen())continue;
+			if (nearVectorLen < testLen)continue;
 
 			hitFlg = true;
-			nearVectorLen = testVector.GetLen();
+			nearVectorLen = testLen;
 			SetHitVector(testVector * -1.0f);
 			_nearNormal = normal;
 			hitMaterialName = frameCom->materialList[primitive->mateNo]->mateName;
@@ -257,16 +258,13 @@ template<typename CharaType>
 bool ChCpp::PolygonCollider<CharaType>::IsHit(HitTestRay* _target)
 {
 	if (ChPtr::NullCheck(_target))return false;
-
-	auto&& model = GetModel();
 	if (ChPtr::NullCheck(model))return false;
 
 	float maxLen = _target->GetMaxLen();
 	ChVec3 pos = _target->GetPos();
 	ChVec3 ray = _target->GetRayDir();
-	minLen = maxLen;
 
-	bool hitFlg = IsHitRayToMesh(*model, pos, ray, minLen);
+	bool hitFlg = IsHitRayToMesh(*model, maxLen, pos, ray);
 
 	if (hitFlg)
 		_target->SetHitVector(GetHitVector() * -1.0f);

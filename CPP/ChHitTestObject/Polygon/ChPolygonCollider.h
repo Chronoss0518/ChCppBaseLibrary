@@ -51,7 +51,7 @@ namespace ChCpp
 
 	private:
 
-		bool IsHitRayToMesh(TransformObject<CharaType>& _object, const ChVec3& _rayPos,const ChVec3& _rayDir,const float _rayLen);
+		bool IsHitRayToMesh(TransformObject<CharaType>& _object, float& _outLen, const ChVec3& _rayPos,const ChVec3& _rayDir);
 
 		bool IsHitTestRay(float& _outLen, TransformObject<CharaType>& _object, const ChVec3& _rayPos, const ChVec3& _rayDir);
 
@@ -66,10 +66,6 @@ namespace ChCpp
 		bool IsHitTestSphere(TransformObject<CharaType>& _object, ChVec3& _nearNormal, const ChVec3& _spherePos, float _sphereSize);
 
 	private:
-
-		bool cullHitFlg = true;
-		bool lHandWorldFlg = true;
-		float minLen = 0.0f;
 
 		ChVec3 max, min;
 
