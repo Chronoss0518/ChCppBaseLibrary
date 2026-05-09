@@ -45,16 +45,19 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTestRay(float& _outLen, TransformOb
 
 	float tmpLen = 0.0f;
 	ChVec3 poss[3];
+	ChVec3 tmpVec;
 	for (ChPtr::Shared<Ch3D::Primitive>& primitive : frameCom->primitives)
 	{
 		if (primitive->vertexData.size() <= 2)continue;
 
-		for (unsigned char j = 0; j < 3; j++)
+		poss[0] = *posList[primitive->vertexData[0]->vertexNo];
+		for (size_t i = 1; i < primitive->vertexData.size() - 1; i++)
 		{
-			poss[j] = *posList[primitive->vertexData[handType == UseHandType::RightHand ? primitive->vertexData.size() - j - 1 : j]->vertexNo];
-		}
+			for (unsigned char j = 1; j < 3; j++)
+			{
+				poss[j] = *posList[primitive->vertexData[handType == UseHandType::RightHand ? primitive->vertexData.size() - j - i : i + j - 1]->vertexNo];
+			}
 
-		{
 			ChVec3 faceNormal = ChVec3::GetCross((poss[1] - poss[0]), (poss[2] - poss[0]));
 			faceNormal.Normalize();
 			ChVec3 pos0ToRay = _rayPos - poss[0];
@@ -62,16 +65,6 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTestRay(float& _outLen, TransformOb
 			float faceLen = ChVec3::GetDot(faceNormal, pos0ToRay);
 
 			if (faceLen > _outLen)continue;
-		}
-
-		for (size_t i = 1; i < primitive->vertexData.size() - 1; i++)
-		{
-			ChVec3 tmpVec;
-
-			for (unsigned char j = 1; j < 3; j++)
-			{
-				poss[j] = *posList[primitive->vertexData[handType == UseHandType::RightHand ? primitive->vertexData.size() - j - i : i + j - 1]->vertexNo];
-			}
 
 			if (!HitTestTri(
 				tmpLen,
