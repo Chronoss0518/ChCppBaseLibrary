@@ -17,7 +17,7 @@ bool PanelCollider::IsHit(HitTestSphere* _target)
 
 	ChVec3 pos = _target->GetPos();;
 
-	ChVec3 nearVec = ChVec3(0.0f);
+	ChVec3 nearVec = ChVec3(_target->GetSize());
 	ChVec3 nearNormal = ChVec3(0.0f, 1.0f, 0.0f);
 	
 	ChVec3 tmpVec = ChVec3();
