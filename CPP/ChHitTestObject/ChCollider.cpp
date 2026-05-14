@@ -88,91 +88,23 @@ bool ChCpp::Collider::HitTestTri(
 
 bool ChCpp::Collider::GetTriNearPoint(ChVec3& _hitVector, ChVec3& _normal, const ChVec3& _point, const ChVec3& _pos1, const ChVec3& _pos2, const ChVec3& _pos3, float _maxLen)
 {
-	//https://shikousakugo.wordpress.com/2012/06/27/ray-intersection-2/
-	//ÉNÉâÉÅÉãÇÃåˆéÆ//
-
-	//eg1 = (v1 - v0), eg2 = (v2 - v0);
-	//hitPos = spos + (dir * len)
-	//hitPos = (eg1 * u) + (eg2 * v) + v0
-	//spos + (dir * len) = (eg1 * u) + (eg2 * v) + v0
-	//spos - v0 = (eg1 * u) + (eg2 * v) - (dir * len)
-
-	//spos1 - v01 = eg11 * u + eg21 * v - dir1 * len
-	//spos2 - v02 = eg12 * u + eg22 * v - dir2 * len
-	//spos3 - v03 = eg13 * u + eg23 * v - dir3 * len
-	//spos - v0 = v2sp
-
-	//u = dat(v2sp,eg2,-dir)/dat(eg1.eg2.-dir)
-	//v = dat(eg1,v2sp,-dir)/dat(eg1.eg2.-dir)
-	//len = dat(eg1,eg2,v2sp)/dat(eg1.eg2.-dir)
-
 	_hitVector = 0.0f;
-
-	float u = 0.0f, v = 0.0f;
-	float len = 0.0f;
-
-	ChVec3 uEdge = _pos2 - _pos1, vEdge = _pos3 - _pos1, v2sp = _point - _pos1;
-
-	auto dir = ChVec3::GetCross(uEdge, vEdge);
-	_normal = dir;
-
-	float divDat = 0.0f;
-
-	divDat = CreateDat(uEdge, vEdge, dir);
-
-	if (divDat <= 0.0f)return false;
-
-	u = CreateDat(v2sp, vEdge, dir);
-	u = u / divDat;
-
-	v = CreateDat(uEdge, v2sp, dir);
-	v = v / divDat;
-
-	if ((u >= 0.0f && u <= 1.0f) && (v >= 0.0f && v < 1.0f) && u + v <= 1.0f)
-	{
-		len = CreateDat(uEdge, vEdge, v2sp);
-		len = len / divDat;
-
-		if (std::abs(len) > _maxLen)return false;
-
-		_hitVector = dir * len;
-
-		return true;
-	}
-
-
 
 	ChVec3 centerPos = _pos1 + _pos2 + _pos3;
 	centerPos /= 3.0f;
 	ChVec3 testVec = 0.0f;
 
-	if (u <= 0.0f && v >= 1.0f)
+	ChVec3 uEdge = _pos2 - _pos1, vEdge = _pos3 - _pos1, v2sp = _point - _pos1;
+
+	//Pos1 Near Test//
+	float d1 = 0.0f, d2 = 0.0f;
+
+	d1 = ChVec3::GetDot(uEdge, v2sp);//uEdge//
+	d2 = ChVec3::GetDot(vEdge, v2sp);//vEdge//
+
+	if (d1 <= 0.0f && d2 <= 0.0f)
 	{
-		testVec = _point - _pos3;
-		if (testVec.GetLen() > _maxLen)return false;
-
-		_hitVector = testVec;
-		_normal = _pos3 - centerPos;
-		_normal.Normalize();
-
-		return true;
-	}
-
-	if (u >= 1.0f && v <= 0.0f)
-	{
-		testVec = _point - _pos2;
-		if (testVec.GetLen() > _maxLen)return false;
-
-		_hitVector = testVec;
-		_normal = _pos2 - centerPos;
-		_normal.Normalize();
-
-		return true;
-	}
-
-	if (u <= 0.0f && v <= 0.0f)
-	{
-		testVec = _point - _pos1;
+		testVec = v2sp;
 		if (testVec.GetLen() > _maxLen)return false;
 
 		_hitVector = testVec;
@@ -182,55 +114,101 @@ bool ChCpp::Collider::GetTriNearPoint(ChVec3& _hitVector, ChVec3& _normal, const
 		return true;
 	}
 
-	if (v < 0.0f && u >= 0.0f && u <= 1.0f)
+	//Pos2 Near Test//
+	float d3 = 0.0f, d4 = 0.0f;
+
+	d3 = ChVec3::GetDot(uEdge, _point - _pos2);
+	d4 = ChVec3::GetDot(vEdge, _point - _pos2);
+
+	if (d3 >= 0.0f && d4 <= d3)
 	{
-		testVec = GetLineNearPoint(_point, _pos1, _pos2);
+		testVec = _point - _pos2;
 		if (testVec.GetLen() > _maxLen)return false;
 
 		_hitVector = testVec;
-		_normal = ChVec3::GetCross(centerPos - _pos1, _pos2 - _pos1);
-		_normal = ChVec3::GetCross(_normal, _pos2 - _pos1);
+		_normal = _pos1 - centerPos;
+		_normal.Normalize();
+
+		return true;
+	}
+	
+	//Pos3 Near Test//
+	float d5 = 0.0f, d6 = 0.0f;
+	d5 = ChVec3::GetDot(uEdge, _point - _pos3);
+	d6 = ChVec3::GetDot(vEdge, _point - _pos3);
+
+	if (d6 >= 0.0f && d5 <= d6)
+	{
+		testVec = _point - _pos3;
+		if (testVec.GetLen() > _maxLen)return false;
+
+		_hitVector = testVec;
+		_normal = _pos1 - centerPos;
 		_normal.Normalize();
 
 		return true;
 	}
 
-	if (u < 0.0f && v >= 0.0f && v <= 1.0f)
+	//Line1To2 Near Test//
+	float vc = d1 * d4 - d3 * d2;
+	if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
 	{
-		testVec = GetLineNearPoint(_point, _pos1, _pos3);
+		float w = d1 / (d1 - d3);
+		testVec = _pos1 + uEdge * w;
+		testVec = _point - testVec;
 		if (testVec.GetLen() > _maxLen)return false;
 
 		_hitVector = testVec;
-		_normal = ChVec3::GetCross(centerPos - _pos1, _pos3 - _pos1);
-		_normal = ChVec3::GetCross(_normal, _pos3 - _pos1);
+		_normal = ChVec3::GetCross(centerPos - _pos1, uEdge);
+		_normal = ChVec3::GetCross(_normal, uEdge);
 		_normal.Normalize();
 
 		return true;
 	}
 
-	testVec = GetLineNearPoint(_point, _pos2, _pos3);
+	//Line1To3 Near Test//
+	float vb = d5 * d2 - d1 * d6;
+	if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
+	{
+		float w = d2 / (d2 - d6);
+		testVec = _pos1 + vEdge * w;
+		testVec = _point - testVec;
+		if (testVec.GetLen() > _maxLen)return false;
+
+		_hitVector = testVec;
+		_normal = ChVec3::GetCross(centerPos - _pos1, vEdge);
+		_normal = ChVec3::GetCross(_normal, vEdge);
+		_normal.Normalize();
+
+		return true;
+	}
+
+	//Line2To3 Near Test//
+	float va = d3 * d6 - d5 * d4;
+	if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
+	{
+		float w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
+		testVec = _pos2 + (_pos3 - _pos2) * w;
+		testVec = _point - testVec;
+		if (testVec.GetLen() > _maxLen)return false;
+
+		_hitVector = testVec;
+		_normal = ChVec3::GetCross(centerPos - _pos1, _pos3 - _pos2);
+		_normal = ChVec3::GetCross(_normal, _pos3 - _pos2);
+		_normal.Normalize();
+
+		return true;
+	}
+
+
+	float denom = 1.0f / (va + vb + vc);
+	float v = vb * denom, w = vc * denom;
+	testVec = _pos1 + uEdge * v + vEdge * w;
+	testVec = _point - testVec;
 	if (testVec.GetLen() > _maxLen)return false;
-
 	_hitVector = testVec;
-	_normal = ChVec3::GetCross(centerPos - _pos2, _pos3 - _pos2);
-	_normal = ChVec3::GetCross(_normal, _pos3 - _pos2);
+	_normal = ChVec3::GetCross(uEdge, vEdge);
 	_normal.Normalize();
 
 	return true;
-}
-
-ChVec3 ChCpp::Collider::GetLineNearPoint(const ChVec3& _point, const ChVec3& _pos1, const ChVec3& _pos2)
-{
-	ChVec3 line = _pos2 - _pos1;
-	ChVec3 posToPoint = _point - _pos1;
-
-	float dot = ChVec3::GetDot(line, posToPoint);
-
-	float size = line.GetLen();
-
-	float t = dot / (size * size);
-
-	ChVec3 onPos = _pos1 + line * t;
-
-	return _point - onPos;
 }

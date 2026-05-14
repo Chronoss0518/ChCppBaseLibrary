@@ -44,8 +44,6 @@ namespace ChCpp
 
 		float CreateDat(const ChVec3& _vec1, const ChVec3& _vec2, const ChVec3& _vec3);
 
-		ChVec3 GetLineNearPoint(const ChVec3& _point, const ChVec3& _pos1, const ChVec3& _pos2);
-
 	};
 }
 
