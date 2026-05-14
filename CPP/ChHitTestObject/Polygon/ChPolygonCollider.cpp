@@ -58,14 +58,6 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTestRay(float& _outLen, TransformOb
 				poss[j] = *posList[primitive->vertexData[handType == UseHandType::RightHand ? primitive->vertexData.size() - j - i : i + j - 1]->vertexNo];
 			}
 
-			ChVec3 faceNormal = ChVec3::GetCross((poss[1] - poss[0]), (poss[2] - poss[0]));
-			faceNormal.Normalize();
-			ChVec3 pos0ToRay = _rayPos - poss[0];
-
-			float faceLen = ChVec3::GetDot(faceNormal, pos0ToRay);
-
-			if (faceLen > _outLen)continue;
-
 			if (!HitTestTri(
 				tmpLen,
 				tmpVec,
@@ -164,6 +156,7 @@ bool ChCpp::PolygonCollider<CharaType>::IsHitTestSphere(TransformObject<CharaTyp
 		}
 
 	}
+
 
 	return hitFlg;
 }
