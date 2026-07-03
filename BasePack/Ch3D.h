@@ -22,56 +22,26 @@ namespace Ch3D
 		ChVec3 pos;
 	};
 
-	inline void SetPosition(Position* _pos, const ChVec3& _val)
-	{
-		if (ChPtr::NullCheck(_pos))return;
-		_pos->pos = _val;
-	}
-
 	//¶ã‚ª0.0,0.0‚ÌÀ•WŒn//
 	struct UV
 	{
 		ChVec2 uv;
 	};
 
-	inline void SetUV(UV* _uv, const ChVec2& _val)
-	{
-		if (ChPtr::NullCheck(_uv))return;
-		_uv->uv = _val;
-	}
-
 	struct Color
 	{
 		ChVec4 color = ChVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	};
-
-	inline void SetColor(Color* _color, const ChVec4& _val)
-	{
-		if (ChPtr::NullCheck(_color))return;
-		_color->color = _val;
-	}
 
 	struct Normal
 	{
 		ChVec3 normal = ChVec3(0.0f,1.0f,0.0f);
 	};
 
-	inline void SetNormal(Normal* _normal, const ChVec3& _val)
-	{
-		if (ChPtr::NullCheck(_normal))return;
-		_normal->normal = _val;
-	}
-
 	struct FaceNormal
 	{
 		ChVec3 faceNormal = ChVec3(0.0f, 1.0f, 0.0f);
 	};
-
-	inline void SetFaceNormal(FaceNormal* _faceNormal, const ChVec3& _val)
-	{
-		if (ChPtr::NullCheck(_faceNormal))return;
-		_faceNormal->faceNormal = _val;
-	}
 
 	template<unsigned long Num>
 	struct Bone
